@@ -1,7 +1,7 @@
 # ELEC60019 Machine Learning
 
 - The EEE Department's version of the Machine Learning course.
-- I covered extensions in statistical learning theory in some areas including more proofs.
+- I covered extensions in statistical learning theory.
 - These notes are unfinished and have several notational and content errors, including some missing detail from the slide. 
 - These errors will be documented after term ends. 
 - I do not recommend using these notes for reference during the open-book exam.
