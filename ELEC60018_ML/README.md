@@ -11,7 +11,7 @@
 
 ### To Do
 - [ ] Derivation of Hoeffding's Inequality: Change Proof
-- [ ] Section 2.6.4: Clarift in Combinatorial Quantity operator $B(N,k)$
+- [ ] Section 2.6.4: Clarify the Combinatorial Quantity operator $B(N,k)$
 - [ ] Section 2.8: Terminology
 - [ ] Section 3.5: Does the loss function approximate true risk better than the VC inequality? Also crop diagram better
 - [ ] Section 3.7: Cover Regularised Loss Minimisation, Structural Risk Minimisation
