@@ -1,0 +1,55 @@
+
+\documentclass{report}
+    \title{Deep Learning}
+    \author{Timothy Chung}
+    \date{8/01/24}
+
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\setlength\parindent{0pt}
+\input{common.tex}
+\newcommand{\infer}[2]{\cfrac{#1}{#2}}
+\newcommand{\infers}[3]{\cfrac{#1}{#2}(#3)}
+
+\newcommand{\ninfer}[3]{(\text{#1}):\cfrac{#2}{#3}}
+\newcommand{\ninfers}[4]{(\text{#1}):\cfrac{#2}{#3}(#4)}
+\newcommand{\ainfer}[3]{\cfrac{#2}{#3}(\text{#1})}
+
+\newcommand{\mllet}[2]{\text{let } #1 \text{ in } #2}
+\newcommand{\mlfix}[2]{\text{fix } #1 . #2}
+
+\newcommand{\hc}{\mathcal{H}}
+
+
+\begin{document}
+\include{titlepage/titlepage}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    \Huge
+    \textbf{ELEC60015 Deep Learning} \\
+    \vspace{1cm}
+    \Large
+    Timothy Chung \\
+    \vspace{1cm}
+    Spring 2024 \\
+    \vfill
+\end{titlepage}
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+\newpage
+\input{1_intro}
+\input{2_cnn}
+\input{3_network_training}
+\input{4_cnn_archs}
+\input{5_rnns}
+\input{6_rep_learn_autoencoders}
+\input{7_generative_models}
+\input{8_rl}
+\input{9_int_trustworthy}
+
+
+
+\end{document}
+
