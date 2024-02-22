@@ -1,0 +1,352 @@
+\chapter{Linear Stochastic Models}
+
+\section{Objectives}
+\begin{itemize}
+    \item Introduce linear stochastic models for real world data
+    \item Understand stochastic processes for noise
+    \item ARMA models, partial correlations, and optimal model order selection criteria (MDL, AIC,...)
+\end{itemize}
+\begin{theorembox}{Wold's Decomposition Theorem}
+
+Any covariance-stationary time series can be decomposed into two different parts: \textbf{deterministic} and \textbf{stochastic}.\\
+
+Let $w$ denote a white process, $x_r[n]$ a regular random process, and $x_p[n]$ a predictable process such that $x_r[n]\perp x_p[n]$.
+
+\begin{align}
+x[n]&=x_p[n]+x_r[n]\\
+&=x_p[n]+\sum_{j=1}^qb_jw[n-j]
+\end{align}
+
+The condition requires $\E[x_r[m]x_p[n]]=0$.
+
+\end{theorembox}
+
+\begin{definitionbox}{Deterministic vs Stochastic}
+    \begin{itemize}
+        \item Deterministic means a component can be precisely described by an equation without any randomness, following a predictable pattern that can be determined exactly for any point in time, e.g. a sine wave.
+        \item Stochastic means a component described by a random process. It cannot be described by a simple equation but can be represented using a probability distribution, such as WGN (Filtered White Gaussian) noise.
+    \end{itemize}
+\end{definitionbox}
+
+\section{WSS Process}
+A WSS process has two conditions:
+\begin{enumerate}
+    \item The mean of the process is constant for all time, i.e., \( \E[X_t] = \mu \) for all \( t \), where \( \mu \) is a constant.
+    \item The autocovariance function \( R_x(t, t+\tau) = \text{Cov}(X_t, X_{t+\tau}) \) depends only on the time lag \( \tau \) and not on time \( t \) itself, i.e., \( R_x(t, t+\tau) = R_x(\tau) \).
+\end{enumerate}
+
+The general form for the power spectrum of a WSS process is 
+\begin{equation}
+P_x(e^{j\omega})=\sum_{k=1}^N\alpha_k\delta(\omega-\omega_k)+P_{x_r}(e^{j\omega})
+\end{equation}
+
+\begin{definitionbox}{Linearly Deterministic Process}
+    A covariance-stationary process is called linearly deterministic if $p(x[n]\mid x[n-1],x[n-2],\ldots)=x[n].$ It can be predicted correctly with zero error if we know its entire past data $x[n-1],x[n-2],\ldots$
+\end{definitionbox}
+
+\section{ARMA Models}
+ARMA models are a linear stochastic model.\\
+
+Autoregressive (AR) filters use an all-pole system and Moving Average (MA) filters use an all-zero system. An Autoregressive Moving Average (ARMA) filter utilises both poles and zeroes.\\
+
+In ARMA modelling we filter white noise $w[n]$ with a causal linear shift-invariant filter (transfer function $H[z]$ that has $p$ poles and  $q$ zeroes. 
+
+\begin{equation}\label{eq:ARMA}
+    X(z)=H(z)W(z)\quad\Rightarrow\quad H(z)=\frac{B_q(z)}{A_p(z)}=\frac{\sum_{k=0}^qb_kz^{-k}}{1+\sum_{k=1}^pa_kz^{-k}}
+\end{equation}
+
+If our filter is WSS, then $x[n]$ is WSS as well. To show this, multiply both sides of Equation \ref{eq:ARMA} by $x[n-k]$ can calulating expectation, we have
+
+\begin{equation}
+    r_{xx}(k)=\underbrace{\sum_{l=1}^pa_lr_{xx}(k-l)}_{\color{red}{\text{easy to calculate}}}+\underbrace{\sum_{l=0}^qb_lr_{xw}(k-l)}_{\color{red}{\text{can be complicated}}}
+\end{equation}
+
+Note that since $X(z) = H(z)W(z)$ the random processes $x[n]$ and $w[n]$ are related by a linear difference equation with constant coefficients. This is 
+
+\begin{equation}
+    \begin{aligned}\mathrm{ARMA(p,q)}=H(z)=&\frac{B(z)}{A(z)}=\frac{\sum_{k=0}^qb_kz^{-k}}{1+\sum_{k=1}^pa_kz^{-k}}\\x[n]=&\underbrace{\sum_{l=1}^pa_lx[n-l]}_{\text{autoregressive}}+\underbrace{\sum_{l=0}^qb_lw[n-l]}_{\text{moving average}}\end{aligned}
+\end{equation}
+
+Note that for $H(z)$, coefficients must be absolutely summable. For the process to be stationary, $\sum_{j=0}^\infty|b_j|<\infty$, and for it to be invertible, $\sum_{j=0}^\infty|a_j|<\infty$.
+
+
+\section{AR Processes}
+An autoregressive process of order p, denoted by $AR(p)$ can be described by:
+
+\begin{align}
+    x[n] =& a_1x[n-1] + a_2x[n-2]+ \ldots + a_p[n-p] + w[n] \\=&\sum_{i=1}^pa_ix[n-i]+w[n]\\
+    =&\mathbf{a}^T\mathbf{x}[n]+w[n]
+\end{align}
+
+\subsection{ACF of an AR Process}
+We start by finding $x[n-k]x[n]$:
+
+\begin{equation}
+    x[n-k]x[n]=\\a_1x[n-k]x[n-1]+a_2x[n-k]x[n-2]+\cdots\\+a_px[n-k]x[n-p]+x[n-k]w[n]
+\end{equation}
+
+When $k>0$, $\E\{x[n-k]w[n]\} =0$ due to both processes being orthogonal to each other. We are left with:
+
+\begin{equation}
+    r_{xx}(k) = 
+    \begin{cases}
+        a_1r_{xx}(1) + a_2r_{xx}(2) + \cdots + a_pr_{xx}(p) + \sigma_w^2, & \text{for } k = 0 \\
+        a_1r_{xx}(k-1) + a_2r_{xx}(k-2) + \cdots + a_pr_{xx}(k-p), & \text{for } k > 0
+    \end{cases}
+\end{equation}
+
+
+\subsection{Normalised ACF of an AR Process}
+
+We can normalise by dividing by $r_{xx}(0)$ to get $\rho(k) = r_{xx}(k)/r_{xx}(0)$.
+
+\begin{equation}\label{eq:AR_norm_ACF}
+    \rho(k)=a_1\rho(k-1)+a_2\rho(k-2)+\cdots+a_p\rho(k-p)\quad k>0
+\end{equation}
+
+\subsection{Variance of an AR Process}
+
+For $k=0$, the $\E\{x[n-k]w[n]\}$ term contributes $\sigma^2_w$ to variance, and 
+
+\begin{equation}
+    r_{xx}(0)=a_1r_{xx}(-1)+a_2r_{xx}(-2)+\cdots+a_pr_{xx}(-p)+\sigma_w^2
+\end{equation}
+
+Dividing by $r_{xx}(0) = \sigma^2_x$, we get:
+
+\begin{equation}
+    \sigma_x^2=\frac{\sigma_w^2}{1-\rho_1a_1-\rho_2a_2-\cdots-\rho_pa_p}
+\end{equation}
+
+\subsection{Power Spectrum of an AR Process}
+
+Recall the formula for otuput power of a linear system, $P_{xx}=|H(z)|^2P_{ww}=H(z)H^*(z)P_{ww}$. We then have 
+
+\begin{equation}
+    P_{xx}(f)=\frac{2\sigma_w^2}{\left|1-a_1e^{-j2\pi f}-\cdots-a_pe^{-j2\pi pf}\right|^2}\quad0\leq f\leq1/2
+\end{equation}
+
+\section{MA Processes}
+A moving average process of order q, $MA(q)$, is given by:
+\begin{align}
+    x[n]=&w[n]+b_1w[n-1]+\cdots+b_qw[n-q]\\
+    =&w[n] + \sum^q_{i=1}b_iw[n-i]\\
+    =& \mathbf{b^Tw}[n] + w[n]
+\end{align}
+
+
+\subsection{ACF of an MA process}
+Note that the ACF has a cutoff after lag $q$.
+\begin{equation}
+    r_{xx}(k)=\E\big[(w[n]+b_1w[n-1]+\cdots+b_qw[n-q])(w[n-k])\big]
+\end{equation}
+\subsection{Variance of an MA process}
+We sub in $k=0$ into the ACF to obtain the variance:
+
+\begin{equation}
+    r_{xx}(0)=(1+b_1^2+\cdots+b_q^2)\sigma_w^2
+\end{equation}
+
+\subsection{Power Spectrum of an MA process}
+Since a moving average filter has a transfer function of all zeroes, and no poles except at the origin.which is known as an ARMA process.
+\begin{equation}
+    P(f)=2\sigma_w^2\left|1+b_1e^{-j2\pi f}+b_2e^{-j4\pi f}+\cdots+b_qe^{-j2\pi qf}\right|^2
+\end{equation}
+
+ An MA process has a limited ability to accurately represent time series with spectra that have sharp peaks (high power at specific frequencies). This is because the MA model, being a sum of weighted noise components, tends to produce a smoother spectrum without sharp features. To model time series with sharp spectral peaks (like those that might be seen in signals dominated by sinusoidal components), one would typically need AR or ARMA processes.
+
+\section{Duality of AR and MA processes}
+Because of duality between IIR and FIR (infinite and finite impulse response) filters, every AR process has an MA representation. Take for example AR(1):
+
+\begin{equation}
+    x[n]=a_1x[n-1]+w[n]\quad\Leftrightarrow\quad\sum_{j=0}^\infty b_jw[n-j]
+\end{equation}
+
+\section{Yule-Walker and the ACF: Motivations}
+Say we want to find the coefficients for an AR(1) process:
+
+\begin{equation}
+     x[n] = a_1x[n-1] + w[n]
+\end{equation}
+
+The case of $p=1$ is trivial. We form the over-determined system
+
+\begin{equation}
+    \underbrace{\begin{pmatrix}
+x_2 \\
+x_3 \\
+\vdots \\
+x_N
+\end{pmatrix}}_{\mathbf{b}} =
+\underbrace{\begin{pmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_{N-1}
+\end{pmatrix}}_{\mathbf{A}} a_1
+\end{equation}
+
+And solve with the least-squares estimator
+\begin{equation}
+\hat{a_1}=\left(\mathbf{A}^T\mathbf{A}\right)^{-1}\mathbf{A}^T\mathbf{b}=\frac{\sum_{i=1}^{N-1}x_ix_{i+1}}{\sum_{i=1}^{N-1}x_i^2}=\frac{c_1}{c_o}=r_1
+\end{equation}
+
+where $c_i, r_i$ refer to the i-th autocovariance and correlation coefficients respectively.\\
+
+For the case of $p=2$, with process 
+
+\begin{equation}
+     x[n] = a_1x[n-1] + a_2x[n-2] + w[n]
+\end{equation}
+
+We have 
+\begin{equation}
+\underbrace{\begin{pmatrix}
+x_3 \\
+x_4 \\
+\vdots \\
+x_N
+\end{pmatrix}}_{\mathbf{b}} = \underbrace{\begin{pmatrix}
+x_2 & x_1 \\
+x_3 & x_2 \\
+\vdots & \vdots \\
+x_{N-1} & x_{N-2}
+\end{pmatrix}}_{\mathbf{A}}
+\underbrace{\begin{pmatrix}
+a_1 \\
+a_2
+\end{pmatrix}}_{\mathbf{a}}
+\end{equation}
+
+But notice how that as the order grows, it becomes more computationally intensive to compute the inverse in $\hat{\mathbf{a}}=\left(\mathbf{A}^T\mathbf{A}\right)^{-1}\mathbf{A}^T\mathbf{b}$ as $\mathbf{A^TA}$ is not guaranteed to be diagonal, so inverting it becomes difficult.\\
+
+Instead, we can derive a more efficient process for any order $p$. From Equation \ref{eq:AR_norm_ACF}, we note that 
+
+\begin{equation*}
+    \rho(k)=a_1\rho(k-1)+a_2\rho(k-2)+\cdots+a_p\rho(k-p)\quad k>0
+\end{equation*}
+
+We can list the equations as such, notating $\rho(k)$ as $\rho_k$:
+
+\begin{align*}
+\rho_1 &= &a_1\rho_0 &+ &a_2\rho_1 &+ &a_3\rho_2 &+ &\cdots &+ &a_{p-1}\rho_{p-2} &+ &a_p\rho_{p-1} \\
+\rho_2 &= &a_1\rho_1 &+ &a_2\rho_0 &+ &a_3\rho_1 &+ &\cdots &+ &a_{p-1}\rho_{p-3} &+ &a_p\rho_{p-2} \\
+\rho_{p-1} &= &a_1\rho_{p-2} &+ &a_2\rho_{p-3} &+ &a_3\rho_{p-4} &+ &\cdots &+ &a_{p-1}\rho_0 &+ &a_p\rho_1 \\
+\rho_p &= &a_1\rho_{p-1} &+ &a_2\rho_{p-2} &+ &a_3\rho_{p-3} &+ &\cdots &+ &a_{p-1}\rho_1 &+ &a_p\rho_0
+\end{align*}
+
+
+Since $\rho_0 = 1$, we have:
+\begin{equation}\label{eq:YW}
+\underbrace{
+\left(\begin{array}{c}
+\rho_1 \\
+\rho_2 \\
+\vdots \\
+\rho_{p-1} \\
+\rho_p
+\end{array}\right)}_{\mb{r}} = 
+\underbrace{\left(\begin{array}{cccccc}
+1 & \rho_1 & \rho_2 & \cdots & \rho_{p-2} & \rho_{p-1} \\
+\rho_1 & 1 & \rho_1 & \cdots & \rho_{p-3} & \rho_{p-2} \\
+\vdots & \vdots & \vdots & & \vdots & \vdots \\
+\rho_{p-2} & \rho_{p-3} & \rho_{p-4} & \cdots & 1 & \rho_1 \\
+\rho_{p-1} & \rho_{p-2} & \rho_{p-3} & \cdots & \rho_1 & 1
+\end{array}\right)}_{\mathbf{R}}
+\underbrace{\left(\begin{array}{c}
+a_1 \\
+a_2 \\
+\vdots \\
+a_{p-1} \\
+a_p
+\end{array}\right)}_{\mb{a}}
+\end{equation}
+
+
+This is the form $\mathbf{Ra} = \mathbf{r}$, where $\mathbf{R}$ is a square coefficient matrix that is full rank and symmetric, and invertability is guaranteed. We can then go on to calculate $\hat{\mathbf{a}}=\mathbf{R}^{-1}\mathbf{r}$.
+
+\section{Yule-Walker and the PACF: Motivations}
+The PACF stands for the Partial Autocorrelation function, which shows the relationship between an observation in a time series with observations at prior time steps, with the relationships of intervening observations removed. \\
+
+It is a vector $\pi$ defined by
+
+\begin{equation}
+    \pi(k) = 
+\begin{cases} 
+1 & \text{if } k=0 \\
+a_{kk} & \text{if } k\geq1
+\end{cases}
+\end{equation}
+
+where $a_{kk}$ is the last component of $\mathbf{a}_k=[a_{k1},a_{k2},\ldots,a_{kk}]^T$ from $\mathbf{a}_k=\mathbf{R}_k^{-1}\mathbf{r}_k$. We denote $a_{kj}$ to be the jth coefficient in an autoregressive representation of order k, at Equation \ref{eq:YW}.\\
+
+$\rho_k=a_1\rho_{k-1}+a_2\rho_{k-2}+\cdots+a_p\rho_{k-p}\quad k>0$ now becomes:
+
+\begin{equation}
+    \rho_j=a_{kj}\rho_{j-1}+\cdots+a_{k(k-1)}\rho_{j-k+1}+a_{kk}\rho_{j-k}\quad j=1,2,\ldots,k
+\end{equation}
+
+\begin{equation}
+\underbrace{
+\left(\begin{array}{c}
+\rho_1 \\
+\rho_2 \\
+\vdots \\
+\rho_{k-1} \\
+\rho_k
+\end{array}\right)}_{\mb{r}} = 
+\underbrace{\left(\begin{array}{cccccc}
+1 & \rho_1 & \rho_2 & \cdots & \rho_{k-2} & \rho_{k-1} \\
+\rho_1 & 1 & \rho_1 & \cdots & \rho_{k-3} & \rho_{k-2} \\
+\vdots & \vdots & \vdots & & \vdots & \vdots \\
+\rho_{k-2} & \rho_{k-3} & \rho_{k-4} & \cdots & 1 & \rho_1 \\
+\rho_{k-1} & \rho_{k-2} & \rho_{k-3} & \cdots & \rho_1 & 1
+\end{array}\right)}_{\mathbf{R}}
+\underbrace{\left(\begin{array}{c}
+a_{k1} \\
+a_{k2} \\
+\vdots \\
+a_{k(k-1)} \\
+a_{kk}
+\end{array}\right)}_{\mb{a}}
+\end{equation}
+
+We can solve for $k=1,2\ldots$ manually:
+
+\begin{equation}
+    a_{11}=\rho_1,\quad a_{22}=\frac{\rho_2-\rho_1^2}{1-\rho_1^2},\quad a_{33}=\frac{\left|\begin{array}{ccc}1&\rho_1&\rho_1\\\rho_1&1&\rho_2\\\rho_2&\rho_1&\rho_3\end{array}\right|}{\left|\begin{array}{ccc}1&\rho_1&\rho_2\\\rho_1&1&\rho_1\\\rho_2&\rho_1&1\end{array}\right|},\quad\text{etc}
+\end{equation}
+
+The partial autocorrelation function at lag \( k \), denoted \(\pi(k)\) (or equally the AR coefficient \(a_{kk}\)), measures the linear relationship between \(x(n)\) and \(x(n - k)\), once we have removed the influence of \(x_{n-1}, \ldots, x_{n-k+1}\), i.e.,
+\[
+a_{kk} = \text{corr}\left(x(n) - \hat{x}(n), x(n - k) - \hat{x}(n - k)\right).
+\]
+
+The PACF is used to determine the order $p$ of an AR Model (when we are trying to model the data with an AR model), as when lag $k$ reaches $p$, PACF should drop off, indicating no linear relationship beyond that point.\\
+
+Therefore, for an AR(p) process, the PAC $a_{kk}$ is nonzero for all $k \leq p$ and zero everywhere else. In practice, it is difficult to guarantee this for real world data, so a small threshold for tolerance is needed.
+
+\section{Examples of Modelling with ARMA}
+See the slides, page 42 onwards.
+
+
+\section{Summary: AR and MA Processes}
+\begin{enumerate}
+    \item A stationary finite AR(\(p\)) process can be represented as an infinite order MA process. A finite MA process can be represented as an infinite AR process.
+    \item The finite MA(\(q\)) process has an Autocorrelation Function (ACF) that is zero beyond \(q\). For an AR process, the ACF is infinite in length and consists of a mixture of damped exponentials and/or damped sine waves.
+    \item Finite MA processes are always stable, and there is no requirement on the coefficients of MA processes for stationarity. However, for invertibility, the roots of the characteristic equation must lie inside the unit circle.
+    \item AR processes produce spectra with sharp peaks (two poles of \(A(z)\) per peak), whereas MA processes cannot produce peaky spectra.
+\end{enumerate}
+
+\textbf{ARMA modelling} is a classic technique which has found a tremendous number of applications.
+
+\section{Summary: Wold's Decomposition Theorem and ARMA}
+\begin{itemize}
+    \item Every stationary time series can be represented as a sum of a perfectly predictable process and a feasible moving average process.
+    \item Two time series with the same Wold representations are the same, as the Wold representation is unique.
+    \item Since any MA process also has an ARMA representation, working with ARMA models is not an arbitrary choice but is physically justified.
+    \item The causality and stationarity on ARMA processes depend entirely on the AR parameters and not on the MA parameters.
+    \item An MA process is not uniquely determined by its ACF.
+    \item An AR(\(p\)) process is always invertible, even if it is not stationary.
+    \item An MA(\(q\)) process is always stationary, even if it is non-invertible.
+\end{itemize}

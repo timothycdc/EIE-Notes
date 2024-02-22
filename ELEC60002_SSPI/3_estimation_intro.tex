@@ -1,0 +1,161 @@
+\chapter{Intro to Estimation Theory}
+\section{Introduction}
+\begin{itemize}
+    \item Historical data still allows for accurate modelling of complex systems.
+    \item This links to a need for a unifying and rigorous framework that defines a `goodness of performance' measure for any Data Analytic model
+\end{itemize}
+
+Terminology: \textbf{Prediction} refers to a pre-built model based on in-sample data to estimate out-of-sample values. \textbf{Forecasting} is a form of prediction that implicitly assumes time-series methods, and we use historical data to predict future data, often with probabilistic bounds (confidence intervals).
+
+\section{Statistical Estimation: Problem Statement}
+
+\begin{definitionbox}{Estimators and Estimate}
+Given an N-point dataset, $x[0],x[1],\ldots,x[N-1]$ that depends on unknown scalar parameter $\theta$. We let $\hat{\theta}$ be an estimator that is defined as a function $g(\cdot)$ of dataset $\{x\}$, that can estimate our unknown parameter $\theta$.
+
+\begin{equation}
+    \hat{\theta}=g\big(x[0],x[1],\ldots,x[N-1]\big)
+\end{equation}
+
+This is the single parameter or scalar case. We can consider the vector case, determining a set of parameters $\mb{\theta} = [\theta_1, \ldots,\theta_p]^T$ from data samples $\mb{x} = [x[0], \ldots,x[N-1]]^T$ where such parameters will yield the highest probability of obtaining the observed data. 
+
+\begin{equation}
+    \max_{\text{span }\boldsymbol{ \theta}}p(\mb{x};\boldsymbol{\theta})
+\end{equation}
+
+The \textbf{estimator refers to our rule }$g(\mb{x})$ that assigns a value to parameter $\theta$. And an \textbf{estimate} of the true value of $\theta$ is $\hat{\theta}$.
+
+\end{definitionbox}
+We can estimate $\theta$ with \textbf{classical estimation}, assuming $\theta$ is deterministic with no \textit{a priori} information about it (minimum-variance solution, least-squares), or use \textbf{Bayesian estimation}, applying prior knowledge to it (Wiener and Kalman filters, adaptive signal processing).\\
+
+$p(\mb{x};\boldsymbol{\theta})$ contains all the information we need to find $\hat{\theta}$, however, in practice, the PDF is not given so we need to choose a model that captures the essence of the system we are trying to model – leading to a mathematically tractable estimator.
+
+\begin{definitionbox}{Gaussian RV}
+A Gaussian random variable $X \sim N(\mu, \sigma^2)$ has the pdf
+
+\begin{equation}
+\begin{aligned}p_X(x)&=\frac1{\sigma\sqrt{2\pi}}e^{\large-\frac{(x-\mu)^2}{2\sigma^2}}\end{aligned}
+\end{equation}
+
+$\mu$ is the mean, $\sigma$ is the standard deviation, and is greater than zero. $\sigma^2$ is the variance.
+\end{definitionbox}
+
+\begin{definitionbox}{Conditional PDF}
+A conditional pdf $p_{y \mid x}(y\mid x) $ can be thought of as a sliced, normalised form of the joint pdf $p(x,y)$.\\
+
+It is formally defined as 
+
+\begin{equation}
+    p_{Y\mid X}(y \mid x) = \begin{cases}
+    \frac{p_{XY}(x,y)}{p_X(x)}& p_X(x) \neq 0
+        \\ 0 & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+General shorthand and notation means we define it as
+\begin{equation}
+    p(x \mid y) = \begin{cases}
+    \frac{p(x,y)}{p(y)}& p(y) \neq 0
+        \\ 0 & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+\end{definitionbox}
+
+\begin{definitionbox}{Bias}
+The bias is the difference between the expected value of the estimate $\hat{\theta}$ and actual value of the parameter $\p$.
+
+It is denoted by $B$. For $N$ data samples, we have
+
+\begin{equation}
+    B = E\{\est_N - \p\}
+\end{equation}
+
+It can also be defined as $E[\eta]$, where $\eta = \est - \p$.
+
+\end{definitionbox}
+
+\section{Goodness of an Estimate}
+
+We assume noise $\mb{w}$ is white with i.i.d samples. But whiteness is not realistic, much rather, it is Gaussian. We can also assume it has zero-mean. These assumptions (later on) allow us to find a performance bound for optimal estimators, allowing us to gauge performance of an estimator.\\
+
+Goodness analysis is usually a function of noise variance $\sigma_w^2$, usually expressed in terms of signal-to-noise ratio, SNR.
+
+Usually, we can only assess performance if we know true $\p$. Typically the goodness of an estimator is captured through the mean and variance of $\est = g(\mb{x})$. \\
+
+We want $\mu_{\est} = E[\est] = \p$, and a small variance, $\sigma_{\est} = E\{(\est - E \{\est\})^2\}$\\
+
+Estimation error $\eta$ is defined by $\eta = \est - \p$. Since $\est$ is a random variable and $\p$ is a constant, then $\eta$ is a random variable too. Also, $\eta =0$ refers to an unbiased estimator, which exactly matches the parameter $\p$.
+
+We need:
+\begin{enumerate}
+    \item $E\{\eta\} = 0$, an unbiased estimator
+    \item A minimum variance, where $\var(\eta)=E\{(\eta-E\{\eta\})^2\}$ is small
+\end{enumerate}
+
+\subsection{Bias}
+
+\begin{itemize}
+\item For sufficiently large N observations of $x[n]$, the expected value of an unbiased estimate $\est$ converges towards its true value:
+
+\begin{equation}
+    E\{\est_N\} = \theta \equiv B =  E\{\est_N\}- \p =0
+\end{equation}
+
+\item Conversely, if $B\neq 0$ then the estimator $\est = g(\mb{x})$ is biased asymptotically.
+\item Therefore it can be described that an estimator's bias is a critical measure of its \textbf{accuracy}. An unbiased estimator has an expected value equal to the parameter it estimates, while an asymptotically unbiased estimator approaches this property as the sample size grows infinitely large.
+\end{itemize}
+
+\subsection{Variance}
+
+\begin{itemize}
+    \item The \textbf{precision} of an estimator is assessed by how closely it can consistently estimate the parameter. This is formalised by the variance of the estimator approaching zero as the sample size increases indefinitely, called the \textbf{variance criterion}:
+    \begin{equation}
+    \lim_{N \to \infty} \mathrm{var}(\hat{\theta}_N) = 0
+    \end{equation}
+    
+    \item This notion of precision can also be expressed in terms of the estimator's mean squared error (MSE) diminishing as the sample size grows:
+    \begin{equation}
+    \lim_{N \to \infty} \E\left[ (\hat{\theta}_N - \E[\hat{\theta}_N])^2 \right] = 0
+    \end{equation}
+
+    The Mean Square Convergence is a stronger form of converge than the aforementioned \textbf{variance criterion}.
+    
+    \item When the estimator is unbiased, which means its expected value is the true parameter value, we can apply Chebyshev's inequality to show that the estimator's probability of deviating from the true parameter by more than any positive number \(\epsilon\) decreases as variance decreases:
+    \begin{equation}
+    \Pr\left\{|\hat{\theta}_N - \theta| \geq \epsilon\right\} \leq \frac{\mathrm{var}(\hat{\theta}_N)}{\epsilon^2}
+    \end{equation}
+    
+    \item If the \textbf{variance of the estimator does indeed tend to zero as the sample size approaches infinity}, and the estimator is \textbf{asymptotically biased}, the estimator is \textbf{consistent}. This means that the probability that $\est$ differs from $\p$ by more than $\epsilon$ will go to zero; it converges in probability to the true parameter value:
+    \begin{equation}
+    \hat{\theta}_N \xrightarrow{N \to \infty} \theta
+    \end{equation}
+\end{itemize}
+
+\begin{sidenotebox}{Tschebycheff (or Chebyshev) inequality}
+    \textbf{Fun trivia:} Tschebycheff is one of many transliterations for Chebyshev, more include Tchebichef, Tchebychev, Tchebycheff, Tschebyschev...\\
+
+Chebyshev's inequality provides a bound on the probability that a random variable deviates from its mean. To prove this, we will use Markov's inequality, which states that for a non-negative random variable \(X\) and any \(a > 0\),
+\begin{equation}
+    P(X \geq a) \leq \frac{\E[X]}{a}.
+\end{equation}
+
+Now let \(X\) be a random variable with finite mean \(\mu\) and finite variance \(\sigma^2\). For any \(\epsilon > 0\), consider the non-negative random variable \((X - \mu)^2\). Applying Markov's inequality to this random variable, we have:
+\begin{equation}
+    P((X - \mu)^2 \geq \epsilon^2) \leq \frac{\E[(X - \mu)^2]}{\epsilon^2}.
+\end{equation}
+
+Since the variance of \(X\) is \(\sigma^2\), we have \(\E[(X - \mu)^2] = \sigma^2\). Therefore, we can rewrite the inequality as:
+\begin{equation}
+    P((X - \mu)^2 \geq \epsilon^2) \leq \frac{\sigma^2}{\epsilon^2}.
+\end{equation}
+
+Noticing that \((X - \mu)^2 \geq \epsilon^2\) if and only if \(|X - \mu| \geq \epsilon\), we can write:
+\begin{equation}
+    P(|X - \mu| \geq \epsilon) \leq \frac{\sigma^2}{\epsilon^2}.
+\end{equation}
+
+This is the statement of Chebyshev's inequality. \(\blacksquare\)
+
+\end{sidenotebox}
+
+\section{Minimum Variance Unbiased (MVU) Estimation}

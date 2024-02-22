@@ -1,0 +1,62 @@
+
+\documentclass{report}
+    \title{Statistical Signal Processing \& Inference notes}
+    \author{Timothy Chung}
+    \date{8/01/24}
+
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\setlength\parindent{0pt}
+\input{common.tex}
+\newcommand{\infer}[2]{\cfrac{#1}{#2}}
+\newcommand{\infers}[3]{\cfrac{#1}{#2}(#3)}
+
+\newcommand{\ninfer}[3]{(\text{#1}):\cfrac{#2}{#3}}
+\newcommand{\ninfers}[4]{(\text{#1}):\cfrac{#2}{#3}(#4)}
+\newcommand{\ainfer}[3]{\cfrac{#2}{#3}(\text{#1})}
+
+\newcommand{\mllet}[2]{\text{let } #1 \text{ in } #2}
+\newcommand{\mlfix}[2]{\text{fix } #1 . #2}
+
+\newcommand{\hc}{\mathcal{H}}
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\E}{\text{E}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\mb}{\mathbf}
+\newcommand{\est}{\hat{\theta}}
+\newcommand{\p}{\theta}
+
+
+
+\begin{document}
+\include{titlepage/titlepage}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    \Huge
+    \textbf{ELEC60002 Statistical Signal Processing and Inference} \\
+    \vspace{1cm}
+    \Large
+    Timothy Chung \\
+    \vspace{1cm}
+    Spring 2024 \\
+    \vfill
+\end{titlepage}
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+\newpage
+\setcounter{chapter}{-1}
+\chapter{Foreword}
+The notes are intended to be a gentle introductory supplement to the well-documented course notes, and not a full replacement with all the bells and whistles (e.g. real life use-cases, mathematical examples). The full notes are available on Professor Danilo Mandic's website \href{https://www.commsp.ee.ic.ac.uk/~mandic/courses.htm}{here.}\\
+
+
+Thus, a better title for this document would be `Elements of Statistical Signal Processing and Inference'.
+
+\input{1_intro}
+\input{2_ARMA}
+\input{3_estimation_intro}
+
+
+\end{document}
+
