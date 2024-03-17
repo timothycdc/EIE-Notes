@@ -1,0 +1,281 @@
+\chapter{Adaptive Estimation and Inference}
+
+\section{Introduction}
+\subsection{Objectives}
+\begin{itemize}
+    \item Introduce real-time adaptive estimation for \textbf{streaming} data
+    \item Adaptive filters, ARMA models with adaptive coefficients, Wiener filter, Stochastic gradient algorithm, Least Mean Square (LMS)
+    \item Learning rate, bias, variance
+    \item Filtering configurations, nonlinear structures, stability and convergence, and applications
+
+\end{itemize}
+\subsection{Adaptive Filters}
+\begin{itemize}
+    \item Adaptive filters: No assumptions of data
+    \item Number guessing game: one person picks an integer within [-50,50]. The class tries to discover the number in the following styles of game:
+    \begin{itemize}
+        \item Random guess with just correct/incorrect
+        \item Random guess with correct/incorrect and whether the number to be guessed was higher or 
+        lower
+        \item Nonstationarity: guessed number can fluctuate occasionally.
+    \end{itemize}
+    \item This can be described as a recursive update:
+    \begin{align}
+        g_i(n+1) &= g_i(n) + \text{sign}(e(n))\cdot\text{rand}[g_i(n), g_i(n-1)]\\
+        \text{new guess} &= \text{old guess} +  \text{correction}
+    \end{align}
+\end{itemize}
+
+The more formal way is a form of an adaptive filter:
+\begin{align}
+    \text{Correction Term} = \text{Learning Rate} \times \text{Function of Input Data} \times \text{Function of Output Error}
+\end{align}
+
+
+
+
+
+\section{Wiener-Hopf Solution}
+\subsection{Problem Formulation}
+Consider a vector of $p$ sensor signals (thus representing a filter order $p$) with individual signals being $\mb{x(n)}= [x_1(n),\cdots,x_p(n)]^T $ weighted by the corresponding set of \textbf{time-varying} filter parameters $\mb{w}(n) = [w_1(n), \cdots, w_p(n)]^T$.\\
+
+Let the output be the sum of weighted signals:
+\begin{align}
+    y(n) = \sum^p_{i=1} w_i(n)x_i(n) = \mb{x}^T(n)\mb{w}(n) \quad \quad n=0,1,2,...
+\end{align}
+
+Our objective is to find the \textbf{optimum} set of \textbf{fixed} weights $\mathbf{w}_o=[w_{o1},\ldots,w_{op}]^T$ that minimises difference between system output and desired response $d(n)$. Let $d(n)$ be the desired response, or teaching signal, for the filter. \\
+
+We can then define an error signal $e(n) = d(n) - y(n)$.\\
+
+We will want to minimise the mean square error, or the expected value of the error power. Note that for convenience we use half of the expected value, it will have the same optimum weights but is neater to differentiate for other uses, such as finding the closed-form solution. Now, we define the error power, or the expected power, for a given weight, $J(\mb{w})$:
+
+\begin{align}
+    J(\mb{w})=\frac12E\{e^2(n)\}&=\frac12E\left\{\left(d(n)-\sum_{k=1}^pw_k(n)x_k(n)\right)^2\right\} \quad \quad \mb{w}(n) = [w_1(n), \cdots, w_p(n)]^T\\
+    &=\frac12E\{d^2\}-E\left\{\sum_{k=1}^pw_kx_kd\right\}+\frac12E\left\{\sum_{j=1}^p\sum_{k=1}^pw_jw_kx_jx_k\right\}\\
+    &=\frac12E\{d^2\}-\sum_{k=1}^pw_kE\{x_kd\}+\frac12\sum_{j=1}^p\sum_{k=1}^pw_jw_kE\{x_jx_k\} \label{eqn:wiener}
+\end{align}
+
+Now, we introduce the following:\\
+
+The variance of the desired signal, denoted \(\sigma_d^2\), is defined as the expected value of \(d^2\), representing the power of the teaching (desired) signal.\\ 
+
+The cross-correlation between \(d\) and \(x_k\) is given by \(r_{dx}(k)\), indicating the cross-correlation between \(d\) and \(x_k\)\\
+
+The autocorrelation at lag \((j - k)\) for the stochastic process \(x\) is represented as \(r_x(j, k)\), which expresses the autocorrelation at lag \((j - k)\):
+
+\begin{align*}
+\sigma_d^2 &= E\{d^2\} \\
+r_{dx}(k) &= E\{dx_k\}, & k &= 1, 2, \ldots, p \\
+r_x(j, k) &= E\{x_jx_k\}, & j, k &= 1, 2, \ldots, p
+\end{align*}
+
+
+Substitute the notation into Equation \ref{eqn:wiener} and this yields:
+\begin{align}
+    J(\mb{w})=\frac12\sigma_d^2-\sum_{k=1}^pw_kr_{dx}(k)+\frac12\sum_{j=1}^p\sum_{k=1}^pw_jw_kr_x(j,k)
+\end{align}
+
+This is a multidimensional plot of cost function $J$ against the weights, an error surface of the filter. This surface is bowl-shaped (see slide 7 page 10 for a 2-parameter example) and has a global minimum point that is well-defined. 
+
+The \textbf{Wiener solution} follows a least-squares approach. Denote the optimum value of weight $w_k$ as $w_{ok}$.
+
+\begin{align}
+    \nabla_{w_k}J=\frac{\partial J}{\partial w_k}&=\frac\partial{\partial w_k}\Big[\frac12\sigma_d^2-\sum_{k=1}^pw_kr_{dx}(k)+\frac12\sum_{j=1}^p\sum_{k=1}^pw_jw_kr_x(j,k)\Big]\quad k=1,\ldots,p\\
+    &=-r_{dx}(k)+\sum_{j=1}^pw_jr_x(j,k)=0\\
+    &=\sum_{j=1}^pw_{oj}r_x(j,k)=r_{dx}(k),\quad k=1,2,\ldots,p\quad\Leftrightarrow\quad\mathbf{R}_{xx}\mathbf{w}_o=\mathbf{r}_{d\mathbf{x}}\\
+    &\Rightarrow \mathbf{w}_o=\mathbf{R}_{xx}^{-1}\mathbf{r}_{dx}
+\end{align}
+
+The system of equations we are left with are termed the Wiener-Hopf equations, where a filter with weights that satisfy the equations is called a Wiener filter. Notice this is a block filter that operates on the whole set of data, making it non-sequential. This will not work for streaming data.
+
+It is also computationally demanding to calculate inverses for large correlation matrices $\mathbf{R}_{xx}$.
+
+\subsection{Method of steepest descent}
+This is an iterative Wiener solution that allows weights to be adjusted in an iterative fashion along the error surface. Take the direction opposite to the gradient vector, with elements defined by $\nabla_{w_k}J$ for $k=1,2,\cdots,p$. Assume a teaching signal is \( d(n) = \mathbf{x}^T(n) \mathbf{w}_0 + q(n) \), where \( q \) is a noise term following a normal distribution \( q \sim \mathcal{N}(0, \sigma_q^2) \), so that we have \( J_{\text{min}} = \sigma_q^2 \).\\
+
+We have 
+\begin{align}
+    \nabla_{w_k}J(n)=-r_{dx}(k)+\sum_{j=1}^pw_j(n)r_x(j,k)
+\end{align}
+
+The adjustment applied to weight $w_k(n)$ at iteration $n$, called the weight update $\Delta w_k(n)$, is defined as the negative, opposing direction of the gradient:
+
+\begin{align}
+    \Delta w_k(n)=-\mu\nabla_{w_k}J(n),\quad k=1,2,\ldots,p
+\end{align}
+
+where \(\mu\) is a small positive constant, \(\mu \in \mathbb{R}^+\), called the learning rate parameter (also called step size, usually denoted by \(\mu\) or \(\eta\)).\\
+
+
+Recall the gradient of \( J \) with respect to the \( k \)-th weight:
+\begin{equation}
+\nabla_{w_k} J(n) = -r_{dx}(k) + \sum_{j=1}^p w_j(n)r_x(j, k) \quad \text{or} \quad \nabla_{\mathbf{w}} J(n) = -\mathbf{r}_{dx} + \mathbf{R}\mathbf{w}
+\end{equation}
+
+Given the \textit{current} value of the \( k \)-th weight \( w_k(n) \) at iteration \( n \), the \textit{updated} value of this weight at the next iteration \( n+1 \) is computed as:
+\begin{align}
+w_k(n + 1) &= w_k(n) + \Delta w_k(n) = w_k(n) - \mu \nabla_{w_k} J(n) \\
+\mathbf{w}(n + 1) &= \mathbf{w}(n) + \Delta \mathbf{w}(n) = \mathbf{w}(n) - \mu \nabla_{\mathbf{w}} J(n)
+\end{align}
+where \(\mu\) is a small positive constant, representing the learning rate. The \textbf{updated filter weights} are equal to the \textbf{current weights} plus the \textbf{weight update}. We then have:
+\begin{equation}
+w_k(n + 1) = w_k(n) + \mu \left[ r_{dx}(k) - \sum_{j=1}^p w_j(n)r_x(j, k) \right], \quad k = 1, \ldots, p
+\end{equation}
+or in a vector form:
+\begin{definitionbox}{Steepest Descent Update Rule}
+\begin{equation}
+\mathbf{w}(n + 1) = \mathbf{w}(n) + \mu \left[ \mathbf{r}_{dx} - \mathbf{R}\mathbf{w}(n) \right]
+\end{equation}
+\end{definitionbox}
+
+The SD method is \textbf{exact} in that no approximations are made in the derivation; the key difference is that the solution is obtained iteratively. Observe that there is no matrix inverse in the update of filter weights!
+
+Notice we have an adaptive parameter estimator that is determined in an iterative form, i.e. $\text{new parameter estimate} = \text{old parameter estimate} + \text{update}$.
+
+\begin{itemize}
+    \item A \textbf{spatial filter}'s cost function is an ensemble average taken at instant $n$ over an ensemble of spatial filters. An example could be nodes in a sensor array.
+    \item A temporal filter's cost function is the is the sum of error squares over time, where ACF and other processes use time averages. If the processes are jointly ergodic it is justified to substitute time averages for ensemble averages. The sum of error squares is computed by:
+    \begin{align}
+        \mathcal{E}_{total}=\sum_{i=1}^n\mathcal{E}(i)=\frac12\sum_{i=1}^ne^2(i)
+    \end{align}
+\end{itemize}
+
+% continue on slide 20
+\subsection{Learning Rate or Step Size}
+Choosing the right learning rate $\mu$ is crucial to converge on the global minimum solution.
+\begin{itemize}
+    \item For $\mu$ that is small enough the steepest descent (SD) algorithm will converge to a stationary point (local or global minimum) where $J(e) \equiv J(\mb{w}_o)$ where $\nabla_wJ(\mb(w)_o = 0$
+    \item When $\mu$ is small compared to critical value $\mu){crit}$, the trajectory by the weight vector $\mb{w}(n)$ for increasing $n$ tends to be monotonic (steady movement towards solution). 
+    \item But as $\mu$ gets closer to $\mu_{crit}$, the trajectory is oscillatory or overdamped. 
+    \item When $\mu$ exceeds $\mu_{crit}$, trajectory becomes unstable.
+\end{itemize}
+
+
+
+\subsection{Matrix Formulation}
+Similar to the previous section, the vector-matrix formulation of the Wiener filter is as follows:\\
+
+
+The cost (error objective) function, \( J \), defined as \( J = \frac{1}{2} E\{\mathbf{e}^2(n)\} \), can be expanded by:
+\begin{align}
+J &= \frac{1}{2} E\{ \mathbf{e} \mathbf{e}^T \} \nonumber \\
+  &= \frac{1}{2} E\{ (\mathbf{d} - \mathbf{w}^T \mathbf{x})(\mathbf{d} - \mathbf{w}^T \mathbf{x})^T \} \nonumber \\
+  &= \frac{1}{2} E\{ \mathbf{d}^2 - \mathbf{d}\mathbf{x}^T \mathbf{w} - \mathbf{w}^T \mathbf{x}\mathbf{d}^T + \mathbf{w}^T \mathbf{x}\mathbf{x}^T \mathbf{w} \} \nonumber \\
+  &= \frac{1}{2} E\{ \mathbf{d}^2 - 2\mathbf{d}\mathbf{x}^T \mathbf{w} + \mathbf{w}^T \mathbf{x}\mathbf{x}^T \mathbf{w} \} \nonumber \\
+  &= \frac{1}{2} E\{ \mathbf{d}^2 \} - \mathbf{w}^T E\{ \mathbf{d}\mathbf{x}^T \} + \frac{1}{2} \mathbf{w}^T E\{ \mathbf{x}\mathbf{x}^T \} \mathbf{w}
+\end{align}
+where the cross-correlation vector \( \mathbf{r}_{dx} = E\{ \mathbf{d}\mathbf{x}^T \} \) and the autocorrelation matrix \( \mathbf{R} = E\{ \mathbf{x}\mathbf{x}^T \} \).
+
+Thus, with \( \mathbf{w} \) being still a fixed vector for the time being, the cost function \( J \) can be expressed as:
+\begin{equation}
+J = \frac{1}{2} \sigma_d^2 - \mathbf{w}^T \mathbf{r}_{dx} + \frac{1}{2} \mathbf{w}^T \mathbf{R} \mathbf{w}
+\end{equation}
+This function is quadratic in \( \mathbf{w} \) and, for a full-rank \( \mathbf{R} \), it has a unique minimum, \( J(\mathbf{w}_0) \).\\
+
+For \( J_{min} = J(\mathbf{w}_0) \) implies that the derivative of \( J \) with respect to \( \mathbf{w} \), \( \frac{\partial J}{\partial \mathbf{w}} = -\mathbf{r}_{dx} + \mathbf{R} \cdot \mathbf{w} = \mathbf{0} \), which results in:
+\begin{equation}
+\mathbf{0} = -\mathbf{r}_{dx} + \mathbf{R} \cdot \mathbf{w}_0
+\end{equation}
+
+Finally, we obtain the Wiener-Hopf equation:
+\begin{equation}
+\mathbf{w}_0 = \mathbf{R}^{-1} \mathbf{r}_{dx}
+\end{equation}
+
+
+
+\section{Least Mean Square (LMS) Algorithm}
+\textbf{Recall: } from the steepest descent (SD) rule, we have:
+
+\begin{equation}
+\mathbf{w}(n + 1) = \mathbf{w}(n) + \mu \left[ \mathbf{r}_{dx} - \mathbf{R}\mathbf{w}(n) \right]
+\end{equation}
+
+However correlations $ \mathbf{r}_{dx}, \mathbf{R}$ are not readily available or time-consuming to complete. The Least Mean Squares minimises $\mathbf{J(n)}=\frac12e^2(n)$ using instant estimates of the following processes:
+
+\begin{align}
+\mathbf{\hat{R}}(n)&=\mathbf{x}(n)\mathbf{x}^T(n)\\
+\mathbf{\hat{r}}_{d\mathbf{x}}(n)&=d(n)\mathbf{x}(n)
+\end{align}
+
+We then substitute into the SD equation:
+
+\begin{equation}
+    \begin{aligned}\mathbf{w}(n+1)\quad&=\quad\mathbf{w}(n)+\mu\big[d(n)\mathbf{x}(n)-\mathbf{x}(n)\underbrace{\mathbf{x}^T(n)\mathbf{w}(n)}_{\color{red}{y}(n)}\big]\\&=\quad\mathbf{w}(n)+\mu[\underbrace{d(n)-y(n)}_{\color{red}{e}(n)}]\mathbf{x}(n)\end{aligned}
+\end{equation}
+
+We are then left with:
+\begin{equation}
+    \mathbf{w}(n+1)=\mathbf{w}(n)+\mu e(n)\mathbf{x}(n)
+\end{equation}
+
+Generally, LMS takes longer to converge and follows a jagged `zig-zag' pattern, however it is computationally much cheaper to implement.
+
+\subsection{Temporal Problems Example with LMS}
+\subsection{Visualisations of convergence}
+\begin{itemize}
+    \item Chapter, Slide 23
+    \item Chapter 7, Slide 27
+\end{itemize}
+
+\subsection{Convergence of LMS vs MVU Estimation}
+% Note: add slide 30 math + appendix 4
+\begin{itemize}
+    \item A convergence in the mean implies a bias in parameter estimation. $E\{\mathbf{w}(n)\}\to\mathbf{w}_0\quad $as $ n\to\infty $, similar to the requirement for an unbiased optimal weight estimate.
+    \item Convergence in the mean square error implies a variance in the estimator, as it fluctuates around the instant weight vector estimates. Since error is a function of filter weights, it can be denoted $E\{e^2(n)\} \to \text{constant}$ as $n \to \infty$
+    \item We expect MSE convergence condition to be tighter. If LMS is not convergent in mean square error, then it is convergent in mean, but converse is not always true. (i.e. if an estimator is unbiased, it is not necessarily minimum variance, but if it is minimum variance it is likely unbiased.)
+\end{itemize}
+
+
+% notes:
+% IIR filter has infinite response
+% FFN network has how much memory?
+% compare AR(1) to MA (100)
+% Smallest RNN network bigger than largest FFN network
+% when you unfold the recurrent NN
+% too many layers = too much memory? this is why no one uses a NN for a noise cancellation
+
+\section{Applications of adaptive filters}
+\begin{itemize}
+    \item \textbf{Forward prediction: } desired signal is input signal advanced relative to input of adaptive filter. Examples: financial forecasting, wind prediction
+    \item \textbf{System identification: } adaptive filter and unknown system are connected in parallel and fed same input signal $x(n)$. Examples: echo cancellation, removing feedback whistling in teleconferencing, hearing aids
+    \item \textbf{Inverse system modelling: } adaptive filter cascaded with unknown system. Examples: channel equalisation in mobile telephony, wireless sensor networks, underwater communications, mobile sonar, mobile radar
+    \item \textbf{Noise Cancellation: } assuming noise in primary input and reference noise are correlated. Noise removal in phones, concert halls, video recording
+\end{itemize}
+
+% a neural network is a nonlinear adaptive filter
+
+\section{Elements of Neural Networks}
+\subsection{Motivations of nonlinear structures}
+\begin{itemize}
+    \item Cannot separate signals with overlapping components without nonlinear models
+    \item Cannot capture nonlinear signals that are non-gaussian
+\end{itemize}
+
+\subsection{Model of an artificial neuron}
+\begin{itemize}
+    \item Delayed inputs $x$
+    \item Bias input with unity value
+    \item Takes the sums and multilies
+    \item Nonlinear output (activation function)
+\end{itemize}
+% Human body signals are easily saturated. Staring at the sun. Retinas saturated Sigmoid is a good shape
+Nonlinear output: distorts/attenuates the signal more at the extremities.
+Bounded input, bounded output.
+NNs represent nonlinear maps from one metric space to another
+% slide 44 input info
+
+% show slide 45 is similar to LMS, just nonlinear, quasi-linear for activation function like sigmoid
+
+
+
+% convergence: fixed point theory, contraction map???
+
+
+
+
+
+% Human body signals are easily saturated. Staring at the sun. Retinas saturated Sigmoid is a good shape
+
+% final takeaway: use your knowledge and not brute force!!!

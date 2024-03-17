@@ -88,7 +88,7 @@ Estimation error $\eta$ is defined by $\eta = \est - \p$. Since $\est$ is a rand
 
 We need:
 \begin{enumerate}
-    \item $E\{\eta\} = 0$, an unbiased estimator
+    \item $E\{\eta\} = 0$, an \textbf{unbiased} estimator
     \item A minimum variance, where $\var(\eta)=E\{(\eta-E\{\eta\})^2\}$ is small
 \end{enumerate}
 
@@ -110,7 +110,7 @@ We need:
 \begin{itemize}
     \item The \textbf{precision} of an estimator is assessed by how closely it can consistently estimate the parameter. This is formalised by the variance of the estimator approaching zero as the sample size increases indefinitely, called the \textbf{variance criterion}:
     \begin{equation}
-    \lim_{N \to \infty} \mathrm{var}(\hat{\theta}_N) = 0
+    \lim_{N \to \infty} \mathrm{var}(\hat{\theta}_N) = \lim_{N\to\infty}\left\{E\left[\left|\hat{\theta}_N-E\{\hat{\theta}_N\}\right|^2\right]\right\}=0
     \end{equation}
     
     \item This notion of precision can also be expressed in terms of the estimator's mean squared error (MSE) diminishing as the sample size grows:
@@ -130,6 +130,18 @@ We need:
     \hat{\theta}_N \xrightarrow{N \to \infty} \theta
     \end{equation}
 \end{itemize}
+
+\begin{definitionbox}{Unbiased vs Consistent Estimators}
+    \textbf{Unbiased estimators} are defined by $\E\{\est\} = \p$. \textbf{Asymptotically unbiased estimators} are defined by $\E\{\est_N\} = \p$ when $n \to \infty$.\\
+
+    If an\textbf{ asymptotically unbiased or unbiased estimator} has a variance that tends to zero as sample size grows to infinity, as shown by:
+
+    \begin{equation}
+        \lim_{N\to\infty}\left\{\E\left[\left|\hat{\theta}_N-\E\{\hat{\theta}_N\}\right|^2\right]\right\}=0
+    \end{equation}
+
+    Then the estimator is \textbf{consistent}.
+\end{definitionbox}
 
 \begin{sidenotebox}{Tschebycheff (or Chebyshev) inequality}
     \textbf{Fun trivia:} Tschebycheff is one of many transliterations for Chebyshev, more include Tchebichef, Tchebychev, Tchebycheff, Tschebyschev...\\
@@ -158,4 +170,56 @@ This is the statement of Chebyshev's inequality. \(\blacksquare\)
 
 \end{sidenotebox}
 
+\subsection{Testing Estimators}
+Theoretical analysis helps measure the goodness (bias and variance) of the estimators, and use of simulations such as Monte Carlo help verify correctness of theoretical results, or give insight when we cannot find theoretical results. \\
+
+Sometimes estimators have no optimality properties, but may perform good enough in practice.
+
 \section{Minimum Variance Unbiased (MVU) Estimation}
+
+In this section we aim to establish what are `good' estimators of unknown deterministic parameters.
+
+Denote $A$ to be a deterministic signal that lies in interval $(-\infty, \infty)$, observed as $x[n]$ with additive white Gaussian noise (WGN) $w$:
+
+\begin{equation}
+    x[n] = A + w[n] \quad\quad n=0,1,\ldots,N-1
+\end{equation}
+
+An example of an estimator for $A$ would be the sample mean:
+
+\begin{equation}
+    \hat{A} = \frac{1}{N} \sum^{N-1}_{n=0} x[n]
+\end{equation}
+
+Another estimator for $A$ would be half the sample mean:
+
+\begin{equation}
+    \hat{\hat{A}} = \frac{1}{2N} \sum^{N-1}_{n=0} x[n]
+\end{equation}
+
+But notice how $\E\{\hat{\hat{A}}\} = \begin{cases} 0 & A=0 \\ A/2 & A\neq 0\end{cases}$, making it parameter dependent! So it is not unbiased.\\
+
+An biased estimator introduces a `systemic error', which means for certain values of $A$, we will have to correct them, which makes things messy and inconvenient. Our goal is to avoid biased estimators.
+
+\subsection{Averaging Biased Estimators Example}
+See slides 31-32 for reference. Main takeaway: averaging biased  estimators will not remove their bias.
+
+
+\subsection{Mean Square Error}
+
+The Mean Square Error (MSE), is defined as :
+
+\begin{equation}
+    MSE(\hat{\theta})=E\left\{(\hat{\theta}-\theta)^2\right\}
+\end{equation}
+
+This measures the average mean squared deviation of the estimate $\est$ from the true value. We find that it is \textbf{equal to the variance of the estimator plus squared bias}.
+
+\begin{equation}
+    \begin{aligned}
+MSE\left(\hat{\theta}\right)& =E\big\{(\hat{\theta}-\theta)^2\big\}=E\big\{\big[(\hat{\theta}-E\{\hat{\theta}\})+(\underbrace{E\{\hat{\theta}\}-\theta}_{=bias,~B(\hat{\theta})})\big]^2\big\}  \\
+&=E\Big\{\left[\hat{\theta}-E\{\hat{\theta}\}\right]^2\Big\}+2B(\hat{\theta})\underbrace{E\big\{\hat{\theta}-E\{\hat{\theta}\}\big\}}_{=0}+B^2(\hat{\theta}) \\
+&=var(\hat{\theta})+B^2(\hat{\theta})
+\end{aligned}
+\end{equation}
+

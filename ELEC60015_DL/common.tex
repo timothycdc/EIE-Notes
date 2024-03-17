@@ -10,10 +10,8 @@
 \usepackage{tabularx}  % for 'X' column type
 \usepackage{multirow}  % for multirow cells
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.17}
-\usetikzlibrary{calc}
-
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc, shapes.geometric, arrows.meta, positioning}
 
 \tikzset{
     neuron/.style={circle, draw, minimum size=1cm},
@@ -161,4 +159,22 @@
 		\textbf{\href{#1}{#2}}
 	\end{panoptobox}
 }
+
+
+% For theorems:
+% \begin{theorembox}
+%   ... the question ...
+% \end{theorembox}
+ 
+\newtcolorbox[auto counter,number within=section]{theorembox}[2][]{%
+    colback=red!5!white,
+    colframe=red!95!black, % Darker orange frame
+    coltitle=white, % White title text
+    arc=0mm,
+    sharp corners=all,
+    fonttitle=\bfseries,
+    title=#2 \hfill Theorem \thetcbcounter #1
+}
+
+
 %===============================================================================

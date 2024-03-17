@@ -326,6 +326,22 @@ The PACF is used to determine the order $p$ of an AR Model (when we are trying t
 
 Therefore, for an AR(p) process, the PAC $a_{kk}$ is nonzero for all $k \leq p$ and zero everywhere else. In practice, it is difficult to guarantee this for real world data, so a small threshold for tolerance is needed.
 
+\section{AR and MA in Depth}
+\subsection{Variance and Power Spectrum of an AR(1) process}
+\textbf{Variance:}
+\begin{equation}
+    \sigma_x^2=\frac{\sigma_w^2}{1-\rho_1a_1}=\frac{\sigma_w^2}{1-a_1^2}
+\end{equation}
+
+
+\textbf{Power Spectrum:}
+Note how the flat PSD of WGN is shaped according to the position of the pole of AR(1) model, determining if a filter is a high pass filter or a low pass filter.
+
+\begin{equation}
+    P_{xx}(f)=\frac{2\sigma_w^2}{\left|1-a_1e^{-j2\pi f}\right|^2}=\frac{2\sigma_w^2}{1+a_1^2-2a_1cos(2\pi f)}
+\end{equation}
+
+
 \section{Examples of Modelling with ARMA}
 See the slides, page 42 onwards.
 

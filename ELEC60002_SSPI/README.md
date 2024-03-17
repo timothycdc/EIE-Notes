@@ -1,7 +1,7 @@
 
 # ELEC60002 Statistical Signal Processing and Inference
 
-Work in progress up to Lecture 3, more to come.
+Work in progress up to Lecture 3 + LSE, more to come.
 
 Foreword from my notes:
 
