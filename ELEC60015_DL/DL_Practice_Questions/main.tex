@@ -1,0 +1,1741 @@
+\documentclass{report}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{geometry}
+\geometry{margin=1in}
+\setlength{\parindent}{0pt}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{caption}
+\setcounter{tocdepth}{2}
+
+
+
+\usepackage{subcaption}
+\DeclareCaptionLabelFormat{subtable}{Table \thetable\alph{subtable}:}
+\captionsetup[subtable]{labelformat=subtable}
+
+
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx, amssymb, amsfonts, amsmath, listings, multirow, mathtools, svg, tikz, enumitem, minted, xfrac, multicol}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{amsmath} % Required for mathematical features
+\usepackage{amsthm} % Required for theorem-like environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+
+\numberwithin{equation}{section}
+
+
+\newtcolorbox[auto counter,number within=section]{answerbox}[1][]{%
+    breakable,  % Enable breaking across pages
+    colback=blue!5!white,
+    colframe=blue!75!black,
+    arc=0mm,
+    sharp corners=all,
+    fonttitle=\bfseries,
+    title=Answer \thetcbcounter #1,
+    after={\vspace{10pt}} 
+}
+
+\newtcolorbox[auto counter,number within=section]{definitionbox}[2][]{%
+    breakable,  % Enable breaking across pages
+colback=black!5!white,colframe=black!75!black,arc=0mm,sharp corners=all,
+    fonttitle=\bfseries,
+    title= #2,
+    after={\vspace{10pt}} 
+}
+
+
+
+
+\title{ELEC60015 Deep Learning Revision Questions}
+\author{Timothy Chung}
+\date{Spring 2024}
+
+\begin{document}
+
+
+\maketitle
+
+
+
+\tableofcontents % Generates a table of contents
+\newpage 
+
+\chapter{Questions from Mentimeter and Slides}
+\renewcommand{\thesection}{2-3}
+\section{CNNs and Network Training}
+
+
+\begin{enumerate}
+    \item In CNN, a filter is applied to:
+    \begin{enumerate}[label=\alph*.]
+        \item Each channel separately
+        \item All channels across the layer
+        \item All layers across the network
+    \end{enumerate}
+    \item Stride is:
+    \begin{enumerate}[label=\alph*.]
+        \item Step with which a filter is applied
+        \item Slide of the receptive field
+        \item Number of channels a filter is applied to
+    \end{enumerate}
+    \item Learning Rate is:
+    \begin{enumerate}[label=\alph*.]
+        \item Rate of convergence
+        \item Step of weight's update
+        \item Param learnt by SGD
+    \end{enumerate}
+    \item Weights are not updated once per:
+    \begin{enumerate}[label=\alph*.]
+        \item Batch
+        \item Iteration
+        \item Epoch
+    \end{enumerate}
+    \item All training data is used to update weights in one:
+    \begin{enumerate}[label=\alph*.]
+        \item Epoch
+        \item Batch
+        \item Iteration
+    \end{enumerate}
+    \item Averaging updates over iterations is referred to as:
+    \begin{enumerate}[label=\alph*.]
+        \item Decay
+        \item Momentum
+        \item Dropout
+    \end{enumerate}
+    \item First and second order moments of gradients are used in:
+    \begin{enumerate}[label=\alph*.]
+        \item Adam
+        \item RMSProp
+        \item Adagrad
+        \item Nesterov
+        \item Adadelta
+        \item SGD momentum
+    \end{enumerate}
+    \item Second order moments of gradients are used in:
+    \begin{enumerate}[label=\alph*.]
+        \item Adam
+        \item RMSProp
+        \item Adagrad
+        \item Nesterov
+        \item Adadelta
+        \item SGD momentum
+    \end{enumerate}
+    \item Batch Normalisation is applied to:
+    \begin{enumerate}[label=\alph*.]
+        \item Weights
+        \item Channels
+        \item Input Data
+    \end{enumerate}
+    \item Dropout is an effective regularisation of:
+    \begin{enumerate}[label=\alph*.]
+        \item Layers with small filters
+        \item Conv Layers
+        \item Fully Connected Layers
+    \end{enumerate}
+    \item (*) L2 regularisation of weights is called:
+    \begin{enumerate}[label=\alph*.]
+        \item Absolute norm
+        \item Momentum
+        \item Decay
+    \end{enumerate}
+    \item Finetuning is a process of:
+    \begin{enumerate}[label=\alph*.]
+        \item Adjusting hyperparameters on validation set
+        \item Updating parameters pretrained on another dataset
+        \item Updating parameters near convergence
+    \end{enumerate}
+    \item Data Augmentation consists of:
+    \begin{enumerate}[label=\alph*.]
+        \item Collecting more data samples
+        \item Generating new samples from existing data
+        \item Increasing the size of data samples
+    \end{enumerate}
+    \item A hard negative is a:
+    \begin{enumerate}[label=\alph*.]
+        \item Positive example similar to a negative one
+        \item Negative example dissimilar to a positive one
+        \item Negative example similar to a positive one
+    \end{enumerate}
+    \item A hard positive is a:
+    \begin{enumerate}[label=\alph*.]
+        \item Positive example similar to a negative one
+        \item Positive example dissimilar to a positive one
+        \item Positive example dissimilar to a negative one
+    \end{enumerate}
+    \item To debug a model:
+    \begin{enumerate}[label=\alph*.]
+        \item Reduce batch size and learning rate
+        \item Add more data, train longer
+        \item Overfit to a small dataset
+    \end{enumerate}
+    \item Bias in a dataset is:
+    \begin{enumerate}[label=\alph*.]
+        \item Constant offset introduced during normalisation
+        \item Confusing noise introduced during data collection
+        \item Constant offset introduced to avoid overfitting
+    \end{enumerate}
+\end{enumerate}
+
+\setcounter{section}{3}
+\renewcommand{\thesection}{\arabic{section}}
+\section{CNN Architecture}
+\begin{enumerate}
+\item VGG uses:
+\begin{enumerate}[label=\alph*.]
+    \item 5x5 filters avg pool
+    \item 3x3 filters max pool
+    \item 3x3 filters avg pool
+\end{enumerate}
+\item VGG is used because:
+\begin{enumerate}[label=\alph*.]
+    \item small model size
+    \item computation efficiency
+    \item effective feature representation
+
+\end{enumerate}
+\item Efficiency of 1x1 conv filters are used in:
+\begin{enumerate}[label=\alph*.]
+    \item VGG
+    \item Resnet
+    \item Inception
+\end{enumerate}
+\item Inception Block uses:
+\begin{enumerate}[label=\alph*.]
+    \item Parallel filters with concatenated outputs
+    \item Parallel streams combined with FC layers
+    \item Parallel filters same size
+\end{enumerate}
+\item Skip connections are used in:
+\begin{enumerate}[label=\alph*.]
+    \item ResNet
+    \item VGG
+    \item InceptionNet
+\end{enumerate}
+\item Skip connections:
+\begin{enumerate}[label=\alph*.]
+    \item Apply only to ReLU activation
+    \item Apply skip operation to data
+    \item Do not change the data
+\end{enumerate}
+\end{enumerate}
+
+
+\section{RNNs}
+
+\begin{enumerate}
+    \item Best performing word embedding is:
+    \begin{enumerate}[label=\alph*.]
+        \item GloVe
+        \item Elmo
+        \item Bert
+    \end{enumerate}
+    \item Which unit is least effective in remembering sequences:
+    \begin{enumerate}[label=\alph*.]
+        \item RNN
+        \item LSTM
+        \item GRU
+    \end{enumerate}
+    \item Gating mechanism uses:
+    \begin{enumerate}[label=\alph*.]
+        \item Sigmoid
+        \item Tanh
+        \item ReLU
+    \end{enumerate}
+    \item In GRU, hidden state and input are:
+    \begin{enumerate}[label=\alph*.]
+        \item Averaged
+        \item Multiplied
+        \item Concatenated
+    \end{enumerate}
+    \item Language modelling uses architecture type:
+    \begin{enumerate}[label=\alph*.]
+        \item One to many
+        \item Many to Many
+        \item Many to One
+    \end{enumerate}
+    \item Transformer's self-attention uses:
+    \begin{enumerate}[label=\alph*.]
+        \item LSTM units
+        \item GRU units
+        \item Linear projections
+    \end{enumerate}
+\end{enumerate}
+
+\section{Representation Learning}
+\textbf{True or False?}
+\begin{enumerate}
+    \item Dim of representation space $Z$ should be smaller than that of input space $X$. 
+    \item In an autoencoder, encoder and decoder can be asymmetric. 
+    \item The human brain can be seen as a universal representation learner. 
+    \item Representation can be learned using supervised learning. 
+    \item Ideally, we would like to have the decoder to be the inverse of the encoder. 
+    \item Which of these losses below are not robust to outliers:
+    \begin{enumerate}[label=\alph*.]
+        \item MSE
+        \item Absolute value loss
+        \item Cross Entropy
+    \end{enumerate}
+\end{enumerate}
+
+\section{Generative Models}
+\textbf{True or False?}
+\begin{enumerate}
+    \item All generative models, in one way or another, directly learn the data distribution 
+    \item Likelihood-based generative models are not suitable for inpainting. 
+    \item Generative models can be used to classify data. 
+    \item Autoencoders can be used to generate data. 
+\end{enumerate}
+
+\section{Reinforcement Learning}
+\begin{enumerate}
+    \item How to find an optimal policy using value iteration? (From slides)\\
+       
+    \item Let \(A(s) = \mathbb{E}_{\pi}[G_t | S_t = s]\) and \(B(s) = \mathbb{E}_{\pi}[G_{t+1} | S_{t+1} = s]\). What is true? (From slides)
+    \begin{enumerate}[label=\alph*.]
+    \item  \(A>B\) 
+    \item \(A = B\)
+    \item \(A < B\)
+    \item Not enough information to decide. \newline
+
+
+\end{enumerate}
+\item Taken from the 2024 past paper: 
+Consider a Markov Decision Process with states \( \{A, B\} \). The transition probabilities and rewards are given as:
+
+\begin{itemize}
+\item Transition probabilities: \( P(A \rightarrow A) = 0.8 \), \( P(A \rightarrow B) = 0.2 \), \( P(B \rightarrow A) = 0.4 \), \( P(B \rightarrow B) = 0.6 \)
+\item Rewards: \( R(A) = +5 \), \( R(B) = +2 \).
+\end{itemize}
+
+Assume a discount factor \( \gamma \) of 0.5. What are the values for states \( A \) and \( B \)?
+\begin{enumerate}[label=\alph*.]
+    \item \( v(A)=9.25, v(B)=5.5 \)    
+    \item \( v(A)=\infty, v(B)=\infty \)
+    \item \( v(A)=0.6, v(B)=1.2 \)
+    \item \( v(A)=6.5, v(B)=3.25 \)
+\end{enumerate}
+
+\end{enumerate}
+
+\chapter{Custom Questions}
+\section{Intro To Machine Learning}
+\begin{enumerate}
+\item What type of noise is usually caused from measuring data?
+\begin{enumerate}[label=\alph*.]
+\item Deterministic
+\item Stochastic
+\end{enumerate}
+\item Fitting to noise instead of the underlying target function is a sign of:
+\begin{enumerate}[label=\alph*.]
+\item Overfitting
+\item Underfitting
+\item Regularisation
+\end{enumerate}
+\item What norm does Ridge regression use?
+\begin{enumerate}[label=\alph*.]
+\item L0
+\item L1
+\item L2
+\end{enumerate}
+\end{enumerate}
+
+\section{CNNs}
+\begin{enumerate}
+\item Which of the following is not usually represented as one of the 4 dimensions in a CNN tensor?
+\begin{enumerate}[label=\alph*.]
+\item samples
+\item depth
+\item height
+\item width
+\item channel
+\end{enumerate}
+% \item Fitting to noise instead of the underlying target function is a sign of:
+% \begin{enumerate}[label=\alph*.]
+%     \item Overfitting
+%     \item Underfitting
+%     \item Regularisation
+% \end{enumerate}
+\item Filter depth is:
+\begin{enumerate}[label=\alph*.]
+\item Step with which a filter is applied
+\item Slide of the receptive field
+\item Number of channels a filter is applied to
+\end{enumerate}
+\item Filter padding is :
+\begin{enumerate}[label=\alph*.]
+\item The step of the shift when convolving a filter with the image input
+\item Adding space around the borders of an image input to modify output feature map size
+\item A layer to perform non-linear downsampling via a sliding window across the feature map
+\end{enumerate}
+\item The pooling layer is:
+\begin{enumerate}[label=\alph*.]
+\item The step of the shift when convolving a filter with the image input
+\item Adding space around the borders of an image input to modify output feature map size
+\item A layer to perform non-linear downsampling via a sliding window across the feature map
+\end{enumerate}
+\item The pooling layer is used for:
+\begin{enumerate}[label=\alph*.]
+\item Dimensionality increase
+\item Dimensionality reduction
+\item Adding parameters to be learnt
+\end{enumerate}
+\item Which error has the best performance for multiclass classification with CNNs?
+\begin{enumerate}[label=\alph*.]
+\item Mean Squared Error
+\item Categorical Cross Entropy Loss
+\item Classification Error
+\end{enumerate}
+\item Generally, it is better to use larger layers first or smaller filters first?
+\begin{enumerate}[label=\alph*.]
+\item Larger
+\item Smaller
+\end{enumerate}
+\end{enumerate}
+
+\section{Network Training}
+\begin{enumerate}
+\item For a neural network with all sigmoid activation functions, what can result from saturated gradients?
+\begin{enumerate}[label=\alph*.]
+\item Exploding gradients
+\item Vanishing gradients
+\end{enumerate}
+\item What is the difference between normal momentum-based SGD and Nesterov momentum?
+\begin{enumerate}[label=\alph*.]
+\item Nesterov momentum uses decaying moving average of the gradients of projected positions
+\item Nesterov momentum accumulates the contribution of past gradients with an additional momentum term
+\end{enumerate}
+\item Which optimisers use the hadamard product?
+\begin{enumerate}[label=\alph*.]
+\item AdaGrad
+\item RMSProp
+\item SGD with Nesterov
+\item AdaDelta
+\item Adam
+\end{enumerate}
+\item Which optimisers use the second moment of the gradient?
+\begin{enumerate}[label=\alph*.]
+\item AdaGrad
+\item RMSProp
+\item SGD withNesterov
+\item AdaDelta
+\item Adam
+\end{enumerate}
+\item Which form of regularisation randomly zeroes out nodes during training and scales outputs during testing?
+\begin{enumerate}[label=\alph*.]
+\item Batch Normalisation
+\item Dropout
+\end{enumerate}
+%     \item Dropout: If fraction $p$ of nodes are zeroed out during training, what should their outputs be scaled by during testing?
+% \begin{enumerate}[label=\alph*.]
+%     \item $p/l$, where $l$ refers to the count of layers
+%     \item $\mathbf{p}$
+% \end{enumerate}
+\item Dropout: If fraction $p$ of nodes are zeroed out during training, what should their outputs be scaled by during testing?
+\begin{enumerate}[label=\alph*.]
+\item $p/l$, where $l$ refers to the count of layers
+\item $p$
+\end{enumerate}
+\item Batch Normalisation: The Xavier initialisation and Kaiming He initialisation are used for what kinds of activation functions?
+\begin{enumerate}[label=\alph*.]
+\item Sigmoid for Xavier, ReLU for Kaiming He
+\item ReLU for Xavier, Sigmoid for Kaiming He
+\item Both initialisations can use either
+\item Sigmoid for both initialisations
+\end{enumerate}
+\item To prevent the symmetry problem caused by identical gradients during backpropagation, weights should be initialised to:
+\begin{enumerate}[label=\alph*.]
+\item Zero
+\item A random sample from the uniform distribution
+\item A random sample from the Gaussian distribution
+\item A random sample from both distributions above
+\end{enumerate}
+\item Usually it is best to place a Batch Normalisation layer:
+\begin{enumerate}[label=\alph*.]
+\item Between the Conv and Activation Layers
+\item After the FC layer
+\item Before the pooling layer
+\end{enumerate}
+\item For 4D tensor input $[N,H,W,C]$, Batch Normalisation in convolutional networks (ConvNets) calculate the mean and standard deviations across:
+\begin{enumerate}[label=\alph*.]
+\item $H$
+\item $W$
+\item $C$
+\end{enumerate}
+\item When fine-tuning a network, it is normal to use learning rate that is:
+\begin{enumerate}[label=\alph*.]
+\item larger than the original
+\item smaller than the original
+\end{enumerate}
+\item Data splitting: What is the best ratio below for partitioning the training, validation, and test sets respectively?
+\begin{enumerate}[label=\alph*.]
+\item 60:20:20
+\item 20:60:20
+\item 20:20:60
+\end{enumerate}
+\item Does data augmentation require collecting new data?
+\begin{enumerate}[label=\alph*.]
+\item Yes
+\item No
+
+\end{enumerate}
+\item When training error is high, what should be done?
+\begin{enumerate}[label=\alph*.]
+\item Train longer, try different model
+\item Regularise, get more data
+\end{enumerate}
+\item When validation-training error is high, what should be done?
+\begin{enumerate}[label=\alph*.]
+\item Train longer, try different model
+\item Regularise, get more data
+\end{enumerate}
+\item When validation-testing error is high, what should be done?
+\begin{enumerate}[label=\alph*.]
+\item Allocate more validation-training data
+\item Redo hyper-parameter search
+\end{enumerate}
+\item Which optimiser adapts the learning rate based on the accumulated square of gradients and is particularly useful for sparse data?
+\begin{enumerate}[label=\alph*.]
+\item Adam
+\item Adagrad
+\item Adadelta
+\item SGD with Nesterov momentum
+\end{enumerate}
+
+\item Adadelta is an extension of which of the following optimisers?
+\begin{enumerate}[label=\alph*.]
+\item Adam
+\item Adagrad
+\item RMSprop
+\item SGD with Nesterov momentum
+\end{enumerate}
+
+\item Which optimiser combines the advantages of Adagrad and RMSprop and also utilises momentum?
+\begin{enumerate}[label=\alph*.]
+\item Adadelta
+\item SGD
+\item Adam
+\item SGD with Nesterov momentum
+\end{enumerate}
+
+\item Stochastic Gradient Descent (SGD) with Nesterov momentum differs from classic momentum because:
+\begin{enumerate}[label=\alph*.]
+\item It computes the gradient at the updated position rather than the current position.
+\item It uses a fixed learning rate throughout the training.
+\item It does not accumulate the gradient.
+\item It computes the gradient at a position ahead in the direction of the momentum.
+\end{enumerate}
+
+\item RMSprop is designed to solve the diminishing learning rates problem found in which optimiser?
+\begin{enumerate}[label=\alph*.]
+\item Adam
+\item Adagrad
+\item Adadelta
+\item SGD with Nesterov momentum
+\end{enumerate}
+\end{enumerate}
+
+\section{CNN Architectures}
+
+\begin{enumerate}
+\item What features did VGG have that were different from AlexNet?
+\begin{enumerate}[label=\alph*.]
+\item Number of FC layers
+\item Number of filter kernels
+\item Number of channels
+\item Activation function
+\end{enumerate}
+\item What type of pooling layer does GoogLeNet use more often than ResNet?
+\begin{enumerate}[label=\alph*.]
+\item Average
+\item Max Pooling
+\begin{itemize}
+\item GooGLeNet used max pooling followed by $1\times 1$ convolution to reduce depth
+\end{itemize}
+\end{enumerate}
+\item Which model \textbf{improved} on ResNet's skip connections?
+\begin{enumerate}[label=\alph*.]
+\item ResNeXt
+\item Densenet
+\end{enumerate}
+\item What features does ResNeXt have?
+\begin{enumerate}[label=\alph*.]
+\item Google's Inception module
+\item Kaiming He's skip connections
+\item Both Inception modules and skip connections
+\end{enumerate}
+
+\end{enumerate}
+
+\section{RNNs}
+
+\begin{enumerate}
+\item What activation functions do RNNs generally use?
+\begin{enumerate}[label=\alph*.]
+\item tanh
+\item ReLU
+\item Softmax
+\end{enumerate}
+\item What activation functions are generally used with cell states in LSTMs?
+\begin{enumerate}[label=\alph*.]
+\item tanh
+\item ReLU
+\item Sigmoid
+\end{enumerate}
+\item What activation functions do LSTM are generally used with update and forget gates?
+\begin{enumerate}[label=\alph*.]
+\item tanh
+\item ReLU
+\item Sigmoid
+\end{enumerate}
+\item Which is a use case of the Many-to-Many models?
+\begin{enumerate}[label=\alph*.]
+\item Image captioning
+\item Sentiment analysis
+\item Video annotation
+\end{enumerate}
+\item What is a key feature of LSTM networks that distinguishes them from basic RNNs?
+\begin{enumerate}[label=\alph*.]
+\item They have a simpler architecture that is easier to train.
+\item They have feedback loops within the network layers.
+\item They use gating mechanisms to control the flow of information.
+\item They can only process sequence data in one direction.
+\end{enumerate}
+
+\item Why are LSTMs particularly suited for processing sequences with long-range dependencies?
+\begin{enumerate}[label=\alph*.]
+\item Because they can process data in parallel.
+\item Because their gating mechanisms help mitigate the vanishing gradient problem.
+\item Because they have a fixed-size hidden layer.
+\item Because they require less training data than other RNNs.
+\end{enumerate}
+
+\item Which of the following tasks is LSTM least likely to excel at?
+\begin{enumerate}[label=\alph*.]
+\item Language translation.
+\item Sentiment analysis.
+\item Short-term time series prediction.
+\item Real-time image classification.
+\end{enumerate}
+
+\item In an LSTM unit, which gate is responsible for deciding what information to throw away from the cell state?
+\begin{enumerate}[label=\alph*.]
+\item Input gate.
+\item Output gate.
+\item Forget gate.
+\item Update gate.
+\end{enumerate}
+
+\item LSTMs can be utilised in which of the following applications?
+\begin{enumerate}[label=\alph*.]
+\item Time series forecasting.
+\item Text generation.
+\item Speech recognition.
+\item All of the above.
+\end{enumerate}
+
+\end{enumerate}
+
+\section{Representation Learning}
+
+\begin{enumerate}
+\item What kind of data does Supervised learning use?
+\begin{enumerate}[label=\alph*.]
+\item Labelled data
+\item Unlabelled data
+\end{enumerate}
+\item What shows there exists no universally best single feature representation?
+\begin{enumerate}[label=\alph*.]
+\item Hoeffding's inequality
+\item No free lunch theorem
+\item Chebyshev inequality
+\end{enumerate}
+\item What is a solution to the linear autoencoder problem?
+\begin{enumerate}[label=\alph*.]
+\item Principal Component Analysis
+\item Least Squares Approximation
+\item Inverse covariance matrix
+\end{enumerate}
+\item What is an example of a Many-to-Many model?
+\begin{enumerate}[label=\alph*.]
+\item Image captioning
+\item Sentiment analysis
+\item Video annotation
+\end{enumerate}
+\item Which type of autoencoder requires regularisation?
+\begin{enumerate}[label=\alph*.]
+\item Undercomplete
+\item Overcomplete
+\end{enumerate}
+\item An overcomplete autoencoder only tuned to specific patterns in the data would be a:
+\begin{enumerate}[label=\alph*.]
+\item Contractive autoencoder
+\item Sparse autoencoder
+\end{enumerate}
+\item What activation functions can a contractive autoencoder not use?
+\begin{enumerate}[label=\alph*.]
+\item Sigmoid
+\item ReLU
+
+\end{enumerate}
+\item What is the primary purpose of a linear autoencoder?
+\begin{enumerate}[label=\alph*.]
+\item To classify input data into predefined categories.
+\item To learn a compressed representation of the input data.
+    \item To predict future data points in a time series.
+    \item To increase the dimensionality of the input data.
+\end{enumerate}
+
+\item In the context of linear autoencoders, what does the term "overcomplete" refer to?
+\begin{enumerate}[label=\alph*.]
+\item The autoencoder has more layers than necessary.
+\item The autoencoder has more neurons in the hidden layer than inputs.
+\item The autoencoder has a hidden layer larger than the input layer.
+\item The autoencoder is trained on more data than necessary.
+\end{enumerate}
+
+\item Which of the following is a key characteristic of a linear autoencoder for dimensionality reduction?
+\begin{enumerate}[label=\alph*.]
+\item Non-linear activation functions.
+\item Recurrent connections in the network.
+\item Absence of activation functions, resulting in a linear transformation.
+\item Convolutional layers to capture spatial hierarchies.
+\end{enumerate}
+\end{enumerate}
+\section{Generative Models}
+
+\begin{enumerate}
+    \item Which generative model produces sharper examples?
+    \begin{enumerate}[label=\alph*.]
+        \item Generative Adversarial Networks
+        \item Variational Autoencoders
+    \end{enumerate}
+    \item What prevents mode collapse in GANs?
+    \begin{enumerate}[label=\alph*.]
+        \item Wasserstein Distance
+        \item Leaky ReLUs
+        \item Using CNNs
+    \end{enumerate}
+    \item Do GANs have an encoder?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes
+        \item No
+    \end{enumerate}
+    \item Does a GAN's generator sees the data during training?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes, it needs comparisons to produce similar data to the training data to fool the discriminator
+        \item No, it only relies on the discriminator's feedback in the form of probabilities
+    \end{enumerate}
+
+\item What is a distinctive feature of Variational Autoencoders (VAEs) compared to traditional autoencoders?
+\begin{enumerate}[label=\alph*.]
+    \item They use backpropagation for training.
+    \item They only require labeled data for training.
+    \item They learn a probabilistic latent space and can generate new data.
+    \item They always produce binary outputs.
+\end{enumerate}
+
+\item Generative Adversarial Networks (GANs) are composed of two main components, what are they?
+\begin{enumerate}[label=\alph*.]
+    \item Encoder and Decoder.
+    \item Generator and Discriminator.
+    \item Predictor and Classifier.
+    \item Supervisor and Operator.
+\end{enumerate}
+\item Generative Adversarial Networks (GANs) are composed of two main components, what are they?
+\begin{enumerate}[label=\alph*.]
+    \item Encoder and Decoder.
+    \item Generator and Discriminator.
+    \item Predictor and Classifier.
+    \item Supervisor and Operator.
+\end{enumerate}
+
+\item What role does the discriminator play in a Generative Adversarial Network (GAN)?
+\begin{enumerate}[label=\alph*.]
+    \item It generates new data instances.
+    \item It evaluates the authenticity of samples, distinguishing between real and generated data.
+    \item It classifies data into predefined categories.
+    \item It compresses the input data into a latent space.
+\end{enumerate}
+
+\item In the training of a VAE, what is the purpose of the reparameterization trick?
+\begin{enumerate}[label=\alph*.]
+    \item To speed up the training process.
+    \item To allow backpropagation through random sampling.
+    \item To reduce the number of parameters in the model.
+    \item To enhance the resolution of generated images.
+\end{enumerate}
+
+\item Which of the following best describes the training process of GANs?
+\begin{enumerate}[label=\alph*.]
+    \item The generator maximizes the probability of the discriminator being correct.
+    \item The discriminator maximizes the probability of identifying real and generated data correctly, while the generator maximizes the probability of the discriminator making a mistake.
+    \item The generator and discriminator are trained in separate phases, not affecting each other.
+    \item The discriminator is trained to distinguish real data from fake, while the generator is trained to fool the discriminator into thinking the fake data is real.
+\end{enumerate}
+\end{enumerate}
+
+\section{Reinforcement Learning}
+
+\begin{enumerate}
+    \item What does the Markov Decision Process tuple \((\mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R})\) contain?
+    \begin{enumerate}[label=\alph*.]
+        \item State set, Action set, Probability function, Reward function
+        \item State set, Agent set, Probability function, Reward function
+        \item State set, Action set, Probability distribution, Reward function
+    \end{enumerate}
+    \item Which attributes below describe an MDP?
+    \begin{enumerate}[label=\alph*.]
+        \item time-independent
+        \item depends on past states
+        \item random process
+    \end{enumerate}
+    % \item Control in a Markov Decision Process (MDP) are typically designed based on the assumption that the...
+    % \begin{enumerate}[label=\alph*.]
+    % \item State transition probabilities and reward functions are fully specified.
+    % \item State transition probabilities and reward functions are not specified and need to be estimated or learned.
+    % \item Both of the above conditions, as control policies can be derived with or without full knowledge of the MDP.
+    % \end{enumerate}
+    \item Which training method looks one step ahead?
+    \begin{enumerate}[label=\alph*.]
+        \item Temporal Difference
+        \item Monte Carlo
+    \end{enumerate}
+    \item Can TD be applied to non-episodic MDPs?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes
+        \item No
+    \end{enumerate}
+    \item Can MC be applied to non-episodic MDPs?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes
+        \item No
+    \end{enumerate}
+    \item Which of the below works better in complex unpredictable scenarios where the environment is not known?
+    \begin{enumerate}[label=\alph*.]
+        \item MC
+        \item TD
+    \end{enumerate}
+\item Which of the following statements best describes the difference between Q-learning and SARSA in reinforcement learning?
+\begin{enumerate}[label=\alph*.]
+    \item Q-learning is an on-policy algorithm, while SARSA is an off-policy algorithm.
+    \item Q-learning updates its Q-values using the greedy action selection, while SARSA updates its Q-values using the actual next action taken.
+    \item Q-learning and SARSA both update their Q-values based on the actual next action taken and are considered on-policy algorithms.
+    \item There is no difference; Q-learning and SARSA are simply different names for the same algorithm.
+\end{enumerate}
+
+\item What distinguishes Q-learning in terms of policy type?
+\begin{enumerate}[label=\alph*.]
+    \item Q-learning is an on-policy control algorithm.
+    \item Q-learning is an off-policy control algorithm.
+    \item Q-learning does not utilize any policy for learning.
+    \item Q-learning switches between on-policy and off-policy during training.
+\end{enumerate}
+
+\item In Q-learning, when is the Q-value updated?
+\begin{enumerate}[label=\alph*.]
+    \item After the completion of an episode.
+    \item After each step within an episode.
+    \item Only at the end of a learning session.
+    \item Before the agent takes an action.
+\end{enumerate}
+
+\item In SARSA, how are action values updated?
+\begin{enumerate}[label=\alph*.]
+    \item Using the expected value of the next state's best action.
+    \item Using the value of the next action selected by the current policy.
+    \item Independently of the actions selected by the current policy.
+    \item Using a random action from the next state.
+\end{enumerate}
+
+\item SARSA is considered what type of learning algorithm?
+\begin{enumerate}[label=\alph*.]
+    \item Deterministic
+    \item Off-policy
+    \item On-policy
+    \item Model-based
+\end{enumerate}
+
+\end{enumerate}
+
+\chapter{Questions from Mentimeter and Slides with Answers}
+\renewcommand{\thesection}{2-3}
+\section{CNNs and Network Training}
+
+
+\begin{enumerate}
+    \item In CNN, a filter is applied to:
+    \begin{enumerate}[label=\alph*.]
+        \item Each channel separately
+        \item All channels across the layer
+        \item \textbf{All layers across the network}
+    \end{enumerate}
+    \item Stride is:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Step with which a filter is applied}
+        \item Slide of the receptive field
+        \item Number of channels a filter is applied to
+    \end{enumerate}
+    \item Learning Rate is:
+    \begin{enumerate}[label=\alph*.]
+        \item Rate of convergence
+        \item \textbf{Step of weight's update}
+        \item Param learnt by SGD
+    \end{enumerate}
+    \item Weights are not updated once per:
+    \begin{enumerate}[label=\alph*.]
+        \item Batch
+        \item Iteration
+        \item \textbf{Epoch}
+    \end{enumerate}
+    \item All training data is used to update weights in one:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Epoch}
+        \item Batch
+        \item Iteration
+    \end{enumerate}
+    \item Averaging updates over iterations is referred to as:
+    \begin{enumerate}[label=\alph*.]
+        \item Decay
+        \item \textbf{Momentum}
+        \item Dropout
+    \end{enumerate}
+    \item First and second order moments of gradients are used in:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Adam}
+        \item RMSProp
+        \item Adagrad
+        \item Nesterov
+        \item Adadelta
+        \item SGD momentum
+    \end{enumerate}
+    \item Second order moments of gradients are used in:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Adam}
+        \item \textbf{RMSProp}
+        \item \textbf{Adagrad}
+        \item Nesterov
+        \item \textbf{Adadelta}
+        \item SGD momentum
+    \end{enumerate}
+    \item Batch Normalisation is applied to:
+    \begin{enumerate}[label=\alph*.]
+        \item Weights
+        \item \textbf{Channels}
+        \item Input Data
+    \end{enumerate}
+    \item Dropout is an effective regularisation of:
+    \begin{enumerate}[label=\alph*.]
+        \item Layers with small filters
+        \item Conv Layers
+        \item \textbf{Fully Connected Layers}
+    \end{enumerate}
+    \item (*) L2 regularisation of weights is called:
+    \begin{enumerate}[label=\alph*.]
+        \item Absolute norm
+        \item Momentum
+        \item \textbf{Decay}
+    \end{enumerate}
+    \item Finetuning is a process of:
+    \begin{enumerate}[label=\alph*.]
+        \item Adjusting hyperparameters on validation set
+        \item \textbf{Updating parameters pretrained on another dataset}
+        \item Updating parameters near convergence
+    \end{enumerate}
+    \item Data Augmentation consists of:
+    \begin{enumerate}[label=\alph*.]
+        \item Collecting more data samples
+        \item \textbf{Generating new samples from existing data}
+        \item Increasing the size of data samples
+    \end{enumerate}
+    \item A hard negative is a:
+    \begin{enumerate}[label=\alph*.]
+        \item Positive example similar to a negative one
+        \item Negative example dissimilar to a positive one
+        \item \textbf{Negative example similar to a positive one}
+    \end{enumerate}
+    \item A hard positive is a:
+    \begin{enumerate}[label=\alph*.]
+        \item Positive example similar to a negative one
+        \item \textbf{Positive example dissimilar to a positive one}
+        \item Positive example dissimilar to a negative one
+    \end{enumerate}
+    \item To debug a model:
+    \begin{enumerate}[label=\alph*.]
+        \item Reduce batch size and learning rate
+        \item Add more data, train longer
+        \item \textbf{Overfit to a small dataset}
+    \end{enumerate}
+    \item Bias in a dataset is:
+    \begin{enumerate}[label=\alph*.]
+        \item Constant offset introduced during normalisation
+        \item \textbf{Confusing noise introduced during data collection}
+        \item Constant offset introduced to avoid overfitting
+    \end{enumerate}
+\end{enumerate}
+
+\setcounter{section}{3}
+\renewcommand{\thesection}{\arabic{section}}
+\section{CNN Architecture}
+\begin{enumerate}
+\item VGG uses:
+\begin{enumerate}[label=\alph*.]
+    \item 5x5 filters avg pool
+    \item \textbf{3x3 filters max pool}
+    \item 3x3 filters avg pool
+\end{enumerate}
+\item VGG is used because:
+\begin{enumerate}[label=\alph*.]
+    \item small model size
+    \item computation efficiency
+    \item \textbf{effective feature representation}
+    \begin{itemize}
+        \item it is not efficient(note the on the CNN performance graph) 
+        \item but we like to use it for pretrained models
+    \end{itemize}
+\end{enumerate}
+\item Efficiency of 1x1 conv filters are used in:
+\begin{enumerate}[label=\alph*.]
+    \item VGG
+    \item Resnet
+    \item \textbf{Inception}
+\end{enumerate}
+\item Inception Block uses:
+\begin{enumerate}[label=\alph*.]
+    \item \textbf{Parallel filters with concatenated outputs}
+    \item Parallel streams combined with FC layers
+    \item Parallel filters same size
+\end{enumerate}
+\item Skip connections are used in:
+\begin{enumerate}[label=\alph*.]
+    \item \textbf{ResNet}
+    \item VGG
+    \item InceptionNet
+\end{enumerate}
+\item Skip connections:
+\begin{enumerate}[label=\alph*.]
+    \item Apply only to ReLU activation
+    \item Apply skip operation to data
+    \item \textbf{Do not change the data}
+\end{enumerate}
+\end{enumerate}
+
+
+\section{RNNs}
+
+\begin{enumerate}
+    \item Best performing word embedding is:
+    \begin{enumerate}[label=\alph*.]
+        \item GloVe
+        \item Elmo
+        \item \textbf{Bert}
+    \end{enumerate}
+    \item Which unit is least effective in remembering sequences:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{RNN}
+        \item LSTM
+        \item GRU
+    \end{enumerate}
+    \item Gating mechanism uses:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Sigmoid}
+        \item Tanh
+        \item ReLU
+    \end{enumerate}
+    \item In GRU, hidden state and input are:
+    \begin{enumerate}[label=\alph*.]
+        \item Averaged
+        \item Multiplied
+        \item \textbf{Concatenated}
+    \end{enumerate}
+    \item Language modelling uses architecture type:
+    \begin{enumerate}[label=\alph*.]
+        \item One to many
+        \item \textbf{Many to Many}
+        \item Many to One
+    \end{enumerate}
+    \item Transformer's self-attention uses:
+    \begin{enumerate}[label=\alph*.]
+        \item LSTM units
+        \item GRU units
+        \item \textbf{Linear projections}
+    \end{enumerate}
+\end{enumerate}
+
+\section{Representation Learning}
+\textbf{True or False?}
+\begin{enumerate}
+    \item Dim of representation space $Z$ should be smaller than that of input space $X$. \textbf{False}
+    \item In an autoencoder, encoder and decoder can be asymmetric. \textbf{True}
+    \item The human brain can be seen as a universal representation learner. \textbf{False}
+    \begin{itemize}
+        \item There is no single representation feature, e.g., optical limitations.
+        \item Mathematically, there is no universal representation learner.
+    \end{itemize}
+    \item Representation can be learned using supervised learning. \textbf{True}
+    \item Ideally, we would like to have the decoder to be the inverse of the encoder. \textbf{False}
+    \item Which of these losses below are not robust to outliers:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{MSE}
+        \item Absolute value loss
+        \item Cross Entropy
+    \end{enumerate}
+\end{enumerate}
+
+\section{Generative Models}
+\textbf{True or False?}
+\begin{enumerate}
+    \item All generative models, in one way or another, directly learn the data distribution \textbf{True}
+    \item Likelihood-based generative models are not suitable for inpainting. \textbf{False}
+    \item Generative models can be used to classify data. \textbf{True. Indirectly so, by estimating the likelihood of whether a point should belong to which class.}
+    \item Autoencoders can be used to generate data. \textbf{True, Variational Autoencoders especially}
+\end{enumerate}
+
+\section{Reinforcement Learning}
+\begin{enumerate}
+    \item How to find an optimal policy using value iteration? (From slides)\\
+        Value iteration is an algorithm that finds the optimal policy $\pi^*$ for a Markov Decision Process (MDP). The algorithm iteratively improves the value function $V(s)$ for all states $s$ until it converges to the optimal value function $V^*(s)$. Once convergence is reached, the optimal policy $\pi^*$ can be derived from $V^*(s)$. The steps to perform value iteration are:
+
+        \begin{enumerate}
+        \item Initialise $V(s)$ arbitrarily for all states $s$. For a terminal state, if any, set $V(s)$ to 0.
+        \item Repeat:
+        \begin{enumerate}
+            \item For each state $s$, update the value $V(s)$ based on the expected utility of taking each possible action $a$, and then transitioning to the next state $s'$, considering the reward received $r$ and the discounted value of the next state $\gamma V(s')$. The value update rule is:
+            \[ V(s) \leftarrow \max_a \sum_{s', r} p(s', r | s, a) [r + \gamma V(s')] \]
+            where $p(s', r | s, a)$ is the state transition probability, and $\gamma$ is the discount factor.
+        \end{enumerate}
+        \item Until $V(s)$ converges, i.e., the change in $V(s)$ is smaller than a threshold $\theta$ for all states.
+        \item Output a deterministic policy $\pi^*(s)$ that selects the action $a$ that maximizes the expected utility for each state $s$:
+        \[ \pi^*(s) = \arg\max_a \sum_{s', r} p(s', r | s, a) [r + \gamma V(s')] \]
+        \end{enumerate}
+
+        The resulting policy $\pi^*$ is the optimal policy for the MDP, and the value function $V^*(s)$ gives the expected return when starting in state $s$ and following $\pi^*$.
+        
+    \item Let \(A(s) = \mathbb{E}_{\pi}[G_t | S_t = s]\) and \(B(s) = \mathbb{E}_{\pi}[G_{t+1} | S_{t+1} = s]\). What is true? (From slides)
+    \begin{enumerate}[label=\alph*.]
+    \item \textbf{A} $\mathbf{>}$ \textbf{B}
+    \item \(A = B\)
+    \item \(A < B\)
+    \item Not enough information to decide. \newline
+
+    Solution:
+    Given that \(G_t\) is the return from time \(t\) and can be expressed as a sum of rewards as follows:
+\[ G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \ldots \]
+
+The return at time \(t+1\) is:
+\[ G_{t+1} = R_{t+2} + \gamma R_{t+3} + \gamma^2 R_{t+4} + \ldots \]
+
+Notice that \(G_{t+1}\) is the sum of rewards from time \(t+1\) onwards and \(G_t\) includes the reward \(R_{t+1}\) plus \(G_{t+1}\) discounted by \(\gamma\). Thus, we can write:
+\[ G_t = R_{t+1} + \gamma G_{t+1} \]
+
+Taking the expectation of both sides given \(S_t = s\), we have:
+\[ A(s) = \mathbb{E}_{\pi}[R_{t+1} | S_t = s] + \gamma \mathbb{E}_{\pi}[G_{t+1} | S_t = s] \]
+
+Since \( \mathbb{E}_{\pi}[G_{t+1} | S_t = s] \) is not conditioned on \(S_{t+1} = s\), it cannot be simplified directly to \(B(s)\). However, because the expectation of \(G_{t+1}\) given \(S_t = s\) would include transitions from state \(s\) at time \(t\) to all possible next states at time \(t+1\), and because the immediate reward \(R_{t+1}\) is not included in \(B(s)\), it follows that:
+\[ A(s) > B(s) \]
+
+Hence, the correct answer is:
+\[ A > B \]
+
+
+\end{enumerate}
+\item Taken from the 2024 past paper: 
+Consider a Markov Decision Process with states \( \{A, B\} \). The transition probabilities and rewards are given as:
+
+\begin{itemize}
+\item Transition probabilities: \( P(A \rightarrow A) = 0.8 \), \( P(A \rightarrow B) = 0.2 \), \( P(B \rightarrow A) = 0.4 \), \( P(B \rightarrow B) = 0.6 \)
+\item Rewards: \( R(A) = +5 \), \( R(B) = +2 \).
+\end{itemize}
+
+Assume a discount factor \( \gamma \) of 0.5. What are the values for states \( A \) and \( B \)?
+\begin{enumerate}[label=\alph*.]
+    \item \( v(A)=9.25, v(B)=5.5 \checkmark\)    
+    \item \( v(A)=\infty, v(B)=\infty \)
+    \item \( v(A)=0.6, v(B)=1.2 \)
+    \item \( v(A)=6.5, v(B)=3.25 \)
+\end{enumerate}
+
+Solution: Given the Bellman equations for the value of states A and B:
+
+For state A:
+\[ v(A) = R(A) + \gamma \left[ P(A \rightarrow A) \cdot v(A) + P(A \rightarrow B) \cdot v(B) \right] \]
+For state B:
+\[ v(B) = R(B) + \gamma \left[ P(B \rightarrow A) \cdot v(A) + P(B \rightarrow B) \cdot v(B) \right] \]
+
+Substituting the given values:
+
+For state A:
+\[ v(A) = 5 + 0.5 \left[ 0.8 \cdot v(A) + 0.2 \cdot v(B) \right] \]
+For state B:
+\[ v(B) = 2 + 0.5 \left[ 0.4 \cdot v(A) + 0.6 \cdot v(B) \right] \]
+
+Solving the system of equations we find:
+
+\[ v(A) = 9.25 \]
+\[ v(B) = 5.5 \]
+
+This results in the values for states A and B with a discount factor \( \gamma \) of 0.5.
+\end{enumerate}
+
+
+\chapter{Custom Questions With Answers}
+\section{Intro To Machine Learning}
+\begin{enumerate}
+    \item What type of noise is usually caused from measuring data?
+    \begin{enumerate}[label=\alph*.]
+        \item Deterministic
+        \item \textbf{Stochastic}
+    \end{enumerate}
+    \item Fitting to noise instead of the underlying target function is a sign of:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Overfitting}
+        \item Underfitting
+        \item Regularisation
+    \end{enumerate}
+    \item What norm does Ridge regression use?
+    \begin{enumerate}[label=\alph*.]
+        \item L0
+        \item L1
+        \item \textbf{L2}
+    \end{enumerate}
+\end{enumerate}
+
+\section{CNNs}
+\begin{enumerate}
+    \item Which of the following is not usually represented as one of the 4 dimensions in a CNN tensor?
+    \begin{enumerate}[label=\alph*.]
+        \item samples
+        \item \textbf{depth}
+        \item height
+        \item width
+        \item channel
+    \end{enumerate}
+    % \item Fitting to noise instead of the underlying target function is a sign of:
+    % \begin{enumerate}[label=\alph*.]
+    %     \item \textbf{Overfitting}
+    %     \item Underfitting
+    %     \item Regularisation
+    % \end{enumerate}
+    \item Filter depth is:
+    \begin{enumerate}[label=\alph*.]
+        \item Step with which a filter is applied
+        \item Slide of the receptive field
+        \item \textbf{Number of channels a filter is applied to}
+    \end{enumerate}
+    \item Filter padding is :
+    \begin{enumerate}[label=\alph*.]
+        \item The step of the shift when convolving a filter with the image input
+        \item \textbf{Adding space around the borders of an image input to modify output feature map size}
+        \item A layer to perform non-linear downsampling via a sliding window across the feature map
+    \end{enumerate}
+    \item The pooling layer is:
+    \begin{enumerate}[label=\alph*.]
+        \item The step of the shift when convolving a filter with the image input
+        \item Adding space around the borders of an image input to modify output feature map size
+        \item \textbf{A layer to perform non-linear downsampling via a sliding window across the feature map}
+    \end{enumerate}
+    \item The pooling layer is used for:
+    \begin{enumerate}[label=\alph*.]
+        \item Dimensionality increase
+        \item \textbf{Dimensionality reduction}
+        \item Adding parameters to be learnt
+    \end{enumerate}
+    \item Which error has the best performance for multiclass classification with CNNs?
+    \begin{enumerate}[label=\alph*.]
+        \item Mean Squared Error
+        \item \textbf{Categorical Cross Entropy Loss}
+        \item Classification Error
+    \end{enumerate}
+    \item Generally, it is better to use larger layers first or smaller filters first?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Larger}
+        \item Smaller
+    \end{enumerate}
+\end{enumerate}
+
+
+\section{Network Training}
+\begin{enumerate}
+    \item For a neural network with all sigmoid activation functions, what can result from saturated gradients?
+    \begin{enumerate}[label=\alph*.]
+        \item Exploding gradients
+        \item \textbf{Vanishing gradients}
+    \end{enumerate}
+    \item What is the difference between normal momentum-based SGD and Nesterov momentum?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Nesterov momentum uses decaying moving average of the gradients of projected positions}
+        \item Nesterov momentum accumulates the contribution of past gradients with an additional momentum term
+    \end{enumerate}
+        \item Which optimisers use the hadamard product?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{AdaGrad}
+        \item \textbf{RMSProp}
+        \item SGD with Nesterov
+        \item \textbf{AdaDelta}
+        \item \textbf{Adam}
+    \end{enumerate}
+        \item Which optimisers use the second moment of the gradient?
+    \begin{enumerate}[label=\alph*.]
+        \item AdaGrad
+        \item \textbf{RMSProp}
+        \item SGD withNesterov
+        \item \textbf{AdaDelta}
+        \item \textbf{Adam}
+    \end{enumerate}
+        \item Which form of regularisation randomly zeroes out nodes during training and scales outputs during testing?
+    \begin{enumerate}[label=\alph*.]
+        \item Batch Normalisation
+        \item \textbf{Dropout}
+    \end{enumerate}
+    %     \item Dropout: If fraction $p$ of nodes are zeroed out during training, what should their outputs be scaled by during testing?
+    % \begin{enumerate}[label=\alph*.]
+    %     \item $p/l$, where $l$ refers to the count of layers
+    %     \item $\mathbf{p}$
+    % \end{enumerate}
+        \item Dropout: If fraction $p$ of nodes are zeroed out during training, what should their outputs be scaled by during testing?
+    \begin{enumerate}[label=\alph*.]
+        \item $p/l$, where $l$ refers to the count of layers
+        \item $\mathbf{p}$
+    \end{enumerate}
+        \item Batch Normalisation: The Xavier initialisation and Kaiming He initialisation are used for what kinds of activation functions?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Sigmoid for Xavier, ReLU for Kaiming He}
+        \item ReLU for Xavier, Sigmoid for Kaiming He
+        \item Both initialisations can use either
+        \item Sigmoid for both initialisations
+    \end{enumerate}
+        \item To prevent the symmetry problem caused by identical gradients during backpropagation, weights should be initialised to:
+    \begin{enumerate}[label=\alph*.]
+        \item Zero
+        \item A random sample from the uniform distribution
+        \item A random sample from the Gaussian distribution
+        \textbf{\item A random sample from either distribution listed above}
+    \end{enumerate}
+        \item Usually it is best to place a Batch Normalisation layer:
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Between the Conv and Activation Layers}
+        \item After the FC layer
+        \item Before the pooling layer
+    \end{enumerate}
+    \item For 4D tensor input $[N,H,W,C]$, Batch Normalisation in convolutional networks (ConvNets) calculate the mean and standard deviations across:
+    \begin{enumerate}[label=\alph*.]
+        \item $H$
+        \item $W$
+        \item $\textbf{C}$
+    \end{enumerate}
+    \item When fine-tuning a network, it is normal to use learning rate that is:
+    \begin{enumerate}[label=\alph*.]
+        \item larger than the original
+        \item \textbf{smaller than the original}
+    \end{enumerate}
+    \item Data splitting: What is the best ratio below for partitioning the training, validation, and test sets respectively?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{60:20:20}
+        \item 20:60:20
+        \item 20:20:60
+    \end{enumerate}
+    \item Does data augmentation require collecting new data?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes
+        \item \textbf{No}
+        \begin{itemize}
+            \item Data augmentation adds noise, generates variations of test samples (e.g. rotated or transformed images), replacing with synonyms (text data), but does not involve collecting new data.
+        \end{itemize}
+    \end{enumerate}
+    \item When training error is high, what should be done?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Train longer, try different model}
+        \item Regularise, get more data
+    \end{enumerate}
+    \item When validation-training error is high, what should be done?
+    \begin{enumerate}[label=\alph*.]
+        \item Train longer, try different model
+        \item \textbf{Regularise, get more data}
+    \end{enumerate}
+    \item When validation-testing error is high, what should be done?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Allocate more validation-training data}
+        \item Redo hyper-parameter search
+    \end{enumerate}
+\item Which optimiser adapts the learning rate based on the accumulated square of gradients and is particularly useful for sparse data?
+\begin{enumerate}[label=\alph*.]
+    \item Adam
+    \item \textbf{Adagrad}
+    \item Adadelta
+    \item SGD with Nesterov momentum
+\end{enumerate}
+
+\item Adadelta is an extension of which of the following optimisers?
+\begin{enumerate}[label=\alph*.]
+    \item Adam
+    \item Adagrad
+    \item \textbf{RMSprop}
+    \item SGD with Nesterov momentum
+\end{enumerate}
+
+\item Which optimiser combines the advantages of Adagrad and RMSprop and also utilises momentum?
+\begin{enumerate}[label=\alph*.]
+    \item Adadelta
+    \item SGD
+    \item \textbf{Adam}
+    \item SGD with Nesterov momentum
+\end{enumerate}
+
+\item Stochastic Gradient Descent (SGD) with Nesterov momentum differs from classic momentum because:
+\begin{enumerate}[label=\alph*.]
+    \item It computes the gradient at the updated position rather than the current position.
+    \item It uses a fixed learning rate throughout the training.
+    \item It does not accumulate the gradient.
+    \item \textbf{It computes the gradient at a position ahead in the direction of the momentum.}
+\end{enumerate}
+
+\item RMSprop is designed to solve the diminishing learning rates problem found in which optimiser?
+\begin{enumerate}[label=\alph*.]
+    \item Adam
+    \item \textbf{Adagrad}
+    \item Adadelta
+    \item SGD with Nesterov momentum
+\end{enumerate}
+\end{enumerate}
+
+
+\section{CNN Architectures}
+
+\begin{enumerate}
+    \item What features did VGG have that were different from AlexNet?
+    \begin{enumerate}[label=\alph*.]
+        \item Number of FC layers
+        \item \textbf{Number of filter kernels}
+        \item \textbf{Number of channels}
+        \item \textbf{Activation function}
+    \end{enumerate}
+    \item What type of pooling layer does GoogLeNet use more often than ResNet?
+    \begin{enumerate}[label=\alph*.]
+        \item Average
+        \item \textbf{Max Pooling}
+        \begin{itemize}
+            \item GooGLeNet used max pooling followed by $1\times 1$ convolution to reduce depth
+        \end{itemize}
+    \end{enumerate}
+    \item Which model \textbf{improved} on ResNet's skip connections?
+    \begin{enumerate}[label=\alph*.]
+        \item ResNeXt
+        \item \textbf{Densenet}
+    \end{enumerate}
+    \item What features does ResNeXt have?
+    \begin{enumerate}[label=\alph*.]
+        \item Google's Inception module
+        \item Kaiming He's skip connections
+        \item \textbf{Both Inception modules and skip connections}
+    \end{enumerate}
+    
+\end{enumerate}
+
+\section{RNNs}
+
+\begin{enumerate}
+    \item What activation functions do RNNs generally use?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{tanh}
+        \item ReLU
+        \item Softmax
+    \end{enumerate}
+    \item What activation functions are generally used with cell states in LSTMs?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{tanh}
+        \item ReLU
+        \item Sigmoid
+    \end{enumerate}
+    \item What activation functions do LSTM are generally used with update and forget gates?
+    \begin{enumerate}[label=\alph*.]
+        \item tanh
+        \item ReLU
+        \item \textbf{Sigmoid}
+    \end{enumerate}
+    \item Which is a use case of the Many-to-Many models?
+    \begin{enumerate}[label=\alph*.]
+        \item Image captioning
+        \item Sentiment analysis
+        \item \textbf{Video annotation}
+    \end{enumerate}
+\item What is a key feature of LSTM networks that distinguishes them from basic RNNs?
+\begin{enumerate}[label=\alph*.]
+    \item They have a simpler architecture that is easier to train.
+    \item They have feedback loops within the network layers.
+    \item \textbf{They use gating mechanisms to control the flow of information.}
+    \item They can only process sequence data in one direction.
+\end{enumerate}
+
+\item Why are LSTMs particularly suited for processing sequences with long-range dependencies?
+\begin{enumerate}[label=\alph*.]
+    \item Because they can process data in parallel.
+    \item \textbf{Because their gating mechanisms help mitigate the vanishing gradient problem.}
+    \item Because they have a fixed-size hidden layer.
+    \item Because they require less training data than other RNNs.
+\end{enumerate}
+
+\item Which of the following tasks is LSTM least likely to excel at?
+\begin{enumerate}[label=\alph*.]
+    \item Language translation.
+    \item Sentiment analysis.
+    \item Short-term time series prediction.
+    \item \textbf{Real-time image classification.}
+\end{enumerate}
+
+\item In an LSTM unit, which gate is responsible for deciding what information to throw away from the cell state?
+\begin{enumerate}[label=\alph*.]
+    \item Input gate.
+    \item Output gate.
+    \item \textbf{Forget gate.}
+    \item Update gate.
+\end{enumerate}
+
+\item LSTMs can be utilised in which of the following applications?
+\begin{enumerate}[label=\alph*.]
+    \item Time series forecasting.
+    \item Text generation.
+    \item Speech recognition.
+    \item \textbf{All of the above.}
+\end{enumerate}
+    
+\end{enumerate}
+
+\section{Representation Learning}
+
+\begin{enumerate}
+    \item What kind of data does Supervised learning use?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Labelled data}
+        \item Unlabelled data
+    \end{enumerate}
+    \item What shows there exists no universally best single feature representation?
+    \begin{enumerate}[label=\alph*.]
+        \item Hoeffding's inequality
+        \item \textbf{No free lunch theorem}
+        \item Chebyshev inequality
+    \end{enumerate}
+    \item What is a solution to the linear autoencoder problem?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Principal Component Analysis}
+        \item Least Squares Approximation
+        \item Inverse covariance matrix
+    \end{enumerate}
+    \item What is an example of a Many-to-Many model?
+    \begin{enumerate}[label=\alph*.]
+        \item Image captioning
+        \item Sentiment analysis
+        \item \textbf{Video annotation}
+    \end{enumerate}
+    \item Which type of autoencoder requires regularisation?
+    \begin{enumerate}[label=\alph*.]
+        \item Undercomplete
+        \item \textbf{Overcomplete}
+    \end{enumerate}
+    \item An overcomplete autoencoder only tuned to specific patterns in the data would be a:
+    \begin{enumerate}[label=\alph*.]
+        \item Contractive autoencoder
+        \item \textbf{Sparse autoencoder}
+    \end{enumerate}
+    \item What activation functions can a contractive autoencoder not use?
+    \begin{enumerate}[label=\alph*.]
+        \item Sigmoid
+        \item \textbf{ReLU}
+        \begin{itemize}
+            \item Contractive autoencoders have a penalty that takes the squared Frobenius norm of the Jacobian of $\phi$ in $x$. It requires activation functions that are differentiable twice, and ReLU is not.
+        \end{itemize}
+    \end{enumerate}
+\item What is the primary purpose of a linear autoencoder?
+\begin{enumerate}[label=\alph*.]
+    \item To classify input data into predefined categories.
+    \item \textbf{To learn a compressed representation of the input data.}
+    \item To predict future data points in a time series.
+    \item To increase the dimensionality of the input data.
+\end{enumerate}
+
+\item In the context of linear autoencoders, what does the term "overcomplete" refer to?
+\begin{enumerate}[label=\alph*.]
+    \item The autoencoder has more layers than necessary.
+    \item The autoencoder has more neurons in the hidden layer than inputs.
+    \item \textbf{The autoencoder has a hidden layer larger than the input layer.}
+    \item The autoencoder is trained on more data than necessary.
+\end{enumerate}
+
+\item Which of the following is a key characteristic of a linear autoencoder for dimensionality reduction?
+\begin{enumerate}[label=\alph*.]
+    \item Non-linear activation functions.
+    \item Recurrent connections in the network.
+    \item \textbf{Absence of activation functions, resulting in a linear transformation.}
+    \item Convolutional layers to capture spatial hierarchies.
+\end{enumerate}
+\end{enumerate}
+
+\section{Generative Models}
+
+\begin{enumerate}
+    \item Which generative model produces sharper examples?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Generative Adversarial Networks}
+        \item Variational Autoencoders
+    \end{enumerate}
+    \item What prevents mode collapse in GANs?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Wasserstein Distance}
+        \item Leaky ReLUs
+        \item Using CNNs
+    \end{enumerate}
+    \item Do GANs have an encoder?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes
+        \item \textbf{No}
+    \end{enumerate}
+    \item Does a GAN's generator sees the data during training?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes, it needs comparisons to produce similar data to the training data to fool the discriminator
+        \item \textbf{No, it only relies on the discriminator's feedback in the form of probabilities}
+    \end{enumerate}
+
+\item What is a distinctive feature of Variational Autoencoders (VAEs) compared to traditional autoencoders?
+\begin{enumerate}[label=\alph*.]
+    \item They use backpropagation for training.
+    \item They only require labeled data for training.
+    \item \textbf{They learn a probabilistic latent space and can generate new data.}
+    \item They always produce binary outputs.
+\end{enumerate}
+
+\item Generative Adversarial Networks (GANs) are composed of two main components, what are they?
+\begin{enumerate}[label=\alph*.]
+    \item Encoder and Decoder.
+    \item \textbf{Generator and Discriminator.}
+    \item Predictor and Classifier.
+    \item Supervisor and Operator.
+\end{enumerate}
+\item Generative Adversarial Networks (GANs) are composed of two main components, what are they?
+\begin{enumerate}[label=\alph*.]
+    \item Encoder and Decoder.
+    \item \textbf{Generator and Discriminator.}
+    \item Predictor and Classifier.
+    \item Supervisor and Operator.
+\end{enumerate}
+
+\item What role does the discriminator play in a Generative Adversarial Network (GAN)?
+\begin{enumerate}[label=\alph*.]
+    \item It generates new data instances.
+    \item \textbf{It evaluates the authenticity of samples, distinguishing between real and generated data.}
+    \item It classifies data into predefined categories.
+    \item It compresses the input data into a latent space.
+\end{enumerate}
+
+\item In the training of a VAE, what is the purpose of the reparameterization trick?
+\begin{enumerate}[label=\alph*.]
+    \item To speed up the training process.
+    \item \textbf{To allow backpropagation through random sampling.}
+    \item To reduce the number of parameters in the model.
+    \item To enhance the resolution of generated images.
+\end{enumerate}
+
+\item Which of the following best describes the training process of GANs?
+\begin{enumerate}[label=\alph*.]
+    \item The generator maximizes the probability of the discriminator being correct.
+    \item The discriminator maximizes the probability of identifying real and generated data correctly, while the generator maximizes the probability of the discriminator making a mistake.
+    \item The generator and discriminator are trained in separate phases, not affecting each other.
+    \item \textbf{The discriminator is trained to distinguish real data from fake, while the generator is trained to fool the discriminator into thinking the fake data is real.}
+\end{enumerate}
+\end{enumerate}
+
+\section{Reinforcement Learning}
+
+\begin{enumerate}
+    \item What does the Markov Decision Process tuple \((\mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R})\) contain?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{State set, Action set, Probability function, Reward function}
+        \item State set, Agent set, Probability function, Reward function
+        \item State set, Action set, Probability distribution, Reward function
+    \end{enumerate}
+    \item Which attributes below describe an MDP?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{time-independent}
+        \item depends on past states
+        \item \textbf{random process}
+    \end{enumerate}
+    % \item Control in a Markov Decision Process (MDP) are typically designed based on the assumption that the...
+    % \begin{enumerate}[label=\alph*.]
+    % \item State transition probabilities and reward functions are fully specified.
+    % \item State transition probabilities and reward functions are not specified and need to be estimated or learned.
+    % \item \textbf{Both of the above conditions, as control policies can be derived with or without full knowledge of the MDP.}
+    % \end{enumerate}
+    \item Which training method looks one step ahead?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Temporal Difference}
+        \item Monte Carlo
+    \end{enumerate}
+    \item Can TD be applied to non-episodic MDPs?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{Yes}
+        \item No
+    \end{enumerate}
+    \item Can MC be applied to non-episodic MDPs?
+    \begin{enumerate}[label=\alph*.]
+        \item Yes
+        \item \textbf{No}
+    \end{enumerate}
+    \item Which of the below works better in complex unpredictable scenarios where the environment is not known?
+    \begin{enumerate}[label=\alph*.]
+        \item \textbf{MC}
+        \item TD
+    \end{enumerate}
+\item Which of the following statements best describes the difference between Q-learning and SARSA in reinforcement learning?
+\begin{enumerate}[label=\alph*.]
+    \item Q-learning is an on-policy algorithm, while SARSA is an off-policy algorithm.
+    \item \textbf{Q-learning updates its Q-values using the greedy action selection, while SARSA updates its Q-values using the actual next action taken.}
+    \item Q-learning and SARSA both update their Q-values based on the actual next action taken and are considered on-policy algorithms.
+    \item There is no difference; Q-learning and SARSA are simply different names for the same algorithm.
+\end{enumerate}
+
+\item What distinguishes Q-learning in terms of policy type?
+\begin{enumerate}[label=\alph*.]
+    \item Q-learning is an on-policy control algorithm.
+    \item \textbf{Q-learning is an off-policy control algorithm.}
+    \item Q-learning does not utilize any policy for learning.
+    \item Q-learning switches between on-policy and off-policy during training.
+\end{enumerate}
+
+\item In Q-learning, when is the Q-value updated?
+\begin{enumerate}[label=\alph*.]
+    \item After the completion of an episode.
+    \item \textbf{After each step within an episode.}
+    \item Only at the end of a learning session.
+    \item Before the agent takes an action.
+\end{enumerate}
+
+\item In SARSA, how are action values updated?
+\begin{enumerate}[label=\alph*.]
+    \item Using the expected value of the next state's best action.
+    \item \textbf{Using the value of the next action selected by the current policy.}
+    \item Independently of the actions selected by the current policy.
+    \item Using a random action from the next state.
+\end{enumerate}
+
+\item SARSA is considered what type of learning algorithm?
+\begin{enumerate}[label=\alph*.]
+    \item Deterministic
+    \item Off-policy
+    \item \textbf{On-policy}
+    \item Model-based
+\end{enumerate}
+    
+    
+    
+
+
+\end{enumerate}
+
+
+
+
+\end{document}
