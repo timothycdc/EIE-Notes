@@ -1,0 +1,189 @@
+%=======================PACKAGES FOR NEWCOMMAND CREATION========================
+\usepackage{xparse}
+%===============================================================================
+
+%=========================PACKAGES FOR USE IN DOCUMENT==========================
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx, amssymb, amsfonts, amsmath, listings, multirow, hyperref, mathtools, svg, tikz, enumitem, minted, xfrac, multicol, subcaption}
+\usepackage[most]{tcolorbox}
+\usepackage[super]{nth}
+\usepackage{tabularx}  % for 'X' column type
+\usepackage{multirow}  % for multirow cells
+\usepackage{pgfplots}
+\usepackage{tocloft}
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usepackage{booktabs} % for tables
+\usepackage{hhline}
+
+
+
+
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+\tikzset{
+    neuron/.style={circle, draw, minimum size=1cm},
+    input neuron/.style={neuron, fill=gray!20},
+    output neuron/.style={neuron, fill=gray!60},
+    activation function/.style={
+        rectangle,
+        draw,
+        minimum size=1cm,
+        fill=gray!30,
+        path picture={
+            % Draw the step function inside the activation function node
+            \draw[thick] 
+            ($(path picture bounding box.south)+(-0.3cm,0.2cm)$) -- 
+            ($(path picture bounding box.south)+(0cm,0.2cm)$) -- 
+            ($(path picture bounding box.south)+(0cm,0.7cm)$) -- 
+            ($(path picture bounding box.south)+(0.3cm,0.7cm)$);
+        }
+    },
+    arrow label/.style={midway, above}
+}
+
+
+% ======= CUSTOM 
+\usepackage{subcaption}
+\usepackage{wasysym}
+
+%=================================GLOBAL SETUP==================================
+\setitemize{itemsep=0em}
+%===============================================================================
+
+%===============================INCLUDE CHAPTERS================================
+\newcommand{\addchapter}[1]{\include{#1/#1}}
+%===============================================================================
+
+%==============================UNFINISHED SECTION===============================
+\newcommand{\unfinished}{\begin{huge} \textcolor{red}{\textbf{UNFINISHED!!!}} \end{huge}}
+\newcommand{\toimprove}{\begin{huge} \textcolor{olive}{\textbf{NEEDS IMPROVEMENT!!!}} \end{huge}}
+%===============================================================================
+
+%==============================PAGE SPLIT LAYOUTS===============================
+\NewDocumentCommand{\twosplit}{O{0.48} O{#1} m m}{
+	\begin{minipage}[t]{#1\textwidth}
+		#3
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{#2\textwidth}
+		#4
+	\end{minipage}
+}
+%===============================================================================
+
+%============================SPECIAL COLOURED BOXES=============================
+
+% For term definitions
+% \begin{definitionbox}{term}
+%	... the term's definition ...
+% \end{definitionbox}
+\newtcolorbox[auto counter,number within=section]{definitionbox}[2][]{%
+	colback=blue!5!white,colframe=blue!75!black,arc=0mm,sharp corners=all,fonttitle=\bfseries,%
+	title=#2 \hfill Definition \thetcbcounter #1}
+
+% For term definitions
+% \begin{sidenotebox}{cool title}
+%	... cool unsassessed/not required info ...
+% \end{sidenotebox}
+\newtcolorbox[auto counter,number within=section]{sidenotebox}[2][]{%
+	colback=black!5!white,colframe=black!75!black,arc=0mm,sharp corners=all,fonttitle=\bfseries,%
+	title=#2 \hfill \textit{Extra, Not Assessed} \thetcbcounter #1}
+% previously the text was "Extra Fun!"
+
+% For example questions:
+% \begin{examplebox}{question name}
+%   ... the question ...
+%	\tcblower
+%   ... the worked answer ...
+% \end{examplebox}
+\newtcolorbox[auto counter,number within=section]{examplebox}[2][]{%
+	colback=orange!5!white,breakable,colframe=orange!75!black,arc=0mm,sharp corners=all,fonttitle=\bfseries,%
+	title=#2 \hfill Example Question \thetcbcounter #1}
+
+
+
+% For exam questions (no answers):
+% \begin{exambox}{1c}{2018}
+%   ... the question ...
+% \end{exambox}
+\newtcolorbox[auto counter,number within=section]{exambox}[3][]{%
+	colback=purple!5!white,breakable,colframe=purple!75!black,arc=0mm,sharp corners=all,fonttitle=\bfseries,
+	title=Q#2 - #3 \hfill Exam Question \thetcbcounter #1}
+
+% For comments:
+% \begin{commentbox}
+%   ... the question ...
+% \end{commentbox}
+ 
+\newtcolorbox[auto counter,number within=section]{commentbox}[2][]{%
+    colback=orange!5!white,
+    colframe=orange!95!black, % Darker orange frame
+    coltitle=white, % White title text
+    arc=0mm,
+    sharp corners=all,
+    fonttitle=\bfseries,
+    title=#2 \hfill
+}
+
+
+ 
+
+% For positives/pros 
+% \begin{prosbox}
+%	... the term's definition ...
+% \end{prosbox}
+\newtcolorbox[]{prosbox}[1][]{%
+	colback=green!5!white,breakable,colframe=green!75!black,leftrule=3mm,arc=0mm,sharp corners=all, #1}
+
+% For negatives/cons 
+% \begin{prosbox}
+%	... the term's definition ...
+% \end{prosbox}
+\newtcolorbox[]{consbox}[1][]{%
+	colback=red!5!white,breakable,colframe=red!75!black,leftrule=3mm,arc=0mm,sharp corners=all, #1}
+
+% For negatives/cons 
+% \begin{tabbox}{consbox}
+%	... the term's definition ...
+% \end{tabbox}
+\newenvironment{tabbox}[2][.8\textwidth]{
+	\def\boxtype{#2}
+	\begin{\boxtype}
+		\begin{center}
+			\begin{tabular}{r p{#1}}
+				}{
+			\end{tabular}
+		\end{center}
+	\end{\boxtype}
+}
+
+% \begin{panoptobox}
+%   ... the question ...
+% \end{panoptobox}
+\newtcolorbox{panoptobox}{enhanced,arc=0mm,breakable,sharp corners=all,colback=gray!5,colframe=gray,leftrule=12mm,detach title,%
+	underlay unbroken and first={\node[below,text=black,anchor=east] at (interior.base west) {\includegraphics[width=11mm]{../common/images/panopto_logo.png}};}}
+
+\newcommand{\lectlink}[2]{
+	\begin{panoptobox}
+		\textbf{\href{#1}{#2}}
+	\end{panoptobox}
+}
+
+% For theorems:
+% \begin{theorembox}
+%   ... the question ...
+% \end{theorembox}
+ 
+\newtcolorbox[auto counter,number within=section]{theorembox}[2][]{%
+    colback=red!5!white,
+    colframe=red!95!black, % Darker orange frame
+    coltitle=white, % White title text
+    arc=0mm,
+    sharp corners=all,
+    fonttitle=\bfseries,
+    title=#2 \hfill Theorem \thetcbcounter #1
+}
+
+%===============================================================================

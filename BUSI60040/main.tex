@@ -1,0 +1,69 @@
+
+\documentclass{report}
+    \title{Statistical Signal Processing \& Inference notes}
+    \author{Timothy Chung}
+    \date{8/01/24}
+    
+    \usepackage[a4paper, total={7in, 10in}]{geometry}
+    \setlength\parindent{0pt}
+    \input{common.tex}
+    \newcommand{\infer}[2]{\cfrac{#1}{#2}}
+    \newcommand{\infers}[3]{\cfrac{#1}{#2}(#3)}
+    
+    \newcommand{\ninfer}[3]{(\text{#1}):\cfrac{#2}{#3}}
+    \newcommand{\ninfers}[4]{(\text{#1}):\cfrac{#2}{#3}(#4)}
+    \newcommand{\ainfer}[3]{\cfrac{#2}{#3}(\text{#1})}
+    
+    \newcommand{\mllet}[2]{\text{let } #1 \text{ in } #2}
+    \newcommand{\mlfix}[2]{\text{fix } #1 . #2}
+    
+    \newcommand{\hc}{\mathcal{H}}
+    \newcommand{\cov}{\text{Cov}}
+    \newcommand{\E}{\text{E}}
+    \newcommand{\var}{\text{Var}}
+    \newcommand{\mb}{\mathbf}
+    \newcommand{\est}{\hat{\theta}}
+    \newcommand{\p}{\theta}
+    
+    
+    
+\begin{document}
+\include{titlepage/titlepage}
+\setlength{\cftsecnumwidth}{4.2em} 
+
+\begin{titlepage}
+\centering
+    \vspace*{1cm}
+    \Huge
+    \textbf{BUSI60040 Corporate Finance} \\
+    \vspace{1cm}
+    \Large
+    Timothy Chung \\
+    \vspace{1cm}
+    Spring 2024 \\
+    \vfill
+\end{titlepage}
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+\newpage
+\setcounter{chapter}{-1}
+\chapter{Foreword}
+The notes are intended to keep a rough track of the (rather lacking) syllabus found on the website \href{https://www.imperial.ac.uk/business-school/undergraduate/bpes/#programme-content}{here.} The notes here themselves are far from a proper curruiculum in corporate finance, more interested readers can consult a better textbook \href{https://book.ivo-welch.info/home/}{here}. \\
+
+This module aims to give an overview of the two key financial instruments: Stocks and Bonds. It will also introduce the key derivatives marketing: Futures and  Options. You will be introduced to the concepts of risk and return in  financial markers  and how diversification influences risk and return. This module will explore the concept of the cost capital and how it can be calculated. You will learn how companies are financed and how to decide between different sources of finance. 
+
+\input{1_intro}
+\input{2_bonds}
+\input{3_equity}
+\input{4_valuation}
+\input{5_equity_markets}
+\input{6_portfolio}
+\input{7_capital_cost}
+\input{8_capital_structure}
+\input{9_options}
+\input{10_options}
+
+
+\end{document}
+
