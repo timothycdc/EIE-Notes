@@ -16,7 +16,7 @@
 \begin{commentbox}{Rigour of A Random Variable}
     For the beginning of this module, a random variable $X$ is considered to be a function from a sample space $\Omega$ to the unit interval $[0, 1]$. \\
 
-    However, in Lectures 6 and 7, we use the full definition of a random variable, which is a measurable function from a sample probability space $(\Omega)$ to a measurable space $(E, \varepsilon)$, involcing the concept of $\sigma$-algebras and measure spaces. \\
+    However, in Lectures 6 and 7, we use the full definition of a random variable, which is a measurable function from a sample probability space $(\Omega)$ to a measurable space $(E, \varepsilon)$, involving the concept of $\sigma$-algebras and measure spaces. \\
 
     When the sample space is a continuous space, the function $p$ is a \textbf{probability density function} (PDF). When the sample space is a discrete space, the function $p$ is a \textbf{probability mass function} (PMF).
 \end{commentbox}
@@ -104,13 +104,13 @@ The CDF has the following properties:
     \caption{Cumulative Distribution Function}
 \end{figure}
 
-\subsection{Dealing with Data}
+\subsection{Dealing with Data (Single-Feature)}
 
 In Machine Learning (ML), we often deal with large datasets from which we aim to extract meaningful insights. It is useful to model these data points as random variables:
-
 \[
 \{x_1, x_2, \ldots, x_N\}
 \]
+
 
 We typically model these samples as random variables:
 
@@ -214,10 +214,9 @@ In other words, we adjust the parameters \(\mu\) and \(\sigma\) so that the assu
     Why do we model samples as distinct random variables?
 
 \begin{enumerate}
-    \item \textbf{Variability: } Even though samples may be identically distributed, they are not the same. Each sample can take different values, and by modelling them as distinct random variables, we can account for this variability.
-    \item \textbf{Dependence Structure: } By treating samples as distinct, we can study and model the relationships and dependencies between them. This is important to understand the overall behavior of the system and in developing robust machine learning models.
-    \item \textbf{Central Limit Theorem: } Many results in probability and statistics, such as the Central Limit Theorem, rely on the assumption that we have a collection of distinct, identically distributed random variables. 
-    \item \textbf{Learning and Generalisation: } Assuming independence simplifies the mathematical analysis and derivation, and to use techniques like maximum likelihood estimation and empirical risk minimisation. Independence ensures a model trained on a subset of data can generalise well to unseen data. If samples were not independent, the model would overfit to specific data points that do not hold in general.
+    \item By treating each sample as a distinct variable, we assume samples are i.i.d, allowing every sample to contribute independently to the likelihood of oberving the data given the model prarameters – so every sample provides unique information to estimate the parameters of the underlying distribution. If we treated all samples as a single random variable, we would lose the granularity of information, leading to a poorer estimate.
+    \item Treating samples as distinct allows us to study and model the relationships and dependencies between them.
+    \item The assumption of i.i.d follows many results in probability and statistics, such as the Central Limit Theorem, which states that the sum of a large number of i.i.d. random variables is approximately normally distributed. It is also an assumed requirement for a model to generalise. The assumption simplifies the analysis and derivation process, allowing us to use techniques like maximum likelihood estimation (MLE) and empirical risk minimization (ERM).
 \end{enumerate}
     
 \end{commentbox}
