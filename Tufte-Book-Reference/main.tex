@@ -23,23 +23,6 @@
 % 1q1
 
 \documentclass[a4paper,nofonts,notoc,oneside,openany,nobib]{tufte-book}
-\usepackage{geometry}
-% \usepackage{float}
-\geometry{
-  % showframe,
-  % paperwidth=6in,
-  % paperheight=9in,
-  left=0.5in,
-  right=0.5in,
-  top=.2in,
-  bottom=.5in,
-  marginparsep=0.2in,
-  marginparwidth=2in,
-  includemp,
-  includehead,
-  % The text width and height are calculated automatically.
-}
-
 
 \newcommand{\formatpart}[1]{%
 \begin{fullwidth}
@@ -61,12 +44,10 @@
 
 
 
-\setcounter{tocdepth}{1}
-\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
 \usepackage{nameref}
 \hypersetup{colorlinks}
-\usepackage{ragged2e}
-
 % uncomment this line if you prefer colored hyperlinks (e.g., for onscreen viewing)
 
 \input{preamble}
@@ -85,10 +66,10 @@
 
 %%
 % Book metadata
-\title{COMP70015 \\Mathematics for Machine Learning}
-\date{Autumn 2025}
-\author[Timothy Chung]{Timothy Chung}
-% \publisher{Publisher of This Book}
+\title{A Tufte-Style Book}
+\date{The edition number}
+\author[The Tufte-LaTeX Developers (with modifications)]{The Tufte-LaTeX\ Developers (with modifications)}
+\publisher{Publisher of This Book}
 
 %%
 % If they're installed, use Bergamo and Chantilly from www.fontsite.com.
@@ -297,12 +278,12 @@
 
 \titlespacing*{\chapter}{0pt}{*3}{*2} % Adjust spacing if necessary
 
-%%%%%%%%%%%%%% Geometry and Margins
+%%%%%%%%%%%%%%
+
 
 \begin{document}
 % Front matter
 \frontmatter
-\RaggedRight
 
 % r.1 blank page
 % \blankpage
@@ -334,11 +315,7 @@
 
 
 % r.3 full title page
-\begin{fullwidth}
-  \begin{raggedright}
-  \maketitle
-  \end{raggedright}
-\end{fullwidth}
+\maketitle
 
 
 % v.4 copyright page
@@ -350,9 +327,9 @@
 \setlength{\parskip}{\baselineskip}
 Copyright \copyright\ \the\year\ \thanklessauthor
 
-% \par\smallcaps{Published by \thanklesspublisher}
+\par\smallcaps{Published by \thanklesspublisher}
 
-% \par\smallcaps{??.netlify.com}
+\par\smallcaps{tufte-latex.googlecode.com}
 
 % \par Licensed under the Apache License, Version 2.0 (the ``License''); you may not
 % use this file except in compliance with the License. You may obtain a copy
@@ -363,7 +340,7 @@ Copyright \copyright\ \the\year\ \thanklessauthor
 % License for the specific language governing permissions and limitations
 % under the License.\index{license}
 
-% \par\textit{First printing, \monthyear}
+\par\textit{First printing, \monthyear}
 \end{fullwidth}
 
 \newpage
@@ -372,54 +349,41 @@ Copyright \copyright\ \the\year\ \thanklessauthor
 \tableofcontents
 
 
-% \listoffigures
+\listoffigures
 
-% \listoftables
+\listoftables
 \end{fullwidth}
 
 % r.7 dedication
-% \cleardoublepage
-% ~\vfill
-% \begin{doublespace}
-% \noindent\fontsize{18}{22}\selectfont\itshape
-% \nohyphenation
-% Dedicated to those who appreciate \LaTeX{} 
-% and the work of \mbox{Edward R.~Tufte} 
-% and \mbox{Donald E.~Knuth}.
-% \end{doublespace}
-% \vfill
-% \vfill
+\cleardoublepage
+~\vfill
+\begin{doublespace}
+\noindent\fontsize{18}{22}\selectfont\itshape
+\nohyphenation
+Dedicated to those who appreciate \LaTeX{} 
+and the work of \mbox{Edward R.~Tufte} 
+and \mbox{Donald E.~Knuth}.
+\end{doublespace}
+\vfill
+\vfill
 
 
 % r.9 introduction
-% \cleardoublepage
+\cleardoublepage
 \chapter*{Introduction}
 
-% This sample book discusses the design of Edward Tufte's
-% books\cite{Tufte2001,Tufte1990,Tufte1997,Tufte2006}
-% and the use of the \doccls{tufte-book} and \doccls{tufte-handout} document classes.
+This sample book discusses the design of Edward Tufte's
+books\cite{Tufte2001,Tufte1990,Tufte1997,Tufte2006}
+and the use of the \doccls{tufte-book} and \doccls{tufte-handout} document classes.
 
-My notes try to combine the detail of the professor's informal lecture notes with the breadth of the slides, where the latter covers all the assessed mathematical content. However, I will have added extra material from the listed reference materials in the informal notes.
-
-\section*{Overview}
-\begin{enumerate}[label=Week \arabic*:, leftmargin=2cm]
-  \item Discuss ML, brush up skills
-  \item Critical optimisation concepts: automatic differentiation, convergence, complexity
-  \item Probabilistic Perspective to ML
-  \item Probabilistic Perspective to ML (contd.)
-  \item Focus on Bayes Theorem + Practicals
-  \item Consolidating learning (PCA study)
-  \item Two Advanced topics: NN training with adversarial examples, + student selected topic
-        % Add more items as needed
-\end{enumerate}
 
 %%
 % Start the main matter (normal chapters)
 \mainmatter
 
-\part{Fundamental Concepts in Mathematics for Machine Learning}
+\part{The First Part}
 
-\chapter{Formalising ML Problem Settings}
+\chapter{The Design of Tufte's Books}
 \label{ch:tufte-design}
 
 \thm{Theorem Name}{This is the statement of the theorem.}
@@ -501,224 +465,10 @@ This is an example of an intuitive explanation.
 }
 
 
-\sn{On The Rigour of A Random Variable}{
-For the beginning of this module, a random variable $X$ is considered to be a function from a sample space $\Omega$ to the unit interval $[0, 1]$. However, in Lectures 6 and 7, we use the full definition of a random variable, which is a measurable function from a sample probability space $(\Omega)$ to a measurable space $(E, \varepsilon)$, involving the concept of $\sigma$-algebras and measure spaces. \bigskip
-
-When the sample space is a continuous space, the function $p$ is a \textbf{probability density function} (PDF). When the sample space is a discrete space, the function $p$ is a \textbf{probability mass function} (PMF).
-}
-
-
-
-
-
-
-
-
-
 \newthought{The pages} of a book are usually divided into three major
 sections: the front matter (also called preliminary matter or prelim), the
 main matter (the core text of the book), and the back matter (or end
 matter).
-
-\section{Brief Probability Theory Review}
-
-$x$ is a sample from a random variable $X$. 
-
-$P(X=x)$ refers to probability that the random variable $X$ takes on the value $x$.
-
-\subsection{Probability Density Function (PDF)}
-\begin{marginfigure}[100pt]
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-            width=4cm,
-            height=4cm,
-            xlabel={$x$},
-            ylabel={$f_X(x)$},
-            domain=-3:3,
-            samples=100,
-            axis lines=left,
-            ymin=0,
-            legend pos=north east,
-            title={Example of a PDF: Normal Distribution}
-        ]
-        \addplot[blue, thick] {exp(-x^2 / 2) / sqrt(2 * pi)};
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Probability Density Function of a standard normal distribution}
-\end{marginfigure}
-
-The Probability Density Function (PDF) of a continuous random variable \(X\) is a function \(f_X(x)\) that describes the relative likelihood for this random variable to take on a given value. The PDF has the following properties:
-\begin{itemize}
-    \item \(f_X(x) \geq 0\) for all \(x\).
-    \item \(\int_{-\infty}^{\infty} f_X(x) \, dx = 1\).
-\end{itemize}
-
-Mathematically, the PDF is defined such that the probability that \(X\) lies within a particular interval \([a, b]\) is given by:
-\[
-P(a \leq X \leq b) = \int_{a}^{b} f_X(x) \, dx.
-\]
-
-
-\subsection{Cumulative Distribution Function (CDF)}
-\begin{marginfigure}
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-          width=4cm,
-          height=4cm,
-            xlabel={$x$},
-            ylabel={$F_X(x)$},
-            domain=-3:3,
-            samples=100,
-            axis lines=left,
-            ymin=0, ymax=1.1,
-            legend pos=south east,
-            title={Example of a CDF: Sigmoid Approximation}
-        ]
-        \addplot[blue, thick] {1 / (1 + exp(-x))};
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Cumulative Distribution Function}
-\end{marginfigure}
-
-The Cumulative Distribution Function (CDF) of a continuous random variable \(X\) is a function \(F_X(x)\) that describes the probability that \(X\) will take a value less than or equal to \(x\). It is defined as:
-\[
-F_X(x) = P(X \leq x) = \int_{-\infty}^{x} f_X(t) \, dt.
-\]
-
-The CDF has the following properties:
-\begin{itemize}
-    \item \(0 \leq F_X(x) \leq 1\) for all \(x\).
-    \item \(F_X(x)\) is a non-decreasing function.
-    \item \(\lim_{x \to -\infty} F_X(x) = 0\).
-    \item \(\lim_{x \to \infty} F_X(x) = 1\).
-\end{itemize}
-
-
-\subsection{Dealing with Data (Single-Feature)}
-
-In Machine Learning (ML), we often deal with large datasets from which we aim to extract meaningful insights. It is useful to model these data points as random variables:
-\[
-\{x_1, x_2, \ldots, x_N\}
-\]
-
-
-We typically model these samples as random variables:
-
-\[
-\{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
-\]
-
-\subsection{Vectors of Random Variables}
-
-When dealing with joint random variables, we often represent them as vectors:
-
-\[
-\mathbf{X} = (X_1, X_2, X_3) \quad \text{with joint distribution} \quad p_{X_1, X_2, X_3}(x_1, x_2, x_3)
-\]
-
-For a vector of random variables \(\mathbf{X}\) in \( \mathbb{R}^3 \), the joint probability density function is denoted as:
-
-\[
-p_{\mathbf{X}}(\mathbf{x}) \quad \text{where} \quad \mathbf{X} \in \mathbb{R}^3
-\]
-
-If these are input observations, they are often referred to as "feature vectors."
-
-\subsection{Distinct Random Variables}
-
-We model samples as distinct random variables \sidenote{\textbf{Question:} Why should we model these as distinct random variables? Aren't they all the same thing?
-
-\textbf{Answer:} Despite being identically distributed, distinct random variables allow for capturing dependencies and interactions between different samples.
-}:
-
-\[
-\{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
-\]
-
-
-\section{Independent and Identically Distributed (i.i.d.) Random Variables}
-
-\subsection{Independence of Random Variables}
-
-Independence refers to the idea that the values or outcomes of one observation in a dataset do not depend on or influence the values of any other observation.\\
-
-For the set of random variables $X_1, X_2, \ldots X_n$, for the collection \(\{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}\), we often assume independence, for any subset of observations \(\{X_{i1}, X_{i2}, \ldots, X_{ik}\}\) where \(i_1, i_2, \ldots, i_k \in \{1, 2, \ldots, N\}\), the joint distribution factorises:
-
-\begin{equation}
-P(X_{i_1} = x_{i_1}, \ldots, X_{i_k} = x_{i_k}) = P(X_{i_1} = x_{i_1}) \cdot \ldots \cdot P(X_{i_k} = x_{i_k})
-\end{equation}
-
-\textit{The joint distribution of the subset is the product of the marginal distributions of the individual random variables.}\\
-
-\textbf{Independence:} The occurrence of any event does not affect the occurrence of others. This is a crucial assumption in many ML models that we will see the usefulness of as early as the next lecture.
-
-\subsection{Identically Distributed Random Variables}
-
-The "identically distributed" part of i.i.d. refers to the idea that all random variables in the sample follow the same probability distribution. That is, they share the same probability density function (pdf) or probability mass function (pmf), depending on whether the data is continuous or discrete. If the set of random variables \(\{X_1, X_2, \ldots, X_n\}\) are identically distributed, then:
-
-
-
-\begin{equation}
-    f_{X_1}(x) = f_{X_2}(x) = \ldots = f_{X_n}(x) = f_{X}(x)
-\end{equation}
-
-\begin{equation}
-F_{X_1}(x) = F_{X_2}(x) = \ldots = F_{X_n}(x) = F_{X}(x)
-\end{equation}
-
-This implies that the cumulative distribution function (CDF) is the same for all these random variables.
-
-
-\section{Statistical Modelling as Curve Fitting}
-
-Machine learning and statistics have significant overlap, and so most concepts studied in this module can be cast as statistical modelling. Consider our random variables:
-
-\[
-\{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
-\]
-
-These random variables can be modelled to fit certain curves that represent the underlying data distribution. 
-
-\subsection{Assumption about the Model}
-
-To proceed with statistical modelling, we make an assumption about the form of the model:
-
-\[
-P_X(x) \approx \mathcal{N}(x; \theta) \quad \theta := (\mu, \sigma)
-\]
-
-Here, \(P_X(x)\) is approximated by a normal distribution \(\mathcal{N}(x; \theta)\), where \(\theta\) represents the parameters of the distribution, namely the mean \(\mu\) and the standard deviation \(\sigma\). This assumption simplifies the process of modelling the data.
-
-\subsection{Fitting the Model}
-
-The next step is to fit the model to the data. This involves finding the parameter values \(\theta\) that maximize the probability of observing the given data. Mathematically, this is expressed as:
-
-\[
-\arg \max_{\theta} P(x_1, \ldots, x_N \mid \theta)
-\]
-
-In other words, we adjust the parameters \(\mu\) and \(\sigma\) so that the assumed model best fits the observed data. This process is known as maximum likelihood estimation (MLE).\\
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\chapter{Blah}
-
 
 \newthought{The front matter} of a book refers to all of the material that
 comes before the main text.  The following table from shows a list of
@@ -826,14 +576,30 @@ Publisher & & & & \\
 \end{tabular}
 \end{center}
 
-
+% \begin{figure*}[p]
+% \fbox{\includegraphics[width=0.45\linewidth]{vdqi-title.pdf}}
+% \hfill
+% \fbox{\includegraphics[width=0.45\linewidth]{ei-title.pdf}}
+% \\\vspace{\baselineskip}
+% \fbox{\includegraphics[width=0.45\linewidth]{ve-title.pdf}}
+% \hfill
+% \fbox{\includegraphics[width=0.45\linewidth]{be-title.pdf}}
+% \end{figure*}
 
 \newthought{The tables of contents} in Tufte's books give us our first
 glimpse of the structure of the main matter.  \VDQI is split into two
 parts, each containing some number of chapters.  His other three books only
 contain chapters---they're not broken into parts.
 
-
+% \begin{figure*}[p]\index{table of contents}
+% \fbox{\includegraphics[width=0.45\linewidth]{vdqi-contents.pdf}}
+% \hfill
+% \fbox{\includegraphics[width=0.45\linewidth]{ei-contents.pdf}}
+% \\\vspace{\baselineskip}
+% \fbox{\includegraphics[width=0.45\linewidth]{ve-contents.pdf}}
+% \hfill
+% \fbox{\includegraphics[width=0.45\linewidth]{be-contents.pdf}}
+% \end{figure*}
 
 
 \section{Typefaces}\label{sec:typefaces1}\index{typefaces}
@@ -1039,13 +805,12 @@ command.\sidenote{The first paragraph of this document includes a citation.}
 
 The complete list of references may also be printed automatically by using
 the \doccmddef{bibliography} command.  (See the end of this document for an
-example.)  If you do not want to print a bibliography at the end of your
+example.)  If you do not want to print a bibliographyn at the end of your
 document, use the \doccmddef{nobibliography} command in its place.  
 
 To enter multiple citations at one location,\cite[-3\baselineskip]{Tufte2006,Tufte1990} you can
 provide a list of keys separated by commas and the same optional vertical
-offset argument: \\
-\Verb|\cite{Tufte2006,Tufte1990}|.  
+offset argument: \Verb|\cite{Tufte2006,Tufte1990}|.  
 \begin{docspec}
   \doccmd{cite}[\docopt{offset}]\{\docarg{bibkey1,bibkey2,\ldots}\}
 \end{docspec}
@@ -1063,7 +828,7 @@ use the \docenvdef{marginfigure} or \docenvdef{margintable} environments as foll
 
 \vspace{-7\baselineskip}
 \begin{marginfigure}%
-
+  \includegraphics[width=\linewidth]{helix}
   \caption{This is a margin figure.  The helix is defined by 
     $x = \cos(2\pi z)$, $y = \sin(2\pi z)$, and $z = [0, 2.7]$.  The figure was
     drawn using Asymptote (\protect\url{http://asymptote.sf.net/}).}
@@ -1094,8 +859,20 @@ Figure~\ref{fig:fullfig} is an example of the \docenv{figure*}
 environment and figure~\ref{fig:textfig} is an example of the normal
 \docenv{figure} environment.
 
+\begin{figure*}[h]
+  \includegraphics[width=\linewidth]{sine.pdf}%
+  \caption{This graph shows $y = \sin x$ from about $x = [-10, 10]$.
+  \emph{Notice that this figure takes up the full page width.}}%
+  \label{fig:fullfig}%
+\end{figure*}
 
-
+\begin{figure}
+  \includegraphics{hilbertcurves.pdf}
+%  \checkparity This is an \pageparity\ page.%
+  \caption[Hilbert curves of various degrees $n$.][15pt]{Hilbert curves of various degrees $n$. \emph{Notice that this figure only takes up the main textblock width.}}
+  \label{fig:textfig}
+  %\zsavepos{pos:textfig}
+\end{figure}
 
 As with sidenotes and marginnotes, a caption may sometimes require vertical
 adjustment. The \doccmddef{caption} command now takes a second optional
