@@ -1,0 +1,35 @@
+\chapter{Towards Learning in Linear Models}
+
+
+\section{Supervised Learning}
+Supervised learning settings assume that we have access to input-output pairs, $(\bm{x}, \bm{y})$, with $\bm{x} \in \mathbb{R}^n$ and $\bm{y} \in \mathbb{R}^m$. It is typically assumed that we have many such pairs comprising a dataset $\{(\bm{x}^{(i)}, \bm{y}^{(i)})\}_{i=1}^N$.
+
+\section{Linear Regression Model}
+Linear regression is exactly what the name suggests: performing regression with a linear model. Assuming a domain of $\mathbb{R}^n$ and a one-dimensional co-domain, we can write our model as $f(\bm{x}) = \bm{x}^\top \bm{\theta}$. Thus our model can be written as:
+
+\[
+\hat{y}^{(i)} = \bm{x}^{(i)\top} \bm{\theta}
+\]
+
+The key idea behind learning is to find $\bm{\theta}$ such that $\hat{y}^{(i)} \approx y^{(i)}$.You may recall linear models written as affine transformations: $y = mx + b$, where $b$ is the bias or constant term – this makes the model affine and not linear. Linear models refers to the relationship between model parameters and predictions via a linear transformation.
+
+\marginnote[17.5pt]{
+    \defsb{Affine Transformations}{
+        Affine transformations are more general than linear transformations, because they include not only scaling and rotation, but also translations.
+    }
+}
+
+
+\defb{Linear Transformation}{
+A linear transformation between two vector spaces $V$ and $W$ is a map 
+
+$$T : V \rightarrow W$$
+
+such that:
+
+\begin{itemize}
+    \item $T(v_1 + v_2) = T(v_1) + T(v_2) \quad \forall v_1, v_2 \in V$
+    \item $T(\alpha v) = \alpha T(v) \quad \forall v \in V \text{ and scalar }\alpha $
+\end{itemize}
+
+}
