@@ -51,6 +51,9 @@
 \end{fullwidth}
     }
 
+
+% TITLE FORMATTING
+
 \titleformat% Formatting the part header
   {\part} % command
   [block] % shape
@@ -60,10 +63,30 @@
   { \formatpart
 }%
 
+\titleformat
+  {\section}
+  [block]
+  {\bfseries\itshape\LARGE}
+  {\thesection}
+  {1em}
+  {}
 
 
+\titleformat
+  {\subsection}
+  [block]
+  {\bfseries\itshape\Large}
+  {\thesubsection}
+  {1em}
+  {}
+
+
+
+
+
+%  GENERAL SETUP
 \setcounter{tocdepth}{1}
-\setcounter{secnumdepth}{1}
+\setcounter{secnumdepth}{2}
 \usepackage{nameref}
 \hypersetup{colorlinks}
 \usepackage{ragged2e}
@@ -71,8 +94,14 @@
 % uncomment this line if you prefer colored hyperlinks (e.g., for onscreen viewing)
 
 \input{preamble}
-
 \usepackage{lmodern}
+% problem is that when using subcaption, it turns all captions from subfigres and figures into normal text size, it should be a footnotesize
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{
+  font=footnotesize,  % Sets the font size for captions
+  labelfont=footnotesize  % Ensures the "Figure x:" part is also footnotesize
+}
 
 
 
@@ -301,6 +330,7 @@
 %%%%%%%%%%%%%% Geometry and Margins
 
 \begin{document}
+
 % Front matter
 \frontmatter
 \RaggedRight
@@ -337,7 +367,7 @@
 % r.3 full title page
 \begin{fullwidth}
   \begin{raggedright}
-  \maketitle
+    \maketitle
   \end{raggedright}
 \end{fullwidth}
 
@@ -345,37 +375,37 @@
 % v.4 copyright page
 \newpage
 \begin{fullwidth}
-~\vfill
-\thispagestyle{empty}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{\baselineskip}
-Copyright \copyright\ \the\year\ \thanklessauthor
+  ~\vfill
+  \thispagestyle{empty}
+  \setlength{\parindent}{0pt}
+  \setlength{\parskip}{\baselineskip}
+  Copyright \copyright\ \the\year\ \thanklessauthor
 
-% \par\smallcaps{Published by \thanklesspublisher}
+  % \par\smallcaps{Published by \thanklesspublisher}
 
-% \par\smallcaps{??.netlify.com}
+  % \par\smallcaps{??.netlify.com}
 
-% \par Licensed under the Apache License, Version 2.0 (the ``License''); you may not
-% use this file except in compliance with the License. You may obtain a copy
-% of the License at \url{http://www.apache.org/licenses/LICENSE-2.0}. Unless
-% required by applicable law or agreed to in writing, software distributed
-% under the License is distributed on an \smallcaps{``AS IS'' BASIS, WITHOUT
-% WARRANTIES OR CONDITIONS OF ANY KIND}, either express or implied. See the
-% License for the specific language governing permissions and limitations
-% under the License.\index{license}
+  % \par Licensed under the Apache License, Version 2.0 (the ``License''); you may not
+  % use this file except in compliance with the License. You may obtain a copy
+  % of the License at \url{http://www.apache.org/licenses/LICENSE-2.0}. Unless
+  % required by applicable law or agreed to in writing, software distributed
+  % under the License is distributed on an \smallcaps{``AS IS'' BASIS, WITHOUT
+  % WARRANTIES OR CONDITIONS OF ANY KIND}, either express or implied. See the
+  % License for the specific language governing permissions and limitations
+  % under the License.\index{license}
 
-% \par\textit{First printing, \monthyear}
+  % \par\textit{First printing, \monthyear}
 \end{fullwidth}
 
 \newpage
 % r.5 contents
 \begin{fullwidth}
-\tableofcontents
+  \tableofcontents
 
 
-% \listoffigures
+  % \listoffigures
 
-% \listoftables
+  % \listoftables
 \end{fullwidth}
 
 % r.7 dedication
@@ -440,68 +470,68 @@ My notes try to combine the detail of the professor's informal lecture notes wit
 \hl{This is a block of highlighted text}
 
 \marginnote{
-\defsb{Small Def Title}{Example Text}
-} 
+  \defsb{Small Def Title}{Example Text}
+}
 
 \defb{Definition Title}{
-This is an example definition.
+  This is an example definition.
 }
 
 \marginnote{
-\extrasb{Small Title}{Example Text}
-} 
+  \extrasb{Small Title}{Example Text}
+}
 
 
 \extrab{Extra Title}{
-This is an example box with extra information.
+  This is an example box with extra information.
 }
 
 \marginnote{
-\egsb{Small Title}{
-Example Text
-\tcblower 
-Answer
-} }
+  \egsb{Small Title}{
+    Example Text
+    \tcblower
+    Answer
+  } }
 
 
 
 \egb{Example Title}{
-This is an example question.
-\tcblower
-Answer here
+  This is an example question.
+  \tcblower
+  Answer here
 }
 
 
 \marginnote{
-\examsb{1c}{2018}{
-This is an example exam question, smaller.
-}
+  \examsb{1c}{2018}{
+    This is an example exam question, smaller.
+  }
 }
 
 
 \examb{1c}{2018}{
-This is an example exam question.
+  This is an example exam question.
 }
 
 
 \marginnote{\refsb{Reference Title}{
-This is an example reference to source material.
-}}
+    This is an example reference to source material.
+  }}
 
 \refb{Reference Title}{
-This is an example reference to source material.
+  This is an example reference to source material.
 }
 
 \marginnote{\intuitsb{Intuition Title}{
-This is an example of an intuitive explanation, smaller
-}
+    This is an example of an intuitive explanation, smaller
+  }
 }
 
 \intuitb{Intuition Title}{
-This is an example of an intuitive explanation.
+  This is an example of an intuitive explanation.
 }
 
-
+\setlength{\parindent}{0pt}
 \input{1_intro}
 \input{2_linear}
 
@@ -517,27 +547,27 @@ counted in the page number sequence).
 
 \bigskip
 \begin{minipage}{\textwidth}
-\begin{center}
-\begin{tabular}{lcccc}
-\toprule
- & \multicolumn{4}{c}{Books} \\
-\cmidrule(l){2-5} 
-Page content & \vdqi & \ei & \ve & \be \\
-\midrule
-Blank half title page & \hangp{1} & \hangp{1} & \hangp{1} & \hangp{1} \\
-Frontispiece\footnotemark{}
-  & \hangp{2} & \hangp{2} & \hangp{2} & \hangp{2} \\
-Full title page & \hangp{3} & \hangp{3} & \hangp{3} & \hangp{3} \\
-Copyright page & \hangp{4} & \hangp{4} & \hangp{4} & \hangp{4} \\
-Contents & \hangp{5} & \hangp{5} & \hangp{5} & \hangp{5} \\
-%Blank & -- & \hangp{6} & \hangp{6} & \hangp{6} \\
-Dedication & \hangp{6} & \hangp{7} & \hangp{7} & 7 \\
-%Blank & -- & \hangp{8} & -- & \hangp{8} \\
-Epigraph & -- & -- & \hangp{8} & -- \\
-Introduction & \hangp{7} & \hangp{9} & \hangp{9} & 9 \\
-\bottomrule
-\end{tabular}
-\end{center}
+  \begin{center}
+    \begin{tabular}{lcccc}
+      \toprule
+                            & \multicolumn{4}{c}{Books}                                     \\
+      \cmidrule(l){2-5}
+      Page content          & \vdqi                     & \ei       & \ve       & \be       \\
+      \midrule
+      Blank half title page & \hangp{1}                 & \hangp{1} & \hangp{1} & \hangp{1} \\
+      Frontispiece\footnotemark{}
+                            & \hangp{2}                 & \hangp{2} & \hangp{2} & \hangp{2} \\
+      Full title page       & \hangp{3}                 & \hangp{3} & \hangp{3} & \hangp{3} \\
+      Copyright page        & \hangp{4}                 & \hangp{4} & \hangp{4} & \hangp{4} \\
+      Contents              & \hangp{5}                 & \hangp{5} & \hangp{5} & \hangp{5} \\
+      %Blank & -- & \hangp{6} & \hangp{6} & \hangp{6} \\
+      Dedication            & \hangp{6}                 & \hangp{7} & \hangp{7} & 7         \\
+      %Blank & -- & \hangp{8} & -- & \hangp{8} \\
+      Epigraph              & --                        & --        & \hangp{8} & --        \\
+      Introduction          & \hangp{7}                 & \hangp{9} & \hangp{9} & 9         \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
 \end{minipage}
 \vspace{-7\baselineskip}\footnotetext{The contents of this page vary from book to book.  In
   \vdqi this page is blank; in \ei and \ve this page holds a frontispiece;
@@ -552,10 +582,10 @@ iv,~\ldots).  Second, the front matter page numbering sequence is usually
 separate from the main matter page numbering.  That is, the page numbers
 restart at 1 when the main matter begins.  In contrast, Tufte has
 enumerated his pages with arabic numerals that share the same page counting
-sequence as the main matter.  
+sequence as the main matter.
 
 \vspace{-7\baselineskip}\marginnote{
-\extrasb{On the side note of...}{yeah}
+  \extrasb{On the side note of...}{yeah}
 
 }
 \vspace{7\baselineskip}
@@ -581,37 +611,37 @@ the following table.
 
 \bigskip
 \begin{center}
-\footnotesize
-\begin{tabular}{lllll}
-\toprule
-Feature & \vdqi & \ei & \ve & \be \\
-\midrule
-Author & & & & \\
-\quad Typeface & serif   & serif   & serif   & sans serif \\
-\quad Style    & italics & italics & italics & upright, caps \\
-\quad Size     & 24 pt   & 20 pt   & 20 pt   & 20 pt \\
-\addlinespace
-Title & & & & \\
-\quad Typeface & serif   & serif   & serif   & sans serif \\
-\quad Style    & upright & italics & upright & upright, caps \\
-\quad Size     & 36 pt   & 48 pt   & 48 pt   & 36 pt \\
-\addlinespace
-Subtitle & & & & \\
-\quad Typeface & \na     & \na     & serif   & \na \\
-\quad Style    & \na     & \na     & upright & \na \\
-\quad Size     & \na     & \na     & 20 pt   & \na \\
-\addlinespace
-Edition & & & & \\
-\quad Typeface & sans serif    & \na  & \na  & \na \\
-\quad Style    & upright, caps & \na  & \na  & \na \\
-\quad Size     & 14 pt         & \na  & \na  & \na \\
-\addlinespace
-Publisher & & & & \\
-\quad Typeface & serif   & serif   & serif   & sans serif \\
-\quad Style    & italics & italics & italics & upright, caps \\
-\quad Size     & 14 pt   & 14 pt   & 14 pt   & 14 pt \\
-\bottomrule
-\end{tabular}
+  \footnotesize
+  \begin{tabular}{lllll}
+    \toprule
+    Feature        & \vdqi         & \ei     & \ve     & \be           \\
+    \midrule
+    Author         &               &         &         &               \\
+    \quad Typeface & serif         & serif   & serif   & sans serif    \\
+    \quad Style    & italics       & italics & italics & upright, caps \\
+    \quad Size     & 24 pt         & 20 pt   & 20 pt   & 20 pt         \\
+    \addlinespace
+    Title          &               &         &         &               \\
+    \quad Typeface & serif         & serif   & serif   & sans serif    \\
+    \quad Style    & upright       & italics & upright & upright, caps \\
+    \quad Size     & 36 pt         & 48 pt   & 48 pt   & 36 pt         \\
+    \addlinespace
+    Subtitle       &               &         &         &               \\
+    \quad Typeface & \na           & \na     & serif   & \na           \\
+    \quad Style    & \na           & \na     & upright & \na           \\
+    \quad Size     & \na           & \na     & 20 pt   & \na           \\
+    \addlinespace
+    Edition        &               &         &         &               \\
+    \quad Typeface & sans serif    & \na     & \na     & \na           \\
+    \quad Style    & upright, caps & \na     & \na     & \na           \\
+    \quad Size     & 14 pt         & \na     & \na     & \na           \\
+    \addlinespace
+    Publisher      &               &         &         &               \\
+    \quad Typeface & serif         & serif   & serif   & sans serif    \\
+    \quad Style    & italics       & italics & italics & upright, caps \\
+    \quad Size     & 14 pt         & 14 pt   & 14 pt   & 14 pt         \\
+    \bottomrule
+  \end{tabular}
 \end{center}
 
 
@@ -643,18 +673,18 @@ The following font sizes are defined by the \TL classes:
   \begin{center}
     \begin{tabular}{lccl}
       \toprule
-      \LaTeX{} size & Font size & Leading & Used for \\
+      \LaTeX{} size        & Font size & Leading & Used for                                             \\
       \midrule
-      \verb+\tiny+         &  5 &  6 & sidenote numbers \\
-      \verb+\scriptsize+   &  7 &  8 & \na \\
-      \verb+\footnotesize+ &  8 & 10 & sidenotes, captions \\
-      \verb+\small+        &  9 & 12 & quote, quotation, and verse environments \\
-      \verb+\normalsize+   & 10 & 14 & body text \\
-      \verb+\large+        & 11 & 15 & \textsc{b}-heads \\
-      \verb+\Large+        & 12 & 16 & \textsc{a}-heads, \textsc{toc} entries, author, date \\
-      \verb+\LARGE+        & 14 & 18 & handout title \\
-      \verb+\huge+         & 20 & 30 & chapter heads \\
-      \verb+\Huge+         & 24 & 36 & part titles \\
+      \verb+\tiny+         & 5         & 6       & sidenote numbers                                     \\
+      \verb+\scriptsize+   & 7         & 8       & \na                                                  \\
+      \verb+\footnotesize+ & 8         & 10      & sidenotes, captions                                  \\
+      \verb+\small+        & 9         & 12      & quote, quotation, and verse environments             \\
+      \verb+\normalsize+   & 10        & 14      & body text                                            \\
+      \verb+\large+        & 11        & 15      & \textsc{b}-heads                                     \\
+      \verb+\Large+        & 12        & 16      & \textsc{a}-heads, \textsc{toc} entries, author, date \\
+      \verb+\LARGE+        & 14        & 18      & handout title                                        \\
+      \verb+\huge+         & 20        & 30      & chapter heads                                        \\
+      \verb+\Huge+         & 24        & 36      & part titles                                          \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -666,7 +696,7 @@ The following font sizes are defined by the \TL classes:
 
 Tufte's books include the following heading levels: parts,
 chapters,\sidenote{Parts and chapters are defined for the \texttt{tufte-book}
-class only.}  sections, subsections, and paragraphs.  Not defined by default
+  class only.}  sections, subsections, and paragraphs.  Not defined by default
 are: sub-subsections and subparagraphs.
 
 \begin{table}[h]
@@ -674,13 +704,13 @@ are: sub-subsections and subparagraphs.
     \footnotesize%
     \begin{tabular}{lcr}
       \toprule
-      Heading & Style & Size \\
+      Heading    & Style  & Size                 \\
       \midrule
-      Part & roman & \measure{24}{36}{40} \\
-      Chapter & italic & \measure{20}{30}{40} \\
-      Section & italic & \measure{12}{16}{26} \\
+      Part       & roman  & \measure{24}{36}{40} \\
+      Chapter    & italic & \measure{20}{30}{40} \\
+      Section    & italic & \measure{12}{16}{26} \\
       Subsection & italic & \measure{11}{15}{26} \\
-      Paragraph & italic & 10/14 \\
+      Paragraph  & italic & 10/14                \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -701,12 +731,12 @@ The following characteristics define the various environments:
     \footnotesize%
     \begin{tabular}{lcl}
       \toprule
-      Environment & Font size & Notes \\
+      Environment & Font size            & Notes                                                 \\
       \midrule
-      Body text & \measure{10}{14}{26} & \\
-      Block quote & \measure{9}{12}{24} & Block indent (left and right) by \unit[1]{pc} \\
-      Sidenotes & \measure{8}{10}{12} & Sidenote number is set inline, followed by word space \\
-      Captions & \measure{8}{10}{12} &  \\
+      Body text   & \measure{10}{14}{26} &                                                       \\
+      Block quote & \measure{9}{12}{24}  & Block indent (left and right) by \unit[1]{pc}         \\
+      Sidenotes   & \measure{8}{10}{12}  & Sidenote number is set inline, followed by word space \\
+      Captions    & \measure{8}{10}{12}  &                                                       \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -717,20 +747,20 @@ The following characteristics define the various environments:
 
 
 \begin{table}
-    \centering
-    \footnotesize
-    \caption{Example table with limited column widths}
-    \begin{tabular}{p{3cm}p{3cm}p{3cm}}
-        \toprule
-        \textbf{Column 1} & \textbf{Column 2} & \textbf{Column 3} \\
-        \midrule
-        \lipsum[1][1-3] & \lipsum[1][1-3] & \lipsum[1][1-3] \\
-        \midrule
-        \lipsum[1][1-3] & \lipsum[1][1-3] & \lipsum[1][1-3] \\
-        \midrule
-        \lipsum[1][1-3] & \lipsum[1][1-3] & \lipsum[1][1-3] \\
-        \bottomrule
-    \end{tabular}
+  \centering
+  \footnotesize
+  \caption{Example table with limited column widths}
+  \begin{tabular}{p{3cm}p{3cm}p{3cm}}
+    \toprule
+    \textbf{Column 1} & \textbf{Column 2} & \textbf{Column 3} \\
+    \midrule
+    \lipsum[1][1-3]   & \lipsum[1][1-3]   & \lipsum[1][1-3]   \\
+    \midrule
+    \lipsum[1][1-3]   & \lipsum[1][1-3]   & \lipsum[1][1-3]   \\
+    \midrule
+    \lipsum[1][1-3]   & \lipsum[1][1-3]   & \lipsum[1][1-3]   \\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
 
@@ -753,7 +783,7 @@ This style provides \textsc{a}- and \textsc{b}-heads (that is,
 If you need more than two levels of section headings, you'll have to define
 them yourself at the moment; there are no pre-defined styles for anything below
 a \Verb|\subsection|.  As Bringhurst points out in \textit{The Elements of
-Typographic Style},\cite{Bringhurst2005} you should ``use as many levels of
+  Typographic Style},\cite{Bringhurst2005} you should ``use as many levels of
 headings as you need: no more, and no fewer.''
 
 The \TL classes will emit an error if you try to use
@@ -774,11 +804,11 @@ One of the most prominent and distinctive features of this style is the
 extensive use of sidenotes.  There is a wide margin to provide ample room
 for sidenotes and small figures.  Any \doccmd{footnote}s will automatically
 be converted to sidenotes.\footnote{This is a sidenote that was entered
-using the \texttt{\textbackslash footnote} command.}  If you'd like to place ancillary
+  using the \texttt{\textbackslash footnote} command.}  If you'd like to place ancillary
 information in the margin without the sidenote mark (the superscript
 number), you can use the \doccmd{marginnote} command.\marginnote{This is a
-margin note.  Notice that there isn't a number preceding the note, and
-there is no number in the main text where this note was written.}
+  margin note.  Notice that there isn't a number preceding the note, and
+  there is no number in the main text where this note was written.}
 
 The specification of the \doccmddef{sidenote} command is:
 \begin{docspec}
@@ -828,12 +858,12 @@ command.\sidenote{The first paragraph of this document includes a citation.}
 The complete list of references may also be printed automatically by using
 the \doccmddef{bibliography} command.  (See the end of this document for an
 example.)  If you do not want to print a bibliography at the end of your
-document, use the \doccmddef{nobibliography} command in its place.  
+document, use the \doccmddef{nobibliography} command in its place.
 
 To enter multiple citations at one location,\cite[-3\baselineskip]{Tufte2006,Tufte1990} you can
 provide a list of keys separated by commas and the same optional vertical
 offset argument: \\
-\Verb|\cite{Tufte2006,Tufte1990}|.  
+\Verb|\cite{Tufte2006,Tufte1990}|.
 \begin{docspec}
   \doccmd{cite}[\docopt{offset}]\{\docarg{bibkey1,bibkey2,\ldots}\}
 \end{docspec}
@@ -852,19 +882,19 @@ use the \docenvdef{marginfigure} or \docenvdef{margintable} environments as foll
 \vspace{-7\baselineskip}
 \begin{marginfigure}%
 
-  \caption{This is a margin figure.  The helix is defined by 
-    $x = \cos(2\pi z)$, $y = \sin(2\pi z)$, and $z = [0, 2.7]$.  The figure was
-    drawn using Asymptote (\protect\url{http://asymptote.sf.net/}).}
+  \caption{This is a margin figure.  The helix is defined by
+  $x = \cos(2\pi z)$, $y = \sin(2\pi z)$, and $z = [0, 2.7]$.  The figure was
+  drawn using Asymptote (\protect\url{http://asymptote.sf.net/}).}
   \label{fig:marginfig}
 \end{marginfigure}
 \vspace{7\baselineskip}
 
 \begin{docspec}
-\textbackslash begin\{marginfigure\}\\
+  \textbackslash begin\{marginfigure\}\\
   \qquad\textbackslash includegraphics\{helix\}\\
   \qquad\textbackslash caption\{This is a margin figure.\}\\
   \qquad\textbackslash label\{fig:marginfig\}\\
-\textbackslash end\{marginfigure\}\\
+  \textbackslash end\{marginfigure\}\\
 \end{docspec}
 
 The \docenv{marginfigure} and \docenv{margintable} environments accept an optional parameter \docopt{offset} that adjusts the vertical position of the figure or table.  See the ``\nameref{sec:sidenotes}'' section above for examples.  The specifications are:
@@ -894,7 +924,7 @@ You may specify the caption in any one of the following forms:
   \doccmd{caption}[\docarg{short caption}]\{\docarg{long caption}\}\\
   \doccmd{caption}[][\docopt{offset}]\{\docarg{long caption}\}\\
   \doccmd{caption}[\docarg{short caption}][\docopt{offset}]%
-                  \{\docarg{long caption}\}
+  \{\docarg{long caption}\}
 \end{docspec}
 A positive \docopt{offset} will push the caption down the page. The short
 caption, if provided, is what appears in the list of figures/tables, otherwise
@@ -917,13 +947,13 @@ the table's data.
   % \fontfamily{ppl}\selectfont
   \begin{tabular}{ll}
     \toprule
-    Margin & Length \\
+    Margin                    & Length                          \\
     \midrule
-    Paper width & \unit[8\nicefrac{1}{2}]{inches} \\
-    Paper height & \unit[11]{inches} \\
-    Textblock width & \unit[6\nicefrac{1}{2}]{inches} \\
-    Textblock/sidenote gutter & \unit[\nicefrac{3}{8}]{inches} \\
-    Sidenote width & \unit[2]{inches} \\
+    Paper width               & \unit[8\nicefrac{1}{2}]{inches} \\
+    Paper height              & \unit[11]{inches}               \\
+    Textblock width           & \unit[6\nicefrac{1}{2}]{inches} \\
+    Textblock/sidenote gutter & \unit[\nicefrac{3}{8}]{inches}  \\
+    Sidenote width            & \unit[2]{inches}                \\
     \bottomrule
   \end{tabular}
   \caption{Here are the dimensions of the various margins used in the Tufte-handout class.}
@@ -983,14 +1013,14 @@ override the caption position.
 example:
 
 \begin{fullwidth}
-\begin{docspec}
-  \textbackslash begin\{figure\}[btp]\\
-  \qquad \textbackslash includegraphics\{sinewave\}\\
-  \qquad \textbackslash caption\{This is an example of a sine wave.\}\\
-  \qquad \textbackslash label\{fig:sinewave\}\\
-  \qquad \hlred{\textbackslash setfloatalignment\{b\}\% forces caption to be bottom-aligned}\\
-  \textbackslash end\{figure\}
-\end{docspec}
+  \begin{docspec}
+    \textbackslash begin\{figure\}[btp]\\
+    \qquad \textbackslash includegraphics\{sinewave\}\\
+    \qquad \textbackslash caption\{This is an example of a sine wave.\}\\
+    \qquad \textbackslash label\{fig:sinewave\}\\
+    \qquad \hlred{\textbackslash setfloatalignment\{b\}\% forces caption to be bottom-aligned}\\
+    \textbackslash end\{figure\}
+  \end{docspec}
 \end{fullwidth}
 
 \noindent The syntax of the \doccmddef{setfloatalignment} command is:
@@ -1008,14 +1038,14 @@ or the \doccmd{forcerectofloat} command inside of the float environment.  For
 example:
 
 \begin{fullwidth}
-\begin{docspec}
-  \textbackslash begin\{figure\}[btp]\\
-  \qquad \textbackslash includegraphics\{sinewave\}\\
-  \qquad \textbackslash caption\{This is an example of a sine wave.\}\\
-  \qquad \textbackslash label\{fig:sinewave\}\\
-  \qquad \hlred{\textbackslash forceversofloat\% forces caption to be set to the left of the float}\\
-  \textbackslash end\{figure\}
-\end{docspec}
+  \begin{docspec}
+    \textbackslash begin\{figure\}[btp]\\
+    \qquad \textbackslash includegraphics\{sinewave\}\\
+    \qquad \textbackslash caption\{This is an example of a sine wave.\}\\
+    \qquad \textbackslash label\{fig:sinewave\}\\
+    \qquad \hlred{\textbackslash forceversofloat\% forces caption to be set to the left of the float}\\
+    \textbackslash end\{figure\}
+  \end{docspec}
 \end{fullwidth}
 
 The \doccmddef{forceversofloat} command causes the algorithm to assume the
@@ -1032,13 +1062,13 @@ environment that stretches across the main text block and the sidenotes
 area.
 
 \begin{Verbatim}
-\begin{fullwidth}
-Lorem ipsum dolor sit amet...
-\end{fullwidth}
+  \begin{fullwidth}
+    Lorem ipsum dolor sit amet...
+  \end{fullwidth}
 \end{Verbatim}
 
 \begin{fullwidth}
-\small\itshape\lipsum[1]
+  \small\itshape\lipsum[1]
 \end{fullwidth}
 
 \section{Typography}\label{sec:typography}
@@ -1078,12 +1108,12 @@ options.  There are a few options that are specific to the
 The \docclsoptdef{a4paper} option will set the paper size to \smallcaps{A4} instead of
 the default \smallcaps{US} letter size.
 
-The \docclsoptdef{sfsidenotes} option will set the sidenotes and title block in a 
+The \docclsoptdef{sfsidenotes} option will set the sidenotes and title block in a
 \textsf{sans serif} typeface instead of the default roman.
 
 The \docclsoptdef{twoside} option will modify the running heads so that the page
 number is printed on the outside edge (as opposed to always printing the page
-number on the right-side edge in \docclsoptdef{oneside} mode).  
+number on the right-side edge in \docclsoptdef{oneside} mode).
 
 The \docclsoptdef{symmetric} option typesets the sidenotes on the outside edge of
 the page.  This is how books are traditionally printed, but is contrary to
@@ -1091,7 +1121,7 @@ Tufte's book design which sets the sidenotes on the right side of the page.
 This option implicitly sets the \docclsopt{twoside} option.
 
 The \docclsoptdef{justified} option sets alldocclsoptdef
-and right).  The default is to set the text ragged right.  
+and right).  The default is to set the text ragged right.
 The body text of Tufte's books are set ragged right.  This prevents
 needless hyphenation and makes it easier to read the text in the slightly
 narrower column.
@@ -1109,13 +1139,13 @@ The \docclsoptdef{nofonts} option prevents the \TL classes from
 automatically loading the Palatino and Helvetica typefaces.  You should use
 this option if you wish to load your own fonts.  If you're using \tXeLaTeX, this
 option is implied (\ie, the Palatino and Helvetica fonts aren't loaded if you
-use \tXeLaTeX).  
+use \tXeLaTeX).
 
 The \docclsoptdef{nols} option inhibits the letterspacing code.  The \TL\
 classes try to load the appropriate letterspacing package (either pdf\TeX's
 \docpkg{letterspace} package or the \docpkg{soul} package).  If you're using
 \tXeLaTeX\ with \docpkg{fontenc}, however, you should configure your own
-letterspacing.  
+letterspacing.
 
 The \docclsoptdef{notitlepage} option causes \doccmd{maketitle} to generate a title
 block instead of a title page.  The \doccls{book} class defaults to a title
@@ -1162,11 +1192,11 @@ preamble of each document.  The \TL classes provide three file hooks:
     classes just prior to any document-class-specific code.  If your
     customizations or code should be included in both the book and handout
     classes, use this file hook.
-  \item[\docfilehook{tufte-book-local.tex}{book}] 
+  \item[\docfilehook{tufte-book-local.tex}{book}]
     If this file exists, it will be loaded after all of the common and
     book-specific code has been read.  If your customizations apply only to the
     book class, use this file hook.
-  \item[\docfilehook{tufte-common-handout.tex}{handout}] 
+  \item[\docfilehook{tufte-common-handout.tex}{handout}]
     If this file exists, it will be loaded after all of the common and
     handout-specific code has been read.  If your customizations apply only to
     the handout class, use this file hook.
@@ -1195,16 +1225,16 @@ The default \doccounter{secnumdepth} for the \TL document classes is $-1$.
   \begin{center}
     \begin{tabular}{lr}
       \toprule
-      Heading level & Value \\
+      Heading level                         & Value \\
       \midrule
-      Part (in \doccls{tufte-book}) & $-1$ \\
-      Part (in \doccls{tufte-handout}) & $0$ \\
-      Chapter (only in \doccls{tufte-book}) & $0$ \\
-      Section & $1$ \\
-      Subsection & $2$ \\
-      Subsubsection & $3$ \\
-      Paragraph & $4$ \\
-      Subparagraph & $5$ \\
+      Part (in \doccls{tufte-book})         & $-1$  \\
+      Part (in \doccls{tufte-handout})      & $0$   \\
+      Chapter (only in \doccls{tufte-book}) & $0$   \\
+      Section                               & $1$   \\
+      Subsection                            & $2$   \\
+      Subsubsection                         & $3$   \\
+      Paragraph                             & $4$   \\
+      Subparagraph                          & $5$   \\
       \bottomrule
     \end{tabular}
   \end{center}
@@ -1257,7 +1287,7 @@ Each of the document class options takes one of five justification types:
     explicitly specified.
 \end{description}
 
-\noindent For example, 
+\noindent For example,
 \begin{docspec}
   \doccmdnoindex{documentclass}[symmetric,justified,marginals=raggedouter]\{tufte-book\}
 \end{docspec}
@@ -1347,26 +1377,26 @@ The following is a list of all of the errors, warnings, and other messages gener
 
 % Errors
 \docmsg{Error: \doccmd{subparagraph} is undefined by this class.}{%
-The \doccmd{subparagraph} command is not defined in the \TL document classes.
-If you'd like to use the \doccmd{subparagraph} command, you'll need to redefine
-it yourself.  See the ``Headings'' section on page~\pageref{sec:headings} for a
-description of the heading styles availaboe in the \TL document classes.}
+  The \doccmd{subparagraph} command is not defined in the \TL document classes.
+  If you'd like to use the \doccmd{subparagraph} command, you'll need to redefine
+  it yourself.  See the ``Headings'' section on page~\pageref{sec:headings} for a
+  description of the heading styles availaboe in the \TL document classes.}
 
 \docmsg{Error: \doccmd{subsubsection} is undefined by this class.}{%
-The \doccmd{subsubsection} command is not defined in the \TL document classes.
-If you'd like to use the \doccmd{subsubsection} command, you'll need to
-redefine it yourself.  See the ``Headings'' section on
-page~\pageref{sec:headings} for a description of the heading styles availaboe
-in the \TL document classes.}
+  The \doccmd{subsubsection} command is not defined in the \TL document classes.
+  If you'd like to use the \doccmd{subsubsection} command, you'll need to
+  redefine it yourself.  See the ``Headings'' section on
+  page~\pageref{sec:headings} for a description of the heading styles availaboe
+  in the \TL document classes.}
 
 \docmsg{Error: You may only call \doccmd{morefloats} twice. See the\par\noindent\ \ \ \ \ \ \ \ Tufte-LaTeX documentation for other workarounds.}{%
-\LaTeX{} allocates 18 slots for storing floats.  The first time
-\doccmd{morefloats} is called, it allocates an additional 34 slots.  The second
-time \doccmd{morefloats} is called, it allocates another 26 slots.
+  \LaTeX{} allocates 18 slots for storing floats.  The first time
+  \doccmd{morefloats} is called, it allocates an additional 34 slots.  The second
+  time \doccmd{morefloats} is called, it allocates another 26 slots.
 
-The \doccmd{morefloats} command may only be called two times.  Calling it a
-third time will generate this error message.  See
-page~\pageref{err:too-many-floats} for more information.}
+  The \doccmd{morefloats} command may only be called two times.  Calling it a
+  third time will generate this error message.  See
+  page~\pageref{err:too-many-floats} for more information.}
 
 % Warnings
 \docmsg{Warning: Option `\docopt{class option}' is not supported -{}- ignoring option.}{%
@@ -1376,39 +1406,39 @@ class.  In this situation, \docopt{class option} is ignored.}
 
 % Info / Debug messages
 \docmsg{Info: The `\docclsopt{symmetric}' option implies `\docclsopt{twoside}'}{%
-You specified the \docclsopt{symmetric} document class option.  This option automatically forces the \docclsopt{twoside} option as well.  See page~\pageref{clsopt:symmetric} for more information on the \docclsopt{symmetric} class option.}
+  You specified the \docclsopt{symmetric} document class option.  This option automatically forces the \docclsopt{twoside} option as well.  See page~\pageref{clsopt:symmetric} for more information on the \docclsopt{symmetric} class option.}
 
 
 \section{Package Dependencies}\label{sec:dependencies}
 The following is a list of packages that the \TL document
 classes rely upon.  Packages marked with an asterisk are optional.
 \begin{multicols}{2}
-\begin{itemize}
-  \item xifthen
-  \item ifpdf*
-  \item ifxetex*
-  \item hyperref
-  \item geometry
-  \item ragged2e
-  \item chngpage \emph{or} changepage
-  \item paralist
-  \item textcase
-  \item soul*
-  \item letterspace*
-  \item setspace
-  \item natbib \emph{and} bibentry
-  \item optparams
-  \item placeins
-  \item mathpazo*
-  \item helvet*
-  \item fontenc
-  \item beramono*
-  \item fancyhdr
-  \item xcolor
-  \item textcomp
-  \item titlesec
-  \item titletoc
-\end{itemize}
+  \begin{itemize}
+    \item xifthen
+    \item ifpdf*
+    \item ifxetex*
+    \item hyperref
+    \item geometry
+    \item ragged2e
+    \item chngpage \emph{or} changepage
+    \item paralist
+    \item textcase
+    \item soul*
+    \item letterspace*
+    \item setspace
+    \item natbib \emph{and} bibentry
+    \item optparams
+    \item placeins
+    \item mathpazo*
+    \item helvet*
+    \item fontenc
+    \item beramono*
+    \item fancyhdr
+    \item xcolor
+    \item textcomp
+    \item titlesec
+    \item titletoc
+  \end{itemize}
 \end{multicols}
 
 

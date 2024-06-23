@@ -33,40 +33,38 @@
     \item Words with similar meanings will be closer together in the embedding space of vectors. This is to capture a sort of relationship within that space, e.g. meaning, morphology, context, etc.
 \end{itemize}
 \begin{figure}[H]
-\begin{center}
-\begin{tikzpicture}
-    \begin{axis}[
-        xmin=-10, xmax=10,
-        ymin=-1, ymax=7,
-        axis lines=middle,
-        axis line style={->},
-        xlabel={$x$},
-        ylabel={$y$},
-        xtick={-10,-9,...,10},
-        ytick={-1,0,...,7},
-        xticklabels={,,},
-        yticklabels={,,},
-        xlabel style={at={(ticklabel* cs:1)},anchor=north west},
-        ylabel style={at={(ticklabel* cs:1)},anchor=south west}
-    ]
-    \tikzset{>=Latex} % correct this line by removing the space
-
-    % Vector arrows
-    \draw[->,red] (axis cs:0,0) -- (axis cs:3,6) node[midway, above left] {King};
-    \draw[->,teal] (axis cs:0,0) -- (axis cs:4,5) node[midway, above] {Queen};
-    \draw[->,red] (axis cs:0,0) -- (axis cs:6,3) node[midway, below] {Man};
-    \draw[->,teal] (axis cs:0,0) -- (axis cs:8,1) node[end, below] {Woman};
-
-    % King - Man vector
-    \draw[->, orange] (axis cs:0,0) -- (axis cs:-3,3) node[midway, below left] {King$-$Man};
-
-    % Queen - Woman vector
-    \draw[->, orange] (axis cs:0,0) -- (axis cs:-4,4) node[midway, below left] {Queen$-$Woman};
-    \end{axis}
-\end{tikzpicture}
-\end{center}
-\end{figure}
-
+    \begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            xmin=-10, xmax=10,
+            ymin=-1, ymax=7,
+            axis lines=middle,
+            axis line style={->},
+            xlabel={$x$},
+            ylabel={$y$},
+            xtick={-10,-9,...,10},
+            ytick={-1,0,...,7},
+            xticklabels={,,},
+            yticklabels={,,},
+            xlabel style={at={(ticklabel* cs:1)},anchor=north west},
+            ylabel style={at={(ticklabel* cs:1)},anchor=south west}
+        ]
+    
+        % Vector arrows
+        \draw[-{Latex},red] (axis cs:0,0) -- (axis cs:3,6) node[midway, above left] {King};
+        \draw[-{Latex},teal] (axis cs:0,0) -- (axis cs:4,5) node[midway, above] {Queen};
+        \draw[-{Latex},red] (axis cs:0,0) -- (axis cs:6,3) node[midway, below] {Man};
+        \draw[-{Latex},teal] (axis cs:0,0) -- (axis cs:8,1) node[near end, below] {Woman};
+    
+        % King - Man vector
+        \draw[-{Latex}, orange] (axis cs:0,0) -- (axis cs:-3,3) node[midway, below left] {King$-$Man};
+    
+        % Queen - Woman vector
+        \draw[-{Latex}, orange] (axis cs:0,0) -- (axis cs:-4,4) node[midway, below left] {Queen$-$Woman};
+        \end{axis}
+    \end{tikzpicture}
+    \end{center}
+    \end{figure}
 \begin{itemize}
     \item \textbf{One-Hot Encoding (Count Vectoring)} involves creating a binary vector for each word in the vocabulary with a 1 indicating the presence of the word in a given document and 0 indicating its absence. 
     \begin{itemize}

@@ -8,3 +8,5 @@ Foreword from my notes:
 The notes are intended to be a gentle introductory supplement to the well-documented course notes, and not a full replacement with all the bells and whistles (e.g. real life use-cases, mathematical examples). The full notes are available on Professor Danilo Mandic’s website [here](https://www.commsp.ee.ic.ac.uk/~mandic/courses.htm).
 
 Thus, a better title for this document would be 'Elements of Statistical Signal Processing and Inference’.
+
+PS: I do not really intend to finish these notes (coursework took a long while for me and I have since moved on to other academic ventures of interest), but I hope their initial stages would be helpful here

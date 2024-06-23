@@ -15,7 +15,7 @@ When the sample space is a continuous space, the function $p$ is a \textbf{proba
 
 $x$ is a sample from a random variable $X$. 
 
-$P(X=x)$ refers to probability that the random variable $X$ takes on the value $x$.
+\noindent $P(X=x)$ refers to probability that the random variable $X$ takes on the value $x$.
 
 \subsection{Probability Density Function (PDF)}
 \begin{marginfigure}[100pt]
@@ -31,7 +31,7 @@ $P(X=x)$ refers to probability that the random variable $X$ takes on the value $
             axis lines=left,
             ymin=0,
             legend pos=north east,
-            title={Example of a PDF: Normal Distribution}
+            title={Example PDF: Normal Distribution}
         ]
         \addplot[blue, thick] {exp(-x^2 / 2) / sqrt(2 * pi)};
         \end{axis}
@@ -65,7 +65,7 @@ P(a \leq X \leq b) = \int_{a}^{b} f_X(x) \, dx.
             axis lines=left,
             ymin=0, ymax=1.1,
             legend pos=south east,
-            title={Example of a CDF: Sigmoid Approximation}
+            title={Example CDF: Sigmoid Approximation}
         ]
         \addplot[blue, thick] {1 / (1 + exp(-x))};
         \end{axis}
@@ -95,7 +95,7 @@ In Machine Learning (ML), we often deal with large datasets from which we aim to
 \]
 
 
-We typically model these samples as random variables:
+\noindent We typically model these samples as random variables:
 
 \[
 \{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
@@ -109,20 +109,20 @@ When dealing with joint random variables, we often represent them as vectors:
 \mathbf{X} = (X_1, X_2, X_3) \quad \text{with joint distribution} \quad p_{X_1, X_2, X_3}(x_1, x_2, x_3)
 \]
 
-For a vector of random variables \(\mathbf{X}\) in \( \mathbb{R}^3 \), the joint probability density function is denoted as:
+\noindent For a vector of random variables \(\mathbf{X}\) in \( \mathbb{R}^3 \), the joint probability density function is denoted as:
 
 \[
 p_{\mathbf{X}}(\mathbf{x}) \quad \text{where} \quad \mathbf{X} \in \mathbb{R}^3
 \]
-
+\noindent 
 If these are input observations, they are often referred to as "feature vectors."
 
 \subsection{Distinct Random Variables}
 
-We model samples as distinct random variables \sidenote{\textbf{Question:} Why should we model these as distinct random variables? Aren't they all the same thing?
+We model samples as distinct random variables \sidenote{\textbf{Why should we model these as distinct random variables? Aren't they all the same thing?} \smallskip
 
-\textbf{Answer:} Despite being identically distributed, distinct random variables allow for capturing dependencies and interactions between different samples.
-}:
+\noindent Despite being identically distributed, distinct random variables allow for capturing dependencies and interactions between different samples.
+}:\bigskip
 
 \[
 \{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
@@ -143,13 +143,15 @@ We model samples as distinct random variables \sidenote{\textbf{Question:} Why s
 
 Independence refers to the idea that the values or outcomes of one observation in a dataset do not depend on or influence the values of any other observation.\\
 
-For the set of random variables $X_1, X_2, \ldots X_n$, for the collection \(\{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}\), we often assume independence, for any subset of observations \(\{X_{i1}, X_{i2}, \ldots, X_{ik}\}\) where \(i_1, i_2, \ldots, i_k \in \{1, 2, \ldots, N\}\), the joint distribution factorises:
+For the set of random variables $X_1, X_2, \ldots X_n$, for the collection \[\{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}\]
+
+\noindent we often assume independence, for any subset of observations \(\{X_{i1}, X_{i2}, \ldots, X_{ik}\}\) where \(i_1, i_2, \ldots, i_k \in \{1, 2, \ldots, N\}\), the joint distribution factorises:
 
 \begin{equation}
 P(X_{i_1} = x_{i_1}, \ldots, X_{i_k} = x_{i_k}) = P(X_{i_1} = x_{i_1}) \cdot \ldots \cdot P(X_{i_k} = x_{i_k})
 \end{equation}
 
-\textit{The joint distribution of the subset is the product of the marginal distributions of the individual random variables.}\\
+\hl{The joint distribution of the subset is the product of the marginal distributions of the individual random variables.} \bigskip
 
 \textbf{Independence:} The occurrence of any event does not affect the occurrence of others. This is a crucial assumption in many ML models that we will see the usefulness of as early as the next lecture.
 
@@ -169,7 +171,7 @@ The "identically distributed" part of i.i.d. refers to the idea that all random 
 F_{X_1}(x) = F_{X_2}(x) = \ldots = F_{X_n}(x) = F_{X}(x)
 \end{equation}
 
-This implies that the cumulative distribution function (CDF) is the same for all these random variables.
+\noindent This implies that the cumulative distribution function (CDF) is the same for all these random variables.
 
 
 \section{Statistical Modelling as Curve Fitting}
@@ -180,7 +182,7 @@ Machine learning and statistics have significant overlap, and so most concepts s
 \{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
 \]
 
-These random variables can be modelled to fit certain curves that represent the underlying data distribution. 
+\noindent These random variables can be modelled to fit certain curves that represent the underlying data distribution. 
 
 \subsection{Assumption about the Model}
 
@@ -270,9 +272,9 @@ Based on observation or experience rather than theory or pure logic.
 \begin{intuitbox}{Empirical Distribution}
     
 
-    Practically, we do not have access to an infinite amount of data, but we have instead a small fraction of it, a sample, to infer any insights from it. In the case of discrete random variables, we use probability mass functions, which is straightforward, but we are interested in probability density functions for continuous random variables, because to model the true distribution, we would need an infinite number of samples.\\
+    Practically, we do not have access to an infinite amount of data, but we have instead a small fraction of it, a sample, to infer any insights from it. In the case of discrete random variables, we use probability mass functions, which is straightforward, but we are interested in probability density functions for continuous random variables, because to model the true distribution, we would need an infinite number of samples. \bigskip
 
-    Thus, our goal is to approximate the true PDF from a given data set using finite samples. The transformation from discrete to continuous is done with the Dirac delta function.\\
+    Thus, our goal is to approximate the true PDF from a given data set using finite samples. The transformation from discrete to continuous is done with the Dirac delta function.\\ \bigskip
 
     A Dirac delta function is interestingly helpful because:
     \[
@@ -337,7 +339,7 @@ Based on observation or experience rather than theory or pure logic.
     
 \end{intuitbox}
 
-\marginnote[-98pt]{    \refsb{Recommended Viewing}{
+\marginnote[-120pt]{    \refsb{Recommended Viewing}{
   \href{https://www.youtube.com/watch?v=7f3YFT7bsmg}{Lecture on Empirical Distribution}\smallskip
 
   Empirical Statistics: When you compute statistics from a dataset, you're really computing statistics for its empirical distribution.\smallskip
