@@ -2,10 +2,10 @@
 For the beginning of this module, a random variable $X$ is considered to be a function from a sample space $\Omega$ to the unit interval $[0, 1]$. However, in Lectures 6 and 7, we use the full definition of a random variable, which is a measurable function from a sample probability space $(\Omega)$ to a measurable space $(E, \varepsilon)$, involving the concept of $\sigma$-algebras and measure spaces. \bigskip
 
 When the sample space is a continuous space, the function $p$ is a \textbf{probability density function} (PDF). When the sample space is a discrete space, the function $p$ is a \textbf{probability mass function} (PMF).
-}
+} 
 
 
-
+\marginnote[-60pt]{We will introduce measure theory later.}
 
 
 
@@ -178,9 +178,9 @@ F_{X_1}(x) = F_{X_2}(x) = \ldots = F_{X_n}(x) = F_{X}(x)
 
 Machine learning and statistics have significant overlap, and so most concepts studied in this module can be cast as statistical modelling. Consider our random variables:
 
-\[
+\begin{equation}
 \{x_1 \sim X_1, x_2 \sim X_2, \ldots, x_N \sim X_N\}
-\]
+\end{equation}
 
 \noindent These random variables can be modelled to fit certain curves that represent the underlying data distribution. 
 
@@ -188,9 +188,9 @@ Machine learning and statistics have significant overlap, and so most concepts s
 
 To proceed with statistical modelling, we make an assumption about the form of the model:
 
-\[
+\begin{equation}
 P_X(x) \approx \mathcal{N}(x; \theta) \quad \theta := (\mu, \sigma)
-\]
+\end{equation}
 
 Here, \(P_X(x)\) is approximated by a normal distribution \(\mathcal{N}(x; \theta)\), where \(\theta\) represents the parameters of the distribution, namely the mean \(\mu\) and the standard deviation \(\sigma\). This assumption simplifies the process of modelling the data.
 
@@ -198,9 +198,9 @@ Here, \(P_X(x)\) is approximated by a normal distribution \(\mathcal{N}(x; \thet
 
 The next step is to fit the model to the data. This involves finding the parameter values \(\theta\) that maximize the probability of observing the given data. Mathematically, this is expressed as:
 
-\[
+\begin{equation}
 \arg \max_{\theta} P(x_1, \ldots, x_N \mid \theta)
-\]
+\end{equation}
 
 In other words, we adjust the parameters \(\mu\) and \(\sigma\) so that the assumed model best fits the observed data. This process is known as maximum likelihood estimation (MLE).\\
 
@@ -344,7 +344,7 @@ Based on observation or experience rather than theory or pure logic.
 
   Empirical Statistics: When you compute statistics from a dataset, you're really computing statistics for its empirical distribution.\smallskip
 
-  A dataset is a distribution.
+  A dataset is, in essence, a distribution.
 }}
 
 

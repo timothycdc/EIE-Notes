@@ -2,7 +2,7 @@
 
 \section{Advanced Problem Formulations (Slides)}
 
-The below are a list of major subject areas in NeurIPS:
+The below are a list of major subject areas in NeurIPS \footnote[1][]{As of 2024, when the slides were created.}:
 \begin{itemize}[noitemsep]
     \item Supervised, Unsupervised or Semi-Supervised Learning:
     \begin{itemize}[noitemsep]
@@ -32,17 +32,17 @@ In supervised learning, let us define the notation:
     y \in \R^m
 \end{equation}
 
-\noindent  Have our dataset be defined as (Assuming the data is i.i.d distributed and  $K >> n$):
+\noindent  Assume our dataset is i.i.d distributed and  $K >> n$, it is defined as 
 \begin{equation}
     \mathcal{D} = \{(x^{(i)}, y^{(i)})\}_{i=1}^K 
 \end{equation}
 
 Our learning objective is to find the minimum error from our loss function $\mathcal{L}$.
 \begin{equation}
-    \min_\theta \left[ \mathcal{L}(f^\theta(xyz),y) \right]
+    \min_\theta \left[ \mathcal{L}(f^\theta(x),y) \right]
 \end{equation}
 
-In the case of \textbf{few-shot learning}, a technique in ML where a model learns to perform a task proficiently with only a limited amount of training data. We do not have the luxury of $K >> n$ and so our model must learn to generalise well, quickly. 
+In the case of \textbf{few-shot learning}, a technique in ML where a model learns to perform a task proficiently with only a limited amount of training data. We do not have the luxury of $K \gg n$ and so our model must learn to generalise well, quickly. 
 
 
 \begin{itemize}[noitemsep]
@@ -53,7 +53,7 @@ In the case of \textbf{few-shot learning}, a technique in ML where a model learn
     \end{itemize}
     \item When $K = 0$:
     \begin{itemize}[noitemsep]
-        \item \textbf{zero-shot learning}: Infers classes with no examples, using descriptions.
+        \item \textbf{zero-shot learning}:\footnote[][]{Very popular with Large Language Models (LLMs) and also known as zero-shot prompting in this case.} Infers classes with no examples, using descriptions.
         \item Example: Identify an animal as a mammal based on descriptions of mammals being warm-blooded with hair.
     \end{itemize}
     \item When $K = nc$:
@@ -73,7 +73,7 @@ Transfer learning is a machine learning technique where a model trained on one t
     \mathcal{D}' &= \{(x'^{(i)}, y'^{(i)})\}_{i=1}^{N'} \quad \text{where } x'^{(i)} \in \mathbb{R}^n, y'^{(i)} \in \mathbb{R}^d
 \end{align}
 
-We then define the functions used in transfer learning:
+We then define the functions used in transfer learning :\footnote[][]{Bear with the difference in notation here: the notes use $\phi$ to represent the feature extractor instead of $g$.}
 \begin{align}
     g^\omega &: \mathbb{R}^n \rightarrow \mathbb{R}^l \\
     h^\kappa &: \mathbb{R}^l \rightarrow \mathbb{R}^d \\ 
@@ -101,7 +101,7 @@ The learning process in transfer learning typically involves two main steps:
 
 \subsection{Density Estimation, Clustering and Dimensionality Reduction}
 
-Assume we have an unsupervised learning setup, with $x \in \R^n$ and our dataset $\mathcal{D} = \{ x_1, x_2, \ldots, x_K \}$ where data is i.i.d and  $K >> n$.
+Assume we have an unsupervised learning setup, with $x \in \R^n$ and our dataset $\mathcal{D} = \{ x_1, x_2, \ldots, x_K \}$ where data is i.i.d and  $K \gg n$.
 
 Notes:
 \begin{enumerate}
@@ -209,7 +209,7 @@ and weights:
     \theta \in \mathbb{R}^3
 \end{equation}
 
-We finally have the fully expanded function:
+We finally have the fully expanded function\marginnote{We use the dot product instead of transposing, for clarity of notation.}:
 
 \begin{equation}
     \hat{y} = \begin{bmatrix} 1 \\ x \\ x^2 \end{bmatrix} \cdot \begin{bmatrix} \theta_0 \\ \theta_1 \\ \theta_2 \end{bmatrix} = \theta_0 + \theta_1 x + \theta_2 x^2
@@ -240,7 +240,7 @@ It takes in a fixed parameter $\gamma > 0$, defined as
     \kappa(x, x') = \exp(-\gamma ||x - x'||^2)
 \end{equation}
 
-where $||x - x'||^2$ is the squared Euclidean distance (or more appropriately, the $L_2$ Norm) between $x$ and $x'$. In practice, one picks fixed centres $x$ and the basis expansion computes the expanded feature set w.r.t the distance to these centres.\sidenote[][-300pt]{There is more nuance to this: you may have noticed that kernel functions take in two points, unlike the polynomial basis expansion $\phi$ taking in a single point. This is because for each of the $n$ points, we compute pairwise similarities with a point's other points, and then construct a feature vector for each point, where each point $x$ is transformed into a $n$-dimensional feature vector where each dimension represents the similarity between $x$ and one of the $n$ points.  \bigskip
+where $||x - x'||^2$ is the squared Euclidean distance (or more appropriately, the $L_2$ Norm) between $x$ and $x'$. In practice, one picks fixed centres $x$ and the basis expansion computes the expanded feature set w.r.t the distance to these centres.\sidenote[][-130pt]{There is more nuance to this: you may have noticed that kernel functions take in two points, unlike the polynomial basis expansion $\phi$ taking in a single point. This is because for each of the $n$ points, we compute pairwise similarities with a point's other points, and then construct a feature vector for each point, where each point $x$ is transformed into a $n$-dimensional feature vector where each dimension represents the similarity between $x$ and one of the $n$ points.  \bigskip
 
 For example, given a dataset with three points $x_1, x_2, x_3$, and a radial basis function $\kappa(x, x')$, the RBF kernel matrix might look like this:
 
