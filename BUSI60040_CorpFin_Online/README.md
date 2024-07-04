@@ -12,3 +12,7 @@ From the Business School website:
 
 
 This module aims to give an overview of the two key financial instruments: Stocks and Bonds. It will also introduce the key derivatives marketing: Futures and Options. You will be introduced to the concepts of risk and return in financial markers and how diversification influences risk and return. This module will explore the concept of the cost capital and how it can be calculated. You will learn how companies are financed and how to decide between different sources of finance.
+
+## Some advice:
+
+Exam feedback for 2024 noted that a lot of students struggled with bond math – during the syllabus refresh, bond math was covered a lot more in-depth but the past papers and material on the portal was not updated to reflect this strongly. If only it was obvious to management that the online resources for this module was quite lacking in bond math (emphasised only in live classes otherwise). Keep this in mind when revising.
