@@ -15,4 +15,4 @@ This module aims to give an overview of the two key financial instruments: Stock
 
 ## Some advice:
 
-Exam feedback for 2024 noted that a lot of students struggled with bond math – during the syllabus refresh, bond math was covered a lot more in-depth but the past papers and material on the portal was not updated to reflect this strongly. If only it was obvious to management that the online resources for this module was quite lacking in bond math (emphasised only in live classes otherwise). Keep this in mind when revising.
+Exam feedback for 2024 noted that a lot of students struggled with bond math – during the syllabus refresh, bond math was covered a lot more in-depth but the past papers and material on the portal was not updated to reflect this strongly. If only it was obvious to management that the online resources for this module were quite lacking in bond math (emphasised only in live classes otherwise). Keep this in mind when revising.
