@@ -1,0 +1,377 @@
+\chapter{Mathematical Preliminaries}
+\section{Functions}
+There are certain functions commonly used in finance:
+
+\begin{itemize}
+    \item \textbf{Exponential functions}: \( f(x) = ac^{bx} \) where \( a \), \( b \), and \( c \) are constants. Very often \( c \) is \( e = 2.7182818\ldots \).
+    \item \textbf{Logarithmic functions}: the natural logarithm is the function denoted by \( \ln(\cdot) \) which satisfies \( e^{\ln(x)} = x \).
+    \item \textbf{Linear functions}: a function \( f \) of several variables \( x_1, x_2, \ldots, x_n \) is linear if it has the form
+    \[
+    f(x_1, x_2, \ldots, x_n) = a_1x_1 + a_2x_2 + \cdots + a_nx_n.
+    \]
+    \item \textbf{Inverse functions}: a function \( f \) has an inverse function \( g \) if for all \( x \) we have \( g(f(x)) = x \). Inverse functions are usually denoted by \( f^{-1} \).
+\end{itemize}
+
+
+\section{Differential Calculus}
+One should be familiar with the following concepts:
+\begin{itemize}
+    \item Limits
+    \item Derivatives
+    \item Product, Quotient, Chain rules
+    \item Higher order derivatives like $f, f', f'', \ldots$
+    \item Partial Derivatives 
+    \[
+    \frac{\partial f(x_1, x_2, \ldots, x_n)}{\partial x_i} = \lim_{\Delta x \to 0} \frac{f(x_1, x_2, \ldots, x_i + \Delta x, \ldots, x_n) - f(x_1, x_2, \ldots, x_n)}{\Delta x}
+    \]
+    \item Taylor Approximation: approximation of a function $f$ in a region near point $x$.
+    \begin{itemize}[label=\textbullet]
+        \item $f(x+\Delta x) = f(x) + f'(x)\Delta x + O(\Delta x^2)$
+        \item $f(x+\Delta x) = f(x) + f'(x)\Delta x + \frac{1}{2}f''(x)\Delta x^2 + O(\Delta x^3)$
+    \end{itemize}
+    where $O(\Delta x^2)$ and $O(\Delta x^3)$ denote terms of order ($\Delta x^2$) and ($\Delta x^3$) respectively.
+    \item Taylor Approximation for multivariable functions:
+    \begin{itemize}[label=\textbullet]
+        \item A function $f:\mathbb{R}^n \Rightarrow \mathbb{R}$ can be approximated in a region near point $(x_1, \ldots, x_n)$ by partial derivatives.
+        \begin{align*}
+            f(x_1 + \Delta x_1, x_2 + \Delta x_2, \ldots, x_n + \Delta x_n) =&
+            f(x_1, x_2, \ldots, x_n) \\+& \sum_{i=1}^n \frac{\partial f}{\partial x_i} \Delta x_i \\+& \frac{1}{2} \sum_{i=1}^n \sum_{j=1}^n \frac{\partial^2 f}{\partial x_i \partial x_j} \Delta x_i \Delta x_j \\+&
+            \sum_{i=1}^n \sum_{j=1}^n \sum_{k=1}^n O(\Delta x_i \Delta x_j \Delta x_k)
+        \end{align*}
+    \end{itemize}
+\end{itemize}
+
+\section{Optimisation}
+\begin{itemize}
+    \item \textbf{Necessary conditions}: a function $f$ of a single variable $x$ is said to have a maximum at point $x_0$ if $f(x_0) \geq f(x)$ for all $x$. If $x_0$ is not a boundary point of an interval over which $f$ is defined, then for $x_0$ to be a maximum, then $f(x_0)  = 0$.
+    \item \textbf{Contrained Optimisation with Lagrange Multipliers}:
+    \begin{itemize}[label=\textbullet]
+        \item Considering maximising multivariable function $f$ of several variables $x_1, x_2, \ldots, x_n$ required to satisfy constraint $g(x_1, x_2, \ldots, x_n) = 0$.
+        \[
+        \max_x f(x_1, x_2, \ldots, x_n) \quad \text{subject to} \quad g(x_1, x_2, \ldots, x_n) = 0
+        \]
+        \item Introduce a Lagrange multiplier $\lambda$ to form the Lagrangian function
+        \[
+        L(x_1, x_2, \ldots, x_n, \lambda) = f(x_1, x_2, \ldots, x_n) - \lambda g(x_1, x_2, \ldots, x_n)
+        \]
+        According to the Lagrangian Method, we set the partial derivatives of the Lagrangian w.r.t to each variable to zero, leaving us with a sytem of $n+1$ equations for $n+1$ unknowns \( x_1, x_2, \ldots, x_n, \lambda \).
+        \[\frac{\partial L}{\partial x_i} = 0 \quad \text{where }i=1..n \quad \text{and} \quad \frac{\partial L}{\partial \lambda} = 0\]
+        \item A problenm with two constraints involves two Lagrange multipliers $\mu$ and $\lambda$.
+        \[\max_x f(x_1, x_2, \ldots, x_n) \quad \text{subject to} \quad g(x_1, x_2, \ldots, x_n) = 0 \quad \text{and} \quad h(x_1, x_2, \ldots, x_n) = 0\]
+        \[L = f(x_1, x_2, \ldots, x_n) - \mu g(x_1, x_2, \ldots, x_n) - \lambda h(x_1, x_2, \ldots, x_n)\]
+        \item More generally, a problem with $n$ variables and $m$ constraints is assigned $m$ Lagrange multipliers, and the function has $n+m$ arguments, and setting all partial derivatives to zero gives $n+m$ equations for $n+m$ unknowns.
+        \begin{itemize}
+            \item Sometimes we have inequality constraints in the form $g(x_1, x_2, \ldots, x_n) \leq 0$. We have two cases:
+            \begin{enumerate}
+                \item If $g(x_1, x_2, \ldots, x_n) < 0$ at the optimum, the constraint is not active and can be dropped, therefore this constraint is non-binding does not require the Lagrange multiplier.
+                \item If $g(x_1, x_2, \ldots, x_n = 0$ at the optimum, the constraint is active and requires the Lagrange multiplier which is non-negative.
+            \end{enumerate}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\section{Random Variables}
+
+\begin{itemize}[label=\textbullet]
+    \item A \textbf{discrete random variable} \( x \) has finite possible values \( x_1, x_2, \ldots, x_m \) with probabilities \( p_1, p_2, \ldots, p_m \):
+    \[
+    p_i = \text{prob}(x = x_i) \quad \text{for any } i = 1, 2, \ldots, m.
+    \]
+    The probabilities are nonnegative and sum to unity:
+    \[
+    \sum_{i=1}^m p_i = 1.
+    \]
+    \item A \textbf{continuous random variable} \( x \) is described by a probability density function \( p(\xi) \):
+    \[
+    \int_a^b p(\xi) \, d\xi = \text{prob}(a \leq x \leq b) \quad \text{for any } a < b.
+    \]
+    The density function is nonnegative and integrates to unity:
+    \[
+    \int_{-\infty}^{+\infty} p(\xi) \, d\xi = 1.
+    \]
+\end{itemize}
+
+\section{Probability Distribution}
+
+\begin{itemize}[label=\textbullet]
+    \item The \textbf{probability distribution} of a random variable \( x \) is the function \( F(\xi) \):
+    \[
+    F(\xi) = \text{prob}(x \leq \xi).
+    \]
+    \item It follows that:
+    \[
+    F(-\infty) = 0, \quad F(+\infty) = 1,
+    \]
+    \( F \) is monotonically increasing.
+    \item If \( x \) is a continuous random variable:
+    \[
+    F(\xi) = \int_{-\infty}^{\xi} p(\xi') \, d\xi' \quad \Rightarrow \quad \frac{dF(\xi)}{d\xi} = p(\xi).
+    \]
+\end{itemize}
+
+latex
+Copy code
+\section{Dependent Random Variables}
+
+\begin{itemize}[label=\textbullet]
+    \item Two \textbf{discrete random variables} \( x \) and \( y \) are described by their possible pairs of values \( (x_1, y_1), (x_2, y_2), \ldots, (x_n, y_n) \) and the corresponding probabilities \( p_1, p_2, \ldots, p_n \) with the interpretation
+    \[
+    p_i = \text{prob}(x = x_i \land y = y_i).
+    \]
+    \item Two \textbf{continuous random variables} \( x \) and \( y \) are described by their joint probability density function \( p(\xi, \eta) \) with the interpretation
+    \[
+    \int_{a_x}^{b_x} \int_{a_y}^{b_y} p(\xi, \eta) \, d\eta \, d\xi = \text{prob}(a_x \leq x \leq b_x \land a_y \leq y \leq b_y).
+    \]
+\end{itemize}
+
+
+\begin{itemize}[label=\textbullet]
+    \item The \textbf{joint probability distribution} \( F \) is defined as
+    \[
+    F(\xi, \eta) = \text{prob}(x \leq \xi, y \leq \eta).
+    \]
+    \item From a joint distribution, the distribution of any of the random variables can easily be recovered:
+    \[
+    F_x(\xi) = F(\xi, \infty); \quad F_y(\eta) = F(\infty, \eta).
+    \]
+    \item In general, \( n \) random variables are defined by their joint probability distribution defined with respect to \( n \) variables.
+\end{itemize}
+
+\section{Independent Random Variables}
+
+\begin{itemize}[label=\textbullet]
+    \item Two \textbf{discrete random variables} \( x \) and \( y \) are independent if the possible joint values can be written as \( (x_i, y_j) \) for \( i = 1, 2, \ldots, n_x \) and \( j = 1, 2, \ldots, n_y \), while the probability \( p_{ij} \) of outcome \( (x_i, y_j) \) factors into the form
+    \[
+    p_{ij} = p_{x,i} p_{y,j}.
+    \]
+    \item Two \textbf{continuous random variables} \( x \) and \( y \) are independent if the joint density function factors into the form
+    \[
+    p(\xi, \eta) = p_x(\xi) p_y(\eta).
+    \]
+    \item \textbf{Example}: The pair of random variables defined as the outcomes on two fair tosses of a die are independent. The probability of obtaining the pair \((3, 5)\), say, is
+    \[
+    \frac{1}{6} \times \frac{1}{6}.
+    \]
+\end{itemize}
+
+\begin{itemize}[label=\textbullet]
+    \item The \textbf{expected value} or expectation of a random variable \( x \) is defined as
+    \[
+    \text{E}(x) = \sum_{i=1}^n x_i p_i \text{ if } x \text{ is a discrete r.v.;}
+    \]
+    \[
+    \text{E}(x) = \int_{-\infty}^{+\infty} \xi p(\xi) \, d\xi \text{ if } x \text{ is a continuous r.v.}
+    \]
+    \item The concept of an expectation can be \textbf{generalized}. For any function \( f : \mathbb{R} \to \mathbb{R} \), we can define
+    \[
+    \text{E}[f(x)] = \sum_{i=1}^n f(x_i)p_i \text{ if } x \text{ is a discrete r.v.;}
+    \]
+    \[
+    \text{E}[f(x)] = \int_{-\infty}^{+\infty} f(\xi) p(\xi) \, d\xi \text{ if } x \text{ is a continuous r.v.}
+    \]
+    \item The \textbf{moment} of order \( m \) of any random variable \( x \) is defined as \( \text{E}(x^m) \).
+\end{itemize}
+
+\section{Variance and Standard Deviation}
+
+\begin{itemize}[label=\textbullet]
+    \item The \textbf{variance} of a r.v. \( x \) is defined as
+    \[
+    \text{var}(x) = \text{E}[(x - \text{E}(x))^2].
+    \]
+    \item One easily verifies the identity:
+    \[
+    \text{var}(x) = \text{E}(x^2) - \text{E}(x)^2.
+    \]
+    \item Loosely, the \textbf{expectation} tells you the 'typical' or 'average' value of a r.v., while the \textbf{variance} gives the amount of 'variation' around this value.
+    \item The \textbf{standard deviation} of a r.v. is defined as
+    \[
+    \text{std}(x) = \sqrt{\text{var}(x)}.
+    \]
+\end{itemize}
+
+\section{Generalised Expectation}
+
+\begin{itemize}[label=\textbullet]
+    \item The concept of an \textbf{expectation} can be further generalised to situations in which there are two dependent random variables \( x \) and \( y \). For any function \( f : \mathbb{R}^2 \to \mathbb{R} \), we can define
+    \[
+    \text{E}[f(x, y)] = \sum_{i=1}^n f(x_i, y_i)p_i \text{ if } x \text{ and } y \text{ are discrete dependent random variables;}
+    \]
+    \[
+    \text{E}[f(x, y)] = \int_{\mathbb{R}^2} f(\xi, \eta)p(\xi, \eta) \, d\xi \, d\eta \text{ if } x \text{ and } y \text{ are continuous dependent random variables.}
+    \]
+    \item Expectations of functions of \( n \) random variables are defined analogously. \footnote[]{Analogously = simultaneously.}
+\end{itemize}
+
+\section{Covariances and Correlations}
+
+\begin{itemize}[label=\textbullet]
+    \item The \textbf{covariance} of two dependent random variables \( x \) and \( y \) is defined as
+    \[
+    \text{cov}(x, y) = \text{E}[(x - \text{E}(x))(y - \text{E}(y))].
+    \]
+    \item Note that \(\text{cov}(x, x) = \text{var}(x)\).
+    \item The \textbf{correlation} of \( x \) and \( y \) is defined as
+    \[
+    \varrho(x, y) = \frac{\text{cov}(x, y)}{\text{std}(x) \text{std}(y)}.
+    \]
+    \item If \( x \) and \( y \) are independent, then
+    \[
+    \text{cov}(x, y) = \text{E}[x - \text{E}(x)]\text{E}[y - \text{E}(y)] = 0 \quad \Rightarrow \quad \varrho(x, y) = 0.
+    \]
+\end{itemize}
+
+
+
+\begin{itemize}[label=\textbullet]
+    \item By the \textbf{Cauchy-Schwartz inequality}, we find
+    \[
+    |\text{cov}(x, y)| \leq \text{E}(|x - \text{E}(x)||y - \text{E}(y)|) \leq \sqrt{\text{E}[(x - \text{E}(x))^2] \text{E}[(y - \text{E}(y))^2]} = \text{std}(x) \text{std}(y).
+    \]
+    \item The correlation \(\varrho(x, y)\) is always between \(-1\) and \(+1\).
+    \item Two random variables \( x \) and \( y \) are said to be:
+    \begin{itemize}
+        \item positively correlated if \( \varrho(x, y) > 0 \);
+        \item perfectly positively correlated if \( \varrho(x, y) = 1 \);
+        \item negatively correlated if \( \varrho(x, y) < 0 \);
+        \item perfectly negatively correlated if \( \varrho(x, y) = -1 \);
+        \item uncorrelated if \( \varrho(x, y) = 0 \).
+    \end{itemize}
+\end{itemize}
+
+
+
+\begin{itemize}[label=\textbullet]
+    \item A random variable \( x \) is \textbf{perfectly positively correlated} with the random variable \( y = ax + b \) for any \( a, b \in \mathbb{R} \) such that \( a > 0 \).
+    \item A random variable \( x \) is \textbf{perfectly negatively correlated} with the random variable \( y = ax + b \) for any \( a, b \in \mathbb{R} \) such that \( a < 0 \).
+    \item Note that if \( x \) and \( y \) are \textbf{independent}, then they are \textbf{uncorrelated}. However, if \( x \) and \( y \) are uncorrelated, then they are not necessarily independent.\footnote[]{Example: Take $y = x^2$ and $x \sim N(0,1)$. $x$ and $y$ are dependent as they can be described by $y = x^2$. \\ \bigskip
+    Then, $E[x] = 0$ by definition and $E[x^2] = 1$, then $E[y] = 0$.\\ \bigskip $E[x^3] = 0$ by symmetry about zero. \\ \bigskip So $\text{cov}(x, y)  = E[xy] - E[x]E[y] \Rightarrow E[x^3] - E[x]E[y] = 0$. So the result shows that $x$ and $y$ are uncorrelated, but dependent.}
+\end{itemize}
+
+
+
+\begin{itemize}[label=\textbullet]
+    \item Let \( x \) and \( y \) be two dependent random variables, and let \( \alpha \) and \( \beta \) be real numbers. Then
+    \[
+    \text{E}(\alpha x + \beta y) = \alpha \text{E}(x) + \beta \text{E}(y),
+    \]
+    \[
+    \text{var}(\alpha x + \beta y) = \alpha^2 \text{var}(x) + 2\alpha\beta \text{cov}(x, y) + \beta^2 \text{var}(y).
+    \]
+    \item Let \( x_1, x_2, \ldots, x_n \) be \( n \) dependent random variables. The \textbf{covariance matrix} of these random variables is defined as the \( n \times n \)-matrix \( V \) with entries
+    \[
+    V_{ij} = \text{cov}(x_i, x_j) \quad \text{for } i, j = 1, \ldots, n.
+    \]
+    \item If \( \alpha_1, \alpha_2, \ldots, \alpha_n \) are \( n \) real numbers, then
+    \[
+    \text{E} \left( \sum_{i=1}^n \alpha_i x_i \right) = \sum_{i=1}^n \alpha_i \text{E}(x_i)
+    \]
+    and
+    \[
+    \text{var} \left( \sum_{i=1}^n \alpha_i x_i \right) = \sum_{i=1}^n \sum_{j=1}^n \alpha_i \alpha_j V_{ij}.
+    \]
+\end{itemize}
+
+\section{Uniform Random Variables}
+
+\begin{itemize}[label=\textbullet]
+    \item A continuous random variable \( x \) with density function
+    \[
+    p(\xi) = 
+    \begin{cases} 
+    (\beta - \alpha)^{-1} & \text{for } \alpha \leq \xi \leq \beta, \\
+    0 & \text{otherwise},
+    \end{cases}
+    \]
+    is said to have a \textbf{uniform distribution} over \([ \alpha, \beta ]\).
+    \item \( x \) takes only values between \( \alpha \) and \( \beta \) and is equally likely to take any such value.
+    \item The \textbf{uniform distribution function} is given by
+    \[
+    F(x) = 
+    \begin{cases} 
+    0 & \text{for } x < \alpha, \\
+    \frac{x - \alpha}{\beta - \alpha} & \text{for } \alpha \leq x \leq \beta, \\
+    1 & \text{for } x > \beta.
+    \end{cases}
+    \]
+    \item \(\text{E}(x) = \frac{\beta + \alpha}{2}\) and \(\text{var}(x) = \frac{(\beta - \alpha)^2}{12}\).
+\end{itemize}
+
+\section{Normal Random Variables}
+
+\begin{itemize}[label=\textbullet]
+    \item A (continuous) random variable \( x \) is said to be \textbf{normal} or \textbf{Gaussian} if its probability density function is of the form
+    \[
+    p(\xi) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{1}{2\sigma^2} (\xi - \mu)^2}.
+    \]
+    \item It follows that \( \text{E}(x) = \mu \) and \( \text{var}(x) = \sigma^2 \).
+    \item A normal r.v. is said to be \textbf{standard} if \( \mu = 0 \) and \( \sigma = 1 \).
+    \item A \textbf{standard normal random variable} has density
+    \[
+    p(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2} x^2},
+    \]
+    and the \textbf{standard normal distribution} \( N \) is given by
+    \[
+    N(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^x e^{-\frac{1}{2} \xi^2} d\xi.
+    \]
+\end{itemize}
+
+
+
+\begin{itemize}[label=\textbullet]
+    \item There is no analytic expression for \( N(x) \), but tables of its values are available.
+    \item Let \( x = (x_1, x_2, \ldots, x_n) \) be a \textbf{vector of \( n \) normal random variables}. We introduce the vector \( \bar{x} \) whose components are the expected values of the components in \( x \). The covariance matrix \( V \) associated with \( x \) can be written as
+    \[
+    V = \text{E}[(x - \bar{x})(x - \bar{x})^\top].
+    \]
+    \item If the \( n \) variables are \textbf{jointly normal}, the density of \( x \) is
+    \[
+    p(x) = \frac{1}{(2\pi)^{n/2} \text{det}(V)^{1/2}} e^{-\frac{1}{2} (x - \bar{x})^\top V^{-1} (x - \bar{x})}.
+    \]
+\end{itemize}
+
+
+
+\begin{itemize}[label=\textbullet]
+    \item If \( n \) jointly normal random variables are \textbf{uncorrelated}, then the covariance matrix \( V \) is diagonal \(\Rightarrow\) the joint density function factors into a product of densities for the \( n \) separate variables.
+    \item \(\Rightarrow\) If \( n \) jointly normal random variables are uncorrelated, then they are independent.
+    \item \textbf{Summation property}: if \( x \) and \( y \) are jointly normal random variables and \( \alpha, \beta \in \mathbb{R} \), then \( \alpha x + \beta y \) is normal.
+    \item \textbf{Generalisation}: if \( x \) is a vector of \( n \) jointly normal r.v.s and \( T \) is an \( m \times n \)-matrix, then \( T x \) is a vector of \( m \) jointly normal r.v.s.
+\end{itemize}
+
+
+
+\begin{itemize}[label=\textbullet]
+    \item To express that \( x \) is a normal r.v. with expected value \( \mu \) and variance \( \sigma^2 \) we use the shorthand notation:
+    \[
+    x \sim \mathcal{N}(\mu, \sigma^2).
+    \]
+    \item To express that \( x \) is a vector of jointly normal r.v.s with expected values \( \bar{x} \) and covariance matrix \( V \) we write:
+    \[
+    x \sim \mathcal{N}(\bar{x}, V).
+    \]
+    \item Some useful properties of normal r.v.s are:
+    \begin{itemize}
+        \item if \( x \sim \mathcal{N}(\mu, \sigma^2) \), then \( (x - \mu)/\sigma \sim \mathcal{N}(0, 1) \);
+        \item if \( y \sim \mathcal{N}(0, 1) \), then \( \sigma y + \mu \sim \mathcal{N}(\mu, \sigma^2) \);
+        \item if \( x_1 \sim \mathcal{N}(\mu_1, \sigma_1^2) \), \( x_2 \sim \mathcal{N}(\mu_2, \sigma_2^2) \) and \( x_1 \) and \( x_2 \) are independent, then \( x_1 + x_2 \sim \mathcal{N}(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2) \);
+    \end{itemize}
+\end{itemize}
+
+\section{Central Limit Theorem}
+
+\begin{itemize}[label=\textbullet]
+    \item Let \( x_1, x_2, x_2, \ldots \) be an infinite sequence of \textbf{independent, identically distributed (i.i.d.)} random variables, each with expected value \( \mu \) and variance \( \sigma^2 \).
+    \item Define \( S_n = \sum_{i=1}^n x_i \) for \( n = 1, 2, 3, \ldots \). Note that \(\text{E}(S_n) = n\mu\) and \(\text{var}(S_n) = n\sigma^2\).
+    \item The \textbf{Central Limit Theorem} says that \textbf{for large \( n \)} the random variable \((S_n - n\mu)/(\sigma \sqrt{n})\) is approximately \textbf{standard normally distributed}. In mathematical terms:
+    \[
+    \text{prob} \left( \frac{S_n - n\mu}{\sigma \sqrt{n}} \leq x \right) \to N(x) \quad \text{as } n \to \infty \, (\forall x \in \mathbb{R}).
+    \]
+\end{itemize}
+
+
+\begin{itemize}[label=\textbullet]
+    \item Real-life systems are \textbf{subject to a range of external influences} that can be reasonably \textbf{approximated by i.i.d. random variables}.
+    \item Hence, by the \textbf{C.L.T.} the \textbf{overall effect} can be reasonably modelled by a \textbf{single normal random variable} with appropriate mean and variance.
+    \item \(\Rightarrow\) Because of the \textbf{C.L.T.} normal random variables are ubiquitous in stochastic modelling! \footnote[]{The normal distribution has convenient mathematical properties, such as being completely described by its mean and variance. As a result, normal distributions are often used to approximate more complex distributions in stochastic models.}
+\end{itemize}

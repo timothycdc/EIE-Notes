@@ -1,0 +1,94 @@
+\chapter{Introduction}
+\section{Cash Flow Streams}
+\defb{Definition of Investments}{
+  An \textbf{investment} is the \textbf{current commitment of resources} in order to achieve later \textbf{benefits}. Basically, investing money right now in hopes of earning a return. \bigskip
+
+Sometimes this amount of money to be obtained later is uncertain. \bigskip
+
+We can generalise this to say that an investment is defined by the terms of \textbf{its resulting cash flow stream}.
+\begin{center}
+    \begin{tikzpicture}
+        % Time arrow
+        \draw[->] (0,0) -- (9,0) node[right] {time};
+        \fill (0,0) circle (2pt);
+        
+        % Initial cash flow arrow
+        \draw[->] (0,0) -- (0,-2);
+        \node at (1.5,-2.5) {initial cash flow investment};
+
+
+        % Cash flow arrows with varying heights
+        \node at (5,2.5) {resulting cash flow streams};
+        \foreach \x/\y in {1/1, 2/2, 3/1, 4/1, 5/2, 6/1, 7/2, 8/2} {
+            \draw[->] (\x,0) -- (\x,\y);
+        }
+    
+    \end{tikzpicture}
+\end{center}
+}
+
+We then have the following questions:
+\begin{itemize}
+    \item How do I choose a preferred cash flow streams, and how much should I be willing to pay for one?
+    \item Are two streams together worth more to me than the sum of their individual values?
+    \item Given a collection of several streams, what's the most favourable combination of them?
+\end{itemize}
+
+Sometimes the timing and amount of cash flows are not fixed, and can be influenced by the investor. Investment science answers these questions by \textbf{determining suitable management strategies to tailor cash flow streams}.
+
+
+\section{Investments and the Market}
+\defb{Investment Analysis}{
+    The process of examining alternatives and deciding which alternative is the most preferable.
+}
+
+Investment problems are a unique class of decision problems that are carried out within the framework of the financial market, which provides a basis for comparison. 
+
+There are several important aspects of the financial market:
+\begin{itemize}
+    \item \textbf{The Comparison Principle}: 
+    \begin{itemize}
+        \item The comparison principle states that if two alternatives are equivalent, then they are equally preferable.
+    \end{itemize}
+    \item \textbf{Arbitrage}:
+    \begin{itemize}
+        \item Arbitrage is the act of taking a risk-free profit on a trade.
+        \item A simple example: In New York, 1 USD = 0.85 EUR. In London, 1 USD = 0.83 EUR. If I had USD, I could buy EUR in New York and convert it back to USD in London to earn 0.02 EUR per USD. \marginnote[-30pt]{This is a very simple example and almost always, there would be no price discrepancy across exchanges.}
+    \end{itemize}
+    \item \textbf{Dynamics}:
+    \begin{itemize}
+        \item Dynamics refers to the forces and processes that cause changes within financial systems or markets over time.
+        \item Such changes can be caused by economic events, government policies, technological advancements, and market sentiment.
+    \end{itemize}
+    \item \textbf{Risk Aversion}:
+    \begin{itemize}
+        \item Investors are generally risk-averse and will only take on risk if they are compensated for it. So an investor only makes an investment if there is an expected return (that is greater than the risk-free rate, or the interest paid if one was to save the money instead of investing it).
+    \end{itemize}
+\end{itemize}
+
+\section{Pricing Coin Tosses}
+\hl{
+    You pay £1, I flip a fair coin.
+    \begin{itemize}
+        \item If heads, you get £3.
+        \item If tails, you get nothing.
+        \item The value of this game is $\pounds 3 \times \frac{1}{2} - 1 = \pounds 0.50$.
+    \end{itemize}
+}
+\hl{
+    You pay £1, I flip a fair coin.
+    \begin{itemize}
+        \item If heads, you get £1.
+        \item If tails, you get £1.
+        \item The value of this game is $\pounds 1 \times \frac{1}{2} + \pounds 1 \times \frac{1}{2} - 1 = \pounds 0$.
+    \end{itemize}
+}
+
+\hl{
+    I flip a fair coin twice.
+    \begin{itemize}
+        \item If at least one flip is heads, you get £9.
+        \item Else, you get nothing.
+        \item Out of the four equally likely outcomes (HH, HT, TH, TT) with probability 1/4 each, three outcomes are possible, so the value of this game is $\pounds 9 \times \frac{3}{4} = \pounds 6.75$.
+    \end{itemize}
+}
