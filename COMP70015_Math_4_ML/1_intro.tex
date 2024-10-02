@@ -414,7 +414,7 @@ derived from a random variable \(X\). We can approximate the distribution of \(X
 }
 Take a case of the self-driving car. There are several facets:
 \begin{enumerate}
-    \item \textbf{Object Recognition: }identifying objects in the scene
+    \item \textbf{Object Recognition: }identifying objects in the scene (classification)
           \begin{itemize}[noitemsep]
               \item An image is a 2D array of pixel values. For a colour image, each pixel has 3 values (RGB).
               \item \textbf{Input:}
@@ -422,7 +422,7 @@ Take a case of the self-driving car. There are several facets:
                         x \in \mathbb{R}^{H \times W \times C}
                     \end{equation}
                     where $H$ is height, $W$ is width, and $C$ is the number of channels (e.g. 3 for RGB)
-              \item \textbf{Output:} We would like to detect if something is a background, another vehicle, the ground level, or a pedestrian. Let's say there are $m$ outcomes, making this a classification problem. Naively, let
+              \item \textbf{Output:} We would like to detect if something is a background, another vehicle, the ground level, or a pedestrian. Let's say there are $m$ outcomes, making this a \textbf{classification problem}. Naively, let
                     $y \in \mathbb{R}^m$. However, these numbers are just arbitrary i.e. raw scores. It would make more sense to refine the output to a probability distribution over the $m$ classes: \\
                     \begin{equation}
                         y \in \Delta^m \quad \text{where }\sum_{i=1}^{m} y_i = 1
@@ -509,9 +509,63 @@ Take a case of the self-driving car. There are several facets:
 
 
           \end{itemize}
-    \item Route planning: deciding where to go
-    \item Speed Control: deciding how fast to go
-    \item Steering Angle Prediction: deciding how to steer
+          \item \textbf{Route Planning:} 
+          We aim to predict the optimal path, where the prediction function \( f^\theta \) takes spatial data and environmental conditions as input and outputs a route (either as a series of decisions or waypoints).
+          \begin{itemize}[noitemsep]
+              \item \textbf{Input:}
+              \begin{equation}
+                  x \in \mathbb{R}^{n}
+              \end{equation}
+              where \( x \) could represent a vector of features including road conditions, traffic density, and start/end coordinates.
+              
+              \item \textbf{Output:} 
+              A route \( y \), represented either as a classification over a set of discrete routes, or as continuous waypoints:
+              \begin{equation}
+                  f^\theta : x \mapsto y
+              \end{equation}
+              Here, \( y \in \mathbb{R}^m \) for \( m \) possible waypoints (or classes, if we use a discrete route classification).
+          \end{itemize}
+          The objective is to minimise the difference between predicted and actual routes, defined as a suitable loss function \( \mathcal{L}(f^\theta(x), y) \).
+
+    \item \textbf{Speed Control:} 
+          In this problem, we predict the optimal driving speed, and \( f^\theta \) models the relationship between environmental and driving conditions and speed.
+          \begin{itemize}[noitemsep]
+              \item \textbf{Input:} 
+              \begin{equation}
+                  x \in \mathbb{R}^p
+              \end{equation}
+              where \( x \) represents features such as current speed, distance to obstacles, road surface, and weather conditions.
+              
+              \item \textbf{Output:} 
+              A continuous speed value \( y \in \mathbb{R} \):
+              \begin{equation}
+                  f^\theta : x \mapsto y
+              \end{equation}
+              where \( y \) is the predicted speed. This is a regression problem, so the goal is to minimise the squared error:
+              \begin{equation}
+                  \mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} (f^\theta(x^{(i)}) - y^{(i)})^2
+              \end{equation}
+          \end{itemize}
+
+    \item \textbf{Steering Angle Prediction:}
+          Steering angle prediction aims to output a continuous angle based on the driving conditions, making it a regression problem.
+          \begin{itemize}[noitemsep]
+              \item \textbf{Input:}
+              \begin{equation}
+                  x \in \mathbb{R}^q
+              \end{equation}
+              where \( x \) could represent lane position, vehicle surroundings, and road curvature.
+              
+              \item \textbf{Output:} 
+              The predicted steering angle \( y \in \mathbb{R} \):
+              \begin{equation}
+                  f^\theta : x \mapsto y
+              \end{equation}
+              This is also a regression task, and the loss function could again be the squared error:
+              \begin{equation}
+                  \mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} (f^\theta(x^{(i)}) - y^{(i)})^2
+              \end{equation}
+          \end{itemize}
 \end{enumerate}
 
 \section{Mathematics of Linear Models}
