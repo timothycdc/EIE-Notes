@@ -1,0 +1,21 @@
+\chapter{Entropy}
+
+Consider a random variable \( X \) taking values in an alphabet \( \mathcal{X} = \{x_1, \dots, x_l\} \).
+
+\defb{Definition: Information Content}{
+The \textit{information content} (also known as surprise or surprisal) of a realisation \( x \) is defined as:
+\[
+h(x) := \log \frac{1}{p(x)}
+\]
+}
+
+\defb{Definition: Entropy}{
+The \textit{entropy} of a random variable \( X \) is given by:
+\[
+H(X) := \sum_{x \in \mathcal{X}} p(x) \log \frac{1}{p(x)}
+\]
+Entropy represents the expected value of the information content (or surprisal) across all possible realisations of \( X \):
+\[
+H(X) = \mathbb{E}[h(X)] = \sum_x p(x) h(x)
+\]
+}

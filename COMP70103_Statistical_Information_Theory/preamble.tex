@@ -14,6 +14,15 @@
 \usepgfplotslibrary{colormaps}
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
+\usepackage{tikz-cd}
+
+% Redefine \subsubsection with bold and larger text
+\renewcommand{\subsubsection}[1]{%
+  \vspace{0.5em}
+  \textbf{\large #1}\mbox{}\\
+  \vspace{0.5em}}
+
+
 
 % Color definitions
 \definecolor{myg}{RGB}{56, 140, 70}
@@ -37,97 +46,97 @@
 % Theorem styles with selective font changes
 \tcbuselibrary{theorems,skins,hooks}
 \newtcbtheorem[number within=section]{Theorem}{Theorem}
-{enhanced, breakable, colback=mytheorembg, frame hidden, boxrule=0sp, 
- borderline west={2pt}{0pt}{mytheoremfr}, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- coltitle=mytheoremfr, fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, segmentation style={solid, mytheoremfr}}{th}
+{enhanced, breakable, colback=mytheorembg, frame hidden, boxrule=0sp,
+  borderline west={2pt}{0pt}{mytheoremfr}, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  coltitle=mytheoremfr, fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, segmentation style={solid, mytheoremfr}}{th}
 
 \newtcbtheorem[number within=section]{corollary}{Corollary}
-{enhanced, breakable, colback=myp!10, frame hidden, boxrule=0sp, 
- borderline west={2pt}{0pt}{myp!85!black}, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- coltitle=myp!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, segmentation style={solid, myp!85!black}}{th}
+{enhanced, breakable, colback=myp!10, frame hidden, boxrule=0sp,
+  borderline west={2pt}{0pt}{myp!85!black}, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  coltitle=myp!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, segmentation style={solid, myp!85!black}}{th}
 
 \newtcbtheorem[number within=section]{lemma}{Lemma}
-{enhanced, breakable, colback=myg!10, frame hidden, boxrule=0sp, 
- borderline west={2pt}{0pt}{myg}, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- coltitle=myg!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, segmentation style={solid, myg!85!black}}{th}
+{enhanced, breakable, colback=myg!10, frame hidden, boxrule=0sp,
+  borderline west={2pt}{0pt}{myg}, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  coltitle=myg!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, segmentation style={solid, myg!85!black}}{th}
 
 \newtcbtheorem[number within=section]{claim}{Claim}
-{enhanced, breakable, colback=myg!10, frame hidden, boxrule=0sp, 
- borderline west={2pt}{0pt}{myg}, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- coltitle=myg!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, segmentation style={solid, myg!85!black}}{th}
+{enhanced, breakable, colback=myg!10, frame hidden, boxrule=0sp,
+  borderline west={2pt}{0pt}{myg}, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  coltitle=myg!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, segmentation style={solid, myg!85!black}}{th}
 
 \newtcbtheorem[number within=section]{Example}{Example}
-{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti, 
- boxrule=1pt, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, description delimiters parenthesis,
- left=1mm, % Set left margin
- right=1mm % Set right margin
+{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti,
+  boxrule=1pt, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, description delimiters parenthesis,
+  left=1mm, % Set left margin
+  right=1mm % Set right margin
 }{ex}
 
 \newtcbtheorem[number within=section]{sidenotebox}{Note}
-{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti, 
- boxrule=1pt, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, description delimiters={}, % Remove parentheses
- left=1mm, % Set left margin
- right=1mm % Set right margin
+{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti,
+  boxrule=1pt, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, description delimiters={}, % Remove parentheses
+  left=1mm, % Set left margin
+  right=1mm % Set right margin
 }{sn}
 
 
 \newtcolorbox{highlightbox}[2][]{%
-    colback=myexamplebg, 
-    breakable, 
-    colframe=myexamplefr, 
-    coltitle=myexampleti, 
-    boxrule=1pt, 
-    sharp corners, 
-    before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
-    fonttitle=\bfseries\sffamily, 
-    description font=\mdseries, 
-    separator sign none, 
-    description delimiters parenthesis, 
-    left=1mm, % Set left margin
-    right=1mm, % Set right margin
-    top=1mm,
+  colback=myexamplebg,
+  breakable,
+  colframe=myexamplefr,
+  coltitle=myexampleti,
+  boxrule=1pt,
+  sharp corners,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  fonttitle=\bfseries\sffamily,
+  description font=\mdseries,
+  separator sign none,
+  description delimiters parenthesis,
+  left=1mm, % Set left margin
+  right=1mm, % Set right margin
+  top=1mm,
 }
 
 \newtcbtheorem[number within=section]{sidenoteboxsmall}{Note}
-{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti, 
- boxrule=1pt, sharp corners, detach title, 
- before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
- fonttitle=\bfseries\sffamily, description font=\mdseries, 
- separator sign none, description delimiters={}, % Remove parentheses
- left=1mm, % Set left margin
- right=1mm % Set right margin
+{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti,
+  boxrule=1pt, sharp corners, detach title,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  fonttitle=\bfseries\sffamily, description font=\mdseries,
+  separator sign none, description delimiters={}, % Remove parentheses
+  left=1mm, % Set left margin
+  right=1mm % Set right margin
 }{sn}
 
 
 \newtcolorbox{highlightboxsmall}[2][]{%
-    colback=myexamplebg, 
-    breakable, 
-    colframe=myexamplefr, 
-    coltitle=myexampleti, 
-    boxrule=1pt, 
-    sharp corners, 
-    before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip}, 
-    fonttitle=\bfseries\sffamily, 
-    description font=\mdseries, 
-    separator sign none, 
-    description delimiters parenthesis, 
-    left=1mm, % Set left margin
-    right=1mm, % Set right margin
-    top=1mm,
+  colback=myexamplebg,
+  breakable,
+  colframe=myexamplefr,
+  coltitle=myexampleti,
+  boxrule=1pt,
+  sharp corners,
+  before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
+  fonttitle=\bfseries\sffamily,
+  description font=\mdseries,
+  separator sign none,
+  description delimiters parenthesis,
+  left=1mm, % Set left margin
+  right=1mm, % Set right margin
+  top=1mm,
 }
 
 % Command shortcuts
@@ -144,49 +153,49 @@
 
 % Define custom tcolorbox environments with smaller horizontal margins
 \newtcolorbox[use counter=definition,number within=section]{definitionbox}[2][]{%
-    colback=blue!5!white,
-    colframe=blue!60!black,
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=#2 \hfill Definition \thetcbcounter #1,
-    left=1mm,
-    right=1mm 
+  colback=blue!5!white,
+  colframe=blue!60!black,
+  arc=0mm,
+  sharp corners=all,
+  fonttitle=\bfseries,
+  title=#2 \hfill Definition \thetcbcounter #1,
+  left=1mm,
+  right=1mm
 }
 
 \newtcolorbox[use counter=extra,number within=section]{extrabox}[2][]{%
-    colback=black!5!white,
-    colframe=black!65,
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=#2 \hfill \textit{Non-Examinable} \thetcbcounter #1,
-    left=1mm, 
-    right=1mm
+  colback=black!5!white,
+  colframe=black!65,
+  arc=0mm,
+  sharp corners=all,
+  fonttitle=\bfseries,
+  title=#2 \hfill \textit{Non-Examinable} \thetcbcounter #1,
+  left=1mm,
+  right=1mm
 }
 
 \newtcolorbox[use counter=example,number within=section]{examplebox}[2][]{%
-    colback=orange!5!white,
-    breakable,
-    colframe=orange!75!black,
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=#2 \hfill Example Q \thetcbcounter #1,
-    left=1mm, 
-    right=1mm 
+  colback=orange!5!white,
+  breakable,
+  colframe=orange!75!black,
+  arc=0mm,
+  sharp corners=all,
+  fonttitle=\bfseries,
+  title=#2 \hfill Example Q \thetcbcounter #1,
+  left=1mm,
+  right=1mm
 }
 
 \newtcolorbox[use counter=exam,number within=section]{exambox}[3][]{%
-    colback=purple!5!white,
-    breakable,
-    colframe=purple!75!black,
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=Q#2 - #3 \hfill Exam Q \thetcbcounter #1,
-    left=1mm, 
-    right=1mm 
+  colback=purple!5!white,
+  breakable,
+  colframe=purple!75!black,
+  arc=0mm,
+  sharp corners=all,
+  fonttitle=\bfseries,
+  title=Q#2 - #3 \hfill Exam Q \thetcbcounter #1,
+  left=1mm,
+  right=1mm
 }
 
 % \newtcolorbox[auto counter,number within=section]{commentbox}[2][]{%
@@ -202,27 +211,27 @@
 % }
 
 \newtcolorbox[use counter=reference,number within=section]{referencebox}[2][]{%
-    colback=green!5!white,
-    colframe=green!65!black,
-    coltitle=white, % White title text
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=#2 \hfill Reference \thetcbcounter #1,
-    left=1mm, 
-    right=1mm 
+  colback=green!5!white,
+  colframe=green!65!black,
+  coltitle=white, % White title text
+  arc=0mm,
+  sharp corners=all,
+  fonttitle=\bfseries,
+  title=#2 \hfill Reference \thetcbcounter #1,
+  left=1mm,
+  right=1mm
 }
 
 \newtcolorbox[use counter=intuition,number within=section]{intuitbox}[2][]{%
-    colback=teal!5!white,
-    colframe=teal!95!black,
-    coltitle=white, % White title text
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=#2 \hfill Intuition \thetcbcounter #1,
-    left=1mm, 
-    right=1mm 
+  colback=teal!5!white,
+  colframe=teal!95!black,
+  coltitle=white, % White title text
+  arc=0mm,
+  sharp corners=all,
+  fonttitle=\bfseries,
+  title=#2 \hfill Intuition \thetcbcounter #1,
+  left=1mm,
+  right=1mm
 }
 
 % Command shortcuts for custom tcolorbox environments
@@ -254,8 +263,8 @@
   left=0.5mm,
   right=0.5mm,
   overlay={
-    \node[anchor=south west,fill=blue!60!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Definition \thetcbcounter #1}};
-  }
+      \node[anchor=south west,fill=blue!60!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Definition \thetcbcounter #1}};
+    }
 }
 
 % Define smaller custom tcolorbox environment for smallexambox with modified configurations
@@ -277,8 +286,8 @@
   left=0.5mm,
   right=0.5mm,
   overlay={
-    \node[anchor=south west,fill=purple!75!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Exam Q \thetcbcounter}};
-  }
+      \node[anchor=south west,fill=purple!75!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Exam Q \thetcbcounter}};
+    }
 }
 
 \newtcolorbox[use counter=extra,number within=section]{smallextrabox}[2][]{%
@@ -299,8 +308,8 @@
   left=0.5mm,
   right=0.5mm,
   overlay={
-    \node[anchor=south west,fill=black!65,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill \textit{Non-Examinable} \thetcbcounter #1}};
-  }
+      \node[anchor=south west,fill=black!65,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill \textit{Non-Examinable} \thetcbcounter #1}};
+    }
 }
 
 \newtcolorbox[use counter=example,number within=section]{smallexamplebox}[2][]{%
@@ -322,8 +331,8 @@
   left=0.5mm,
   right=0.5mm,
   overlay={
-    \node[anchor=south west,fill=orange!75!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Example Q \thetcbcounter #1}};
-  }
+      \node[anchor=south west,fill=orange!75!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Example Q \thetcbcounter #1}};
+    }
 }
 
 
@@ -346,8 +355,8 @@
   left=0.5mm,
   right=0.5mm,
   overlay={
-    \node[anchor=south west,fill=green!65!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Reference \thetcbcounter #1}};
-  }
+      \node[anchor=south west,fill=green!65!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Reference \thetcbcounter #1}};
+    }
 }
 
 \newtcolorbox[use counter=intuition,number within=section]{smallintuitbox}[2][]{%
@@ -369,8 +378,8 @@
   left=0.5mm,
   right=0.5mm,
   overlay={
-    \node[anchor=south west,fill=teal!95!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Intuition \thetcbcounter #1}};
-  }
+      \node[anchor=south west,fill=teal!95!black,text=white,inner sep=2pt,outer sep=0pt,align=left] at ([xshift=1mm,yshift=1mm]frame.south west) {\parbox{\dimexpr\linewidth-4mm\relax}{\scriptsize\bfseries\color{white} \hfill Intuition \thetcbcounter #1}};
+    }
 }
 % Command shortcuts for smaller custom tcolorbox environments
 \newcommand{\defsb}[3][]{\begin{smalldefinitionbox}{#2}#3\end{smalldefinitionbox}}

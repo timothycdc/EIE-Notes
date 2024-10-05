@@ -452,8 +452,15 @@ My notes try to combine the detail of the professor's informal lecture notes wit
 
 \chapter{Formalising ML Problem Settings}
 
+\setlength{\parindent}{0pt} % No indentation
+\raggedright % Align left without hyphenation
 
-\setlength{\parindent}{0pt}
+% Optionally, add \tolerance to adjust line breaks and avoid overfull lines
+\tolerance=1 
+\emergencystretch=\maxdimen % Allow lines to stretch more
+\hyphenpenalty=10000 % Disable hyphenation
+\hbadness=10000 % Suppress underfull box warnings
+
 \input{1_intro}
 \input{2_linear}
 \input{3_optimisation}

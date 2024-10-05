@@ -431,8 +431,18 @@
 
 
 
-\setlength{\parindent}{0pt}
+\setlength{\parindent}{0pt} % No indentation
+\raggedright % Align left without hyphenation
+
+% Optionally, add \tolerance to adjust line breaks and avoid overfull lines
+\tolerance=1 
+\emergencystretch=\maxdimen % Allow lines to stretch more
+\hyphenpenalty=10000 % Disable hyphenation
+\hbadness=10000 % Suppress underfull box warnings
+
+
 \input{1_intro}
+\input{2_entropy}
 
 \chapter{Reference}
 \label{ch:tufte-design}
