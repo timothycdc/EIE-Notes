@@ -131,7 +131,7 @@ We model samples as distinct random variables \sidenote[][-20pt]{\textbf{Why sho
 
 \section{Independent and Identically Distributed (i.i.d.) Random Variables}
 
-\marginnote{    \textbf{Why do we model samples as distinct random variables?}
+\marginnote[-50pt]{    \textbf{Why do we model samples as distinct random variables?}
 
 \begin{enumerate}
     \item By treating each sample as a distinct variable, we assume samples are i.i.d, allowing every sample to contribute independently to the likelihood of oberving the data given the model prarameters – so every sample provides unique information to estimate the parameters of the underlying distribution. If we treated all samples as a single random variable, we would lose the granularity of information, leading to a poorer estimate.
@@ -400,9 +400,20 @@ derived from a random variable \(X\). We can approximate the distribution of \(X
 \end{itemize}
 
 
+\section{Viewing Data}
 
-
-
+\begin{itemize}
+    \item Data (coordinates) Perspective (Design Matrix) 
+    \item Set Perspective
+    \begin{itemize}
+        \item Combination invariant
+        \item Allows for natural language....??
+    \end{itemize}
+    \item Empirical Distribution Perspective
+    \begin{itemize}
+        \item i.i.d
+    \end{itemize}
+\end{itemize}
 
 
 \section{Example Scene: Self-Driving Car}
@@ -528,6 +539,7 @@ Take a case of the self-driving car. There are several facets:
           The objective is to minimise the difference between predicted and actual routes, defined as a suitable loss function \( \mathcal{L}(f^\theta(x), y) \).
 
     \item \textbf{Speed Control:} 
+    \sn{Ordinal Regression here?}{To update}
           In this problem, we predict the optimal driving speed, and \( f^\theta \) models the relationship between environmental and driving conditions and speed.
           \begin{itemize}[noitemsep]
               \item \textbf{Input:} 
