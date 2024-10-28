@@ -1,0 +1,321 @@
+\chapter{Optimisation and Automatic Differentiation}
+
+
+\section{Notation}
+As convention we will use a bold roman letter or a greek symbol to denote a vector.
+
+\[
+    \theta = \begin{bmatrix}
+        \theta_1 \\ \vdots \\ \theta_n
+    \end{bmatrix}
+    \quad
+    \mb{x} = \begin{bmatrix}
+        x_1 \\ \vdots \\ x_n
+    \end{bmatrix}
+\]
+
+Model parameters are denoted by $\theta$ which can either be a vector or a collection of vectors, or matrices, which will be indicated. Matrices are a bold uppercase Roman letter $\mb{A}$, with some exceptiosn such as $diag(\lambda) = \Lambda$ in eigen-decomposition not being a Roman symbol but a greek one. In addition, vectors will be by default columns, i.e. matrices with shape $n \times 1$.
+
+
+\section{Linear model}
+
+For single output (predicted by the linear model) we have \[\hat{y} = \mb{x} ^\top \theta\]
+
+For a dataset we have \[\hat{y} = \mb{X} \theta\]
+
+\[
+    \underbrace{
+        \begin{bmatrix}
+            \hat{y}^{(1)} \\
+            \hat{y}^{(2)} \\
+            \vdots        \\
+            \hat{y}^{(N)}
+        \end{bmatrix}}_{N \times 1}
+    =
+    \underbrace{
+        \begin{bmatrix}
+            x_1^{(1)} & x_2^{(1)} & \cdots & x_n^{(1)} \\
+            x_1^{(2)} & x_2^{(2)} & \cdots & x_n^{(2)} \\
+            \vdots    & \vdots    & \ddots & \vdots    \\
+            x_1^{(N)} & x_2^{(N)} & \cdots & x_n^{(N)}
+        \end{bmatrix}}_{N \times n}
+    \underbrace{
+        \begin{bmatrix}
+            \theta_1 \\
+            \theta_2 \\
+            \vdots   \\
+            \theta_n
+        \end{bmatrix}}_{n \times 1}
+\]
+
+In our equation for the loss function – it is the squared sum of the differences between the true values $y$ and our predicted values $\hat{y}$.
+
+\[
+    \hat{y} = \mathbf{X} \theta
+\]
+
+\begin{align}
+    \mathcal{L}(y, \hat{y}) & = \frac{1}{N} \sum_i \left( y_i - \hat{y}_i \right)^2                                                                                            \\
+                            & = \frac{1}{N} \sum_i \left( y_i - \mathbf{X}_{i,j} \theta_j \right)^2                                                                            \\
+                            & = \frac{1}{N} (\mathbf{X}\theta - y)^\top (\mathbf{X}\theta - y)                                                                                 \\
+                            & = \frac{1}{N} \left( (\mathbf{X}\theta - y)^\top (\mathbf{X}\theta - y) \right)                                                                  \\
+                            & = \frac{1}{N} \left( \theta^\top \mathbf{X}^\top \mathbf{X} \theta - \theta^\top \mathbf{X}^\top y - y^\top \mathbf{X} \theta + y^\top y \right) \\
+                            & = \frac{1}{N} \left( \theta^\top \mathbf{X}^\top \mathbf{X} \theta - 2 (y^\top \mathbf{X} \theta) + y^\top y \right) \label{eq:mse}
+\end{align}
+
+In our equation for our loss function (mean squared error) in \eqref{eq:mse}, we want to use optimisation to find the lowest value of the loss function. This will occur when the gradient at this point is zero.
+
+\subsection{Differentiation of the Loss Function}
+
+Instead of differentiating manually, we can prove several differentiation rules to find out the derivative of the loss function with respect to the model parameters $\theta$.
+
+\defb{Proving \ensuremath{\nabla_\theta\mb{c}^\top\theta = \mb{c}}}{
+    Consider the expression \( \mathbf{c}^\top \theta \), which in Einstein summation notation expands as:
+    \[
+        \mathbf{c}^\top \theta = \sum_j c_j \theta_j
+    \]
+
+    Now, taking the partial derivative with respect to \( \theta_j \) (this allows us to see what happens when not considering the dummy variable \( j \)):
+    \[
+        \frac{\partial \mathbf{c}^\top \theta}{\partial \theta_j} = c_j
+    \]
+    This shows that the gradient of \( \mathbf{c}^\top \theta \) with respect to \( \theta \) is:
+    \[
+        \nabla_\theta \mathbf{c}^\top \theta = \mathbf{c}
+    \]
+}
+
+\defb{Proving \ensuremath{\nabla_\theta(\theta^\top\mathbf{A}\theta) = \mathbf{A}\theta + \mathbf{A}^\top\theta)}}
+{
+    Now consider the quadratic form \( \theta^\top \mathbf{A} \theta \). Expanding it in Einstein notation:
+    \[
+        \theta^\top \mathbf{A} \theta = \sum_i \sum_j \theta_i \theta_j \mathbf{A}_{i,j}
+    \]
+
+    Taking the derivative with respect to \( \theta_k \) (this allows us to see what happens when not considering the dummy variable \( k \)):
+    \[
+        \frac{\partial \theta^\top \mathbf{A} \theta}{\partial \theta_k} = \sum_i \theta_i \mathbf{A}_{i,k} + \sum_j \mathbf{A}_{k,j} \theta_j
+    \]
+    This results in:
+    \[
+        \nabla_\theta (\theta^\top \mathbf{A} \theta) = \mathbf{A} \theta + \mathbf{A}^\top \theta
+    \]
+    Thus, the gradient of \( \theta^\top \mathbf{A} \theta \) is:
+    \[
+        \nabla_\theta (\theta^\top \mathbf{A} \theta) = \mathbf{A} \theta + \mathbf{A}^\top \theta
+    \]
+
+}
+
+With these rules, we have:
+
+\begin{align}
+    \mathcal{L}(y, \hat{y})   & = \frac{1}{N} \sum_i \left( y_i - \hat{y}_i \right)^2                                                                                       \\
+                              & = \frac{1}{N} \left( (\mathbf{X}\theta - y)^\top (\mathbf{X}\theta - y) \right)                                                             \\
+                              & = \frac{1}{N} \left( \theta^\top \mathbf{X}^\top \mathbf{X} \theta - 2 (y^\top \mathbf{X} \theta) + y^\top y \right)                        \\
+                              & = \frac{1}{N} \left( \theta^\top \left[ \mathbf{X}^\top \mathbf{X} \right] \theta - 2 ([\mathbf{X}^\top y]^ \top \theta) + y^\top y \right) \\
+    \nabla_\theta \mathcal{L} & = \frac{2}{N} \left( \mathbf{X}^\top \mathbf{X} \theta - \mathbf{X}^\top y \right)
+\end{align}
+
+\begin{tikzpicture}[every node/.style={draw, circle, minimum size=5mm, inner sep=1pt},
+    >={Stealth}, shorten >=1pt]
+
+    % Input vector
+    \node[draw=none] (x1) at (0.2, 2) {} ; %{$x_1$};
+    \node[draw=none] (x2) at (0.2, 1.55) {} ; %{$x_2$};
+    \node[draw=none] (xn) at (0.2, 0.35) {} ; %{$x_n$};
+
+    % \node[draw=none] (dots1) at (0, 0.75) {$\vdots$};
+    \node[draw=none] (x) at (0, 1.25) {$\begin{bmatrix}
+                \mathbf{x_1} \\ \mathbf{x_2} \\ \vdots \\ \mathbf{x_n}
+            \end{bmatrix}$};
+
+    % Bracket for the input vector
+    % \draw[thick] (-0.5, 3) -- (-0.5, -0.5);
+    % \draw[thick] (-0.5, 3) -- (0.5, 3);
+    % \draw[thick] (-0.5, -0.5) -- (0.5, -0.5);
+
+    % Summation nodes
+    \node (sum1) at (3, 3) {$\sum$};
+    \node (sum2) at (3, 1.7) {$\sum$};
+    \node (sum3) at (3, 0) {$\sum$};
+
+    % Dots between summation nodes
+    \node[draw=none] (dots2) at (3, 0.7) {$\vdots$};
+
+    % Activation function node
+    \node (sigma) at (6, 1.5) {$\sigma$};
+
+    % Output arrow
+    \draw[->] (sigma) -- +(1.2, 0) node[draw=none, right] {$\mathbf{z} = \begin{bmatrix}
+                    \mb{z_1} \\ \mb{z_2} \\ \vdots \\ \mb{z_j}
+                \end{bmatrix} \in \mathbb{R}^{K \times 1}$};
+
+    \node[draw=none] (matrix-vector) at (3.2, 2.5) {$\sum_i \mb{x}_i \theta_{i,1}$};
+    \node[draw=none] (matrix-vector) at (3.2, 1.2) {$\sum_i \mb{x}_i \theta_{i,2}$};
+    \node[draw=none] (matrix-vector) at (3.2, -0.5) {$\sum_i \mb{x}_i \theta_{i,j}$};
+
+    \node[draw=none] (matrix-vector) at (3.2, -1.5) {$\overbrace{\sum_i \underbrace{\mb{W}_{i,j}}_{K \times n} \underbrace{\mb{x}_{i}}_{n \times 1}}$};
+
+    % Arrows from input vector to summation nodes
+    \foreach \i in {x1,x2,xn} {
+            \draw[->] (\i.east) -- (sum1.west);
+            \draw[->] (\i.east) -- (sum2.west);
+            \draw[->] (\i.east) -- (sum3.west);
+        }
+
+    % Arrows from summation nodes to activation function
+    \draw[->] (sum1.east) -- (sigma.west);
+    \draw[->] (sum2.east) -- (sigma.west);
+    \draw[->] (sum3.east) -- (sigma.west);
+
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[every node/.style={draw, circle, minimum size=5mm, inner sep=1pt},
+    >={Stealth}, shorten >=1pt]
+
+    % Input vector
+    \node[draw=none] (x1) at (0.2, 2) {} ;
+    \node[draw=none] (x2) at (0.2, 1.55) {} ;
+    \node[draw=none] (xn) at (0.2, 0.35) {} ;
+
+    \node[draw=none] (x) at (0, 1.25) {$\begin{bmatrix}
+                \mathbf{x_1} \\ \mathbf{x_2} \\ \vdots \\ \mathbf{x_n}
+            \end{bmatrix}$};
+
+    % Summation nodes
+    \node (sum1) at (3, 3) {$\sum$};
+    \node (sum2) at (3, 1.7) {$\sum$};
+    \node (sum3) at (3, 0) {$\sum$};
+
+    % Dots between summation nodes
+    \node[draw=none] (dots2) at (3, 0.7) {$\vdots$};
+
+    % Activation function node
+    \node (sigma) at (5.5, 1.25) {$\sigma$};
+
+    % Output arrow
+    \draw[->] (sigma) -- +(1, 0) ;
+
+    % z vector
+    \node[draw=none] (z1) at (7.2, 2) {};
+    \node[draw=none] (z2) at (7.2, 1.55) {};
+    \node[draw=none] (z3) at (7.2, 0.35) {};
+    \node[draw=none] (z) at (7.0, 1.25) {$\begin{bmatrix}
+                \mb{z_1} \\ \mb{z_2} \\ \vdots \\ \mb{z_j}
+            \end{bmatrix}$};
+
+    % Matrix-vector products
+    \node[draw=none] (matrix-vector1) at (3.2, 2.5) {$\sum_i \mb{x}_i \theta_{i,1}$};
+    \node[draw=none] (matrix-vector2) at (3.2, 1.2) {$\sum_i \mb{x}_i \theta_{i,2}$};
+    \node[draw=none] (matrix-vector3) at (3.2, -0.5) {$\sum_i \mb{x}_i \theta_{i,j}$};
+    \node[draw=none] (matrix-vectorW) at (3.2, -1.5) {$ \mb{W}^{(1)}\mb{x}$};
+
+    % Arrows from input vector to summation nodes
+    \foreach \i in {x1,x2,xn} {
+            \draw[->] (\i.east) -- (sum1.west);
+            \draw[->] (\i.east) -- (sum2.west);
+            \draw[->] (\i.east) -- (sum3.west);
+        }
+
+    % Arrows from summation nodes to activation function
+    \draw[->] (sum1.east) -- (sigma.west);
+    \draw[->] (sum2.east) -- (sigma.west);
+    \draw[->] (sum3.east) -- (sigma.west);
+
+    % Second layer - Summation nodes for z vector shifted to the right
+    \node (sum4) at (10, 3) {$\sum$};
+    \node (sum5) at (10, 1.7) {$\sum$};
+    \node (sum6) at (10, 0) {$\sum$};
+
+    % Matrix-vector products
+    \node[draw=none] (matrix-vector1-2) at (10, 2.5) {$\sum_i \mb{x}_i \theta_{i,1}$};
+    \node[draw=none] (matrix-vector2-2) at (10, 1.2) {$\sum_i \mb{x}_i \theta_{i,2}$};
+    \node[draw=none] (matrix-vector3-2) at (10, -0.5) {$\sum_i \mb{x}_i \theta_{i,j}$};
+
+
+
+    % Dots between summation nodes in second layer
+    \node[draw=none] (dots3) at (10, 0.7) {$\vdots$};
+
+    % Second activation function node
+    \node (sigma2) at (12.5, 1.25) {$\sigma$};
+
+    % Output arrow for the second activation
+    \draw[->] (sigma2) -- +(1, 0);
+
+    % Arrows from z vector to second layer summation nodes, shifted to the right
+    \foreach \i in {z1,z2,z3} {
+            \draw[->] (\i.east) -- (sum4.west);
+            \draw[->] (\i.east) -- (sum5.west);
+            \draw[->] (\i.east) -- (sum6.west);
+        }
+
+    % Arrows from second layer summation nodes to second activation function
+    \draw[->] (sum4.east) -- (sigma2.west);
+    \draw[->] (sum5.east) -- (sigma2.west);
+    \draw[->] (sum6.east) -- (sigma2.west);
+
+    % Add W^(2)x label below
+    \node[draw=none] (matrix-vectorW2) at (10, -1.5) {$ \mb{W}^{(2)}\mb{z}$};
+
+\end{tikzpicture}
+
+
+We begin with the input layer where the initial input is denoted by \( \mathbf{z}^{(1)} = \mathbf{x} \). This serves as the input vector to the first layer of the neural network. As we propagate through the network, the activations of the subsequent layers can be described recursively. For the \((i+1)\)-th layer, the activations are computed as:
+
+\[
+    \mathbf{z}^{(i+1)} = \sigma \left( \mathbf{W}^{(i)} \mathbf{z}^{(i)} + \mathbf{b}^{(i)} \right)
+\]
+
+Here:
+- \( \mathbf{W}^{(i)} \) is the weight matrix for the \(i\)-th layer,
+- \( \mathbf{b}^{(i)} \) is the bias vector for the \(i\)-th layer,
+- \( \sigma(\cdot) \) represents the activation function applied element-wise.
+
+
+In a simple 1-layer neural network, the structure remains the same. The input \( \mathbf{z}^{(1)} = \mathbf{x} \) is processed through a single layer to produce the output. The transformation for the hidden layer follows the same formula:
+
+\[
+    \mathbf{z}^{(i+1)} = \sigma \left( \mathbf{W}^{(i)} \mathbf{z}^{(i)} + \mathbf{b}^{(i)} \right)
+\]
+
+This is the foundational structure for learning in a 1-layer neural network, where the activations are computed using the weight matrix and biases.
+
+
+For a fully connected network, the predicted output \( \hat{y} \) is obtained by applying the activation function \( \sigma \) on the linear transformation of the input:
+
+\[
+    \hat{y} = \sigma(\mathbf{W} \mathbf{x})
+\]
+
+The loss function \( \mathcal{L} \), which measures the difference between the predicted output and the true output \( y \), is commonly defined as the squared error between the prediction and the true value:
+
+\[
+    \mathcal{L} = \left( \sigma(\mathbf{W} \mathbf{x}) - y \right)^2
+\]
+
+This formulation reflects the optimisation problem in fully connected networks, where the activation function \( \sigma \) is typically non-linear, making it challenging to derive analytically tractable solutions.
+
+\textit{Note: The activation function is usually very general and does not always have an analytically tractable form.}
+
+
+
+\subsection{Example of a neural network}
+\begin{align}
+    \mb{z}^{(1)} & = \mb{x}\\
+    \mb{z}^{(2)} & = \tanh(\mb{W}^{(1)}\mb{z}^{(1)} + \mb{b}^{(1)})\\
+    \mb{z}^{(3)} & = \mb{W}^{(2)}\mb{z}^{(2)} 
+\end{align}
+
+\section{Automatic Differentiation}
+
+
+For a function $f : \mathbb{R}^n \rightarrow \mathbb{R}$, the gradient is defined as:
+
+\begin{equation}
+    \frac{\partial f}{\partial x_n} = \lim_{h \rightarrow 0} \frac{f(x_1, \ldots, x_n + h, \ldots, x_N) - f(x_1, \ldots, x_n, \ldots, x_N)}{h}
+\end{equation}
+
+Unfortunately, this method of finite difference where approximating the derivative by taking two very closely spaced points in space is not accurate enough for realistic use and is too slow.
