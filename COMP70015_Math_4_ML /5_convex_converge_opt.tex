@@ -132,10 +132,30 @@ we subtract \(\theta^{(t)}\) from both sides to get:
 \[
     \theta^{(t+1)} - \theta^{(t)} = -\alpha \nabla \mathcal{L}(\theta^{(t)}).
 \]
-Substituting this into the first-order term:
+
+Recall the gradient descent lemma– we then substitute $\mathcal{L}(\bm{w})$ with $\mathcal{L}(\theta^{(t+1)})$ and $\mathcal{L}(\bm{v})$ with $\mathcal{L}(\theta^{(t)})$:
 \[
-    -\alpha \nabla \mathcal{L}(\theta^{(t)})^\top \nabla \mathcal{L}(\theta^{(t)}),
+    \mathcal{L}(\bm{w}) \leq \mathcal{L}(\bm{v}) + \nabla \mathcal{L}(\bm{v})^\top (\bm{w} - \bm{v}) + \frac{L}{2} \|\bm{w} - \bm{v}\|^2.
+    \]
+    
+We have:
+\[
+    \mathcal{L}(\theta^{(t+1)})\leq\mathcal{L}(\theta^{(t)})+\nabla\mathcal{L}(\theta^{(t)})^\top(\theta^{(t+1)}-\theta^{(t)})+\frac L2\left\|\theta^{(t+1)}-\theta^{(t)}\right\|^2
 \]
+
+We then substitute the first occurence of $\theta^{(t+1)} - \theta^{(t)}$ with $-\alpha \nabla \mathcal{L}(\theta^{(t)})$:
+
+\[
+    \mathcal{L}(\theta^{(t+1)}) \leq \mathcal{L}(\theta^{(t)}) - \nabla \mathcal{L}(\theta^{(t)})^\top (\alpha \nabla \mathcal{L}(\theta^{(t)})) + \frac L2\left\|\theta^{(t+1)}-\theta^{(t)}\right\|^2
+\]
+
+Let $\alpha = \frac{1}{L}$, then we have:
+
+\[
+    \mathcal{L}(\theta^{(t+1)})\leq\mathcal{L}(\theta^{(t)})-\frac1L\|\nabla\mathcal{L}(\theta^{(t)})\|^2+\frac L2\left\|\theta^{(t+1)}-\theta^{(t)}\right\|^2
+\]
+
+
 where \(\|\theta^{(t+1)} - \theta^{(t)}\| = \frac{1}{L} \|\nabla \mathcal{L}(\theta^{(t)})\|\), we obtain:
 \[
     \mathcal{L}(\theta^{(t+1)}) \leq \mathcal{L}(\theta^{(t)}) - \frac{1}{2L} \|\nabla \mathcal{L}(\theta^{(t)})\|^2.
