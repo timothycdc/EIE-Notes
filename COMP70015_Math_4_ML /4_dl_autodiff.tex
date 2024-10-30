@@ -96,19 +96,19 @@ We have previously discussed the $n$-dimensional generalisation of the generalis
 By denoting the parameter matrix $\bm{W} \in \mathbb{R}^{m \times n}$, we can define the multi-layer perceptron as an extension of the GLM:
 
 \[
-    y = g^{-1} \left( \theta^\top \sigma (\bm{W} \bm{x} + \bm{b}) \right) \tag{4.1}
+    y = g^{-1} \left( \theta^\top \sigma (\bm{W} \bm{x} + \bm{b}) \right)
 \]
 
 To clarify, we break this into two stages, highlighting that $\theta \in \mathbb{R}^{m \times 1}$:
 
 \begin{align}
-    z & = \sigma (\bm{W} \bm{x} + \bm{b}) \tag{4.2}     \\
-    y & = g^{-1} \left( \theta^\top z \right) \tag{4.3}
+    z & = \sigma (\bm{W} \bm{x} + \bm{b}) \label{eq:mlp1}     \\
+    y & = g^{-1} \left( \theta^\top z \right) \label{eq:mlp2}
 \end{align}
 
 \begin{itemize}
-    \item The first stage, Equation (4.2), represents the hidden neurons in the bipartite graph with weights $\bm{W}$.
-    \item The second stage, Equation (4.3), maps the hidden layer of $m$ dimensions to the output space, forming another bipartite graph with weights determined by $\theta$.
+    \item The first stage, Equation \ref{eq:mlp1}, represents the hidden neurons in the bipartite graph with weights $\bm{W}$.
+    \item The second stage, Equation \ref{eq:mlp2}, maps the hidden layer of $m$ dimensions to the output space, forming another bipartite graph with weights determined by $\theta$.
 \end{itemize}
 
 
@@ -124,7 +124,7 @@ To clarify, we break this into two stages, highlighting that $\theta \in \mathbb
 
         % \node[draw=none] (dots1) at (0, 0.75) {$\vdots$};
         \node[draw=none] (x) at (0, 1.25) {$\begin{bmatrix}
-                    \bm{x_1} \\ \bm{x_2} \\ \vdots \\ \bm{x_n} \\ 1
+                    {x_1} \\ {x_2} \\ \vdots \\ {x_n} \\ 1
                 \end{bmatrix}$};
 
         \node[draw=none] (theta) at (5.5, 4) {$\begin{bmatrix}
@@ -153,7 +153,7 @@ To clarify, we break this into two stages, highlighting that $\theta \in \mathbb
         \node (sigma1) at (6, 1.5) {$\sigma$};
 
         % Output arrow
-        \draw[->] (sigma1) -- +(0.7, 0) node[draw=none, right] {};
+        \draw[->] (sigma1) -- +(0.65, 0) node[draw=none, right] {};
 
         \node[draw=none] (matrix-vector) at (3.2, 3.5) {$\sum_i \mb{x}_i \theta_{i,1}^{(1)} + b_1$};
         \node[draw=none] (matrix-vector) at (3.2, 1.2) {$\sum_i \mb{x}_i \theta_{i,2}^{(1)} + b_2$};
@@ -189,19 +189,16 @@ To clarify, we break this into two stages, highlighting that $\theta \in \mathbb
         \node[draw=none] (z1) at (7.2, 2) {};
         \node[draw=none] (z2) at (7.2, 1.55) {};
         \node[draw=none] (z3) at (7.2, 0.35) {};
-        \node[draw=none, align=center] (z) at (7.0, 1.25) {
+        \node[draw=none, align=center] (z) at (7.0, 1.) {
 
             $\begin{bmatrix}
-                    \mb{z_1} \\ \mb{z_2} \\ \vdots \\ \mb{z_j}
+                    {z_1^{(1)}} \\ {z_2^{(1)}} \\ \vdots \\ {z_j^{(1)}}
                 \end{bmatrix}$
             \\
             \\
-            $\mb{z} = \sigma(\mb{W}^{(1)}\mb{x} + \mb{b}^{(1)})$
+            $\mb{z}^{(1)} = \sigma(\mb{W}^{(1)}\mb{x} + \mb{b}^{(1)})$
 
         };
-
-
-
 
         % % Arrows from input vector to summation nodes
         % \foreach \i in {x1,x2,xn} {
@@ -234,12 +231,31 @@ To clarify, we break this into two stages, highlighting that $\theta \in \mathbb
         \node (sigma2) at (12.5, 1.5) {$\sigma$};
 
         % Output arrow for the second activation
-        \draw[->] (sigma2) -- +(1, 0);
+        \draw[->] (sigma2) -- +(0.65, 0);
 
-        % Output Vector
-        \node[draw=none] (y) at (13.8, 1.25) {$\begin{bmatrix}
-                    \bm{y_1} \\ \bm{y_2} \\ \vdots \\ \bm{y_j}
+        % Output Z second layer
+        \node[draw=none, align=center] (z2layer) at (13.5, 1) {
+
+            $\begin{bmatrix}
+                    {z_1^{(1)}} \\ {z_2^{(1)}} \\ \vdots \\ {z_j^{(1)}}
+                \end{bmatrix}$
+            \\
+            \\
+            $\mb{z}^{(2)} = \sigma(\mb{W}^{(2)}\mb{x} + \mb{b}^{(2)})$
+
+        };
+
+        % Output Y
+        \node[draw=none] (y) at (16.4, 1.27) {$\begin{bmatrix}
+                    {y_1} \\ {y_2} \\ \vdots \\ {y_j}
                 \end{bmatrix}$};
+
+        \node[draw=none] (ylabelfinal) at (16.4, 2.6) {$\mb{y} = g^{-1}(\theta ^\top \mb{z}^{(2)})$};
+
+        \node[rectangle, rounded corners] (theta_final) at (15, 1.5) {$\ g^{-1}(\theta ^\top \cdot) \ $};
+        \draw[->] (13.85, 1.5) -- (theta_final.west);
+        \draw[->] (theta_final.east) -- +(0.39, 0);
+
 
         % Arrows from z vector to second layer summation nodes, shifted to the right
         \foreach \i in {z1,z2,z3} {
@@ -259,7 +275,7 @@ To clarify, we break this into two stages, highlighting that $\theta \in \mathbb
         \node [draw=none](label) at (10, -3) {$k$ perceptrons in level (2)};
 
     \end{tikzpicture}
-    \caption{A multi-layer perceptron with notation.}
+    \caption{A multi-layer perceptron with notation for the input vector $\bm{x}$, the parameter matrices $\bm{W}^{(1)}$ and $\bm{W}^{(2)}$, and the output vector $\bm{y}$. Note that every node marked with a $\Sigma$ represents a single perceptron. So a Multi-layer perceptron is a network that can have multiple perceptrons per single layer, and have multiple layers.}
     \label{fig:mlp}
 \end{figure*}
 
@@ -268,10 +284,10 @@ To clarify, we break this into two stages, highlighting that $\theta \in \mathbb
 The next step in constructing a perceptron is to allow for multiple layers. By adding additional hidden layers, we can generalise the single-layer perceptron to a multi-layer perceptron. The construction of a two-layer perceptron is as follows, visualised by Figure \ref{fig:mlp}:
 
 \[
-    z^{(1)} = \sigma (\bm{W}^{(1)} \bm{x} + \bm{b}^{(1)})
+    \bm{z}^{(1)} = \sigma (\bm{W}^{(1)} \bm{x} + \bm{b}^{(1)})
 \]
 \[
-    z^{(2)} = \sigma (\bm{W}^{(2)} z^{(1)} + \bm{b}^{(2)})
+    \bm{z}^{(2)} = \sigma (\bm{W}^{(2)} z^{(1)} + \bm{b}^{(2)})
 \]
 \[
     y = g^{-1} \left( \theta^\top z^{(2)} \right)
@@ -432,7 +448,7 @@ In the self-attention mechanism, the function \( a_\phi \) is used to compute th
 
 The function \( a_\phi \) is called a compatibility function, as it measures how relevant or aligned two inputs \( \bm{x}_i \) and \( \bm{x}_j \) are. This compatibility score is then converted into a probability-like weight \( \alpha_{ij} \) through a softmax function.\bigskip
 
-For example, in the commonly used *textbf{dot-product attention}, the function \( a_\phi \) is simply the dot product between two input vectors:
+For example, in the commonly used \textbf{dot-product attention}, the function \( a_\phi \) is simply the dot product between two input vectors:
 \[
     a_\phi(\bm{x}_i, \bm{x}_j) = \bm{x}_i^\top \bm{x}_j
 \]
@@ -527,6 +543,11 @@ In the context of Generalised Linear Models (GLMs), gradients are used for learn
 
 \[\theta^{(t+1)}=\theta^{(t)}+\alpha\nabla_\theta\mathcal{L}(f^\theta,\bm{X},\bm{y})
 \]
+
+We will rewrite this as:
+
+\[\theta^{(t+1)}=\theta^{(t)}-\alpha\nabla_\theta\mathcal{L}(\theta^{(t)})\]
+
 It can sometimes be challenging to compute gradients manually. For neural networks, even small models can make manual gradient computation infeasible. To address this, we use a systematic approach called \textit{automatic differentiation}, which automates the process of computing derivatives.
 
 \subsection{A Running Example}
@@ -572,15 +593,37 @@ An alternative method to compute derivatives is the\textbf{ finite difference ap
     \frac{\partial f}{\partial x_n} = \lim_{h \to 0} \frac{f(x_1, x_2, \dots, x_n + h) - f(x_1, x_2, \dots, x_n)}{h}
 \]
 
+The complexity of this method is $O(2nT)$, where $n$ is the number of parameters and $T$ is the complexity of evaluating the function or model once. We evaluate the function twice at $\bm{x}$ and $\bm{x} + (\bm{1} \cdot h)$ for $n$ parameters.\bigskip
+
 However, applying this method to each parameter can be cumbersome and prone to compounded approximation errors, particularly in high-dimensional settings or complex functions.
 
 
 \subsection{Introducing Automatic Differentiation}
+
+
+
 The main concept of automatic differentiation is to break down complex equations into simpler operations, each of which can be easily differentiated. We can then apply the chain rule systematically. By understanding the sequence of operations, we can express the overall model as a composition of functions:
 \[
     f(\bm{x}) = h(g(\bm{x}))
 \]
 
+\marginnote{
+
+    \sns{Side Note on AutoDiff}{
+
+        We are trying to compute $\alpha \nabla_{\theta} \mathcal{L}(\theta^{(t)})$ in
+        \[
+            \theta^{(t+1)} = \theta^{(t)} - \alpha \nabla_{\theta} \mathcal{L}(\theta^{(t)})
+        \]
+        \(\bm{J} := \nabla_{\theta} \mathcal{L}(\theta) \in \mathbb{R}^{m \times n}\),\\
+        \(\theta^{(t)} \in \mathbb{R}^{n \times 1}\),\\
+        \(\mathcal{L}(\theta) : \mathbb{R}^n \rightarrow \mathbb{R}^m\),\\
+        \(\alpha > 0\),\\
+
+
+    }
+
+}
 
 Previously, we sought an analytical expression for the Jacobian matrix, \( \nabla_x f \), to solve for optimal parameters. Consider two functions \( g: \mathbb{R}^n \to \mathbb{R}^k \) and \( h: \mathbb{R}^k \to \mathbb{R}^m \). By applying the chain rule, the Jacobian of the composed function is given by:
 
@@ -601,16 +644,30 @@ Here, we are not computing the full Jacobian matrix, but rather the \textbf{Jaco
 The first paradigm of automatic differentiation we will cover is forward-mode. The key idea is that we compute the necessary derivatives of our function concurrently with the values during the forward pass. Forward mode can be viewed as breaking down the Jacobian-vector product in a sequential manner, as shown below:
 
 \begin{align}
-    \bm{J} \bm{x} & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(1)} \bm{x}                      \\
-                  & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(2)} (\bm{J}^{(1)} \bm{x}^{(1)}) \\
-                  & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(3)} (\bm{J}^{(2)} \bm{x}^{(2)}) \\
-                  & \dots                                                                        \\
-                  & = \bm{J}^{(L)} \bm{x}^{(L-1)}
+    \bm{J} \bm{x} & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(1)} \bm{x} \notag                      \\
+                  & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(2)} (\bm{J}^{(1)} \bm{x}^{(1)}) \notag \\
+                  & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(3)} (\bm{J}^{(2)} \bm{x}^{(2)}) \notag \\
+                  & \dots \notag                                                                        \\
+    \bm{J} \bm{x} & = \bm{J}^{(L)} \bm{x}^{(L-1)} \label{eq:forward-mode-jacobian}
 \end{align}
 
-Here, \( \bm{x}^{(L-1)} \) denotes the intermediate result after the last Jacobian has been applied.
 
-Now, let us apply this process to a simple neural network model. In practice, when training neural networks, we aim to compute the gradient with respect to the parameters. However, to demonstrate the forward-mode process, we will compute the input gradient step by step. First, we express the forward pass and the loss function as:
+Here, \( \bm{x}^{(L-1)} \) denotes the intermediate result after the last Jacobian has been applied. \bigskip
+
+Now, let us apply this process to a simple neural network model. In practice, when training neural networks, we aim to compute the gradient with respect to the parameters. However, to demonstrate the forward-mode process, we will compute the input gradient step by step. First, recall our example:
+
+\[
+    \bm{z}^{(0)} = \bm{x}
+\]
+\[
+    \zeta^{(1)} = \tanh\left( \bm{W}^{(1)} \bm{z}^{(0)} + \bm{b}^{(1)} \right)
+\]
+\[
+    \bm{z}^{(2)} = \bm{W}^{(2)} \zeta^{(1)} + \bm{b}^{(2)}
+\]
+
+
+Then, we express the forward pass and the loss function as a sequence of functions that we can program:
 
 \begin{equation}
     \bm{z}^{(2)} = \text{Matmul}\left( \bm{W}^{(1)}, \tanh\left( \text{Matmul} \left( \bm{W}^{(0)} \bm{z}^{(0)} \right) \right) \right)
@@ -619,7 +676,7 @@ Now, let us apply this process to a simple neural network model. In practice, wh
     \mathcal{L} = \left( \bm{y} - \bm{z}^{(2)} \right)^2
 \end{equation}
 
-The purpose of this step is to identify the elementary operations involved in computing the loss, which will help us build the computational graph.
+The purpose of this step is to identify the elementary operations involved in computing the loss, which will help us build the computational graph. \bigskip
 
 In automatic differentiation literature, these operations are referred to as \textbf{primitives}. Each primitive represents a basic operation that is easy to differentiate. For example, the primitives we commonly deal with include functions like addition, multiplication, or applying activation functions (like \( \tanh \) or raising to a power). For each primitive, the differentiation rules from calculus apply.
 
@@ -642,13 +699,23 @@ In automatic differentiation literature, these operations are referred to as \te
     \caption{Value and Derivative Updates for Various Operations}
 \end{figure}
 
-\begin{figure}[ht]
+Returning to our equations– we ignore the bias terms because they are relegated to affine basis expansion for brevity. We can now compute the forward pass and the derivative of the loss function, step by step:
+
+\begin{align*}
+    \bm{z}^{(0)} & = \bm{x}                                                                                                               \\
+    \zeta^{(1)}  & = \tanh\left( \bm{W}^{(1)} \bm{z}^{(0)} + \bm{b}^{(1)} \right)                                                         \\
+    \bm{z}^{(2)} & = \bm{W}^{(2)} \zeta^{(1)} + \bm{b}^{(2)}                                                                              \\
+                 & = \text{Matmul}\left( \bm{W}^{(1)}, \tanh\left( \text{Matmul} \left( \bm{W}^{(0)} \bm{z}^{(0)} \right) \right) \right) \\
+    \mathcal{L}  & = \left( \bm{y} - \bm{z}^{(2)} \right)^2
+\end{align*}
+
+\begin{figure}[h!]
     \centering
     \begin{tabularx}{\linewidth}{X X}
         \toprule
         \textbf{Value}      & \textbf{Derivative}          \\
         \midrule
-        $x_0 = x$           & $d_0 = \bm{1}$                    \\
+        $x_0 = x$           & $d_0 = \bm{1}$               \\
         $x_1 = W^{(0)} x_0$ & $d_1 = W^{(0)\top} d_0$      \\
         $x_2 = \tanh(x_1)$  & $d_2 = 1 - \tanh^2(x_1) d_1$ \\
         $x_3 = W^{(1)} x_2$ & $d_3 = W^{(1)\top} d_2$      \\
@@ -656,55 +723,345 @@ In automatic differentiation literature, these operations are referred to as \te
         $x_5 = (x_4)^2$     & $d_4 = 2(x_4) d_4$           \\
         \bottomrule
     \end{tabularx}
-    \caption{Forward and Backward Pass for Value and Derivative Calculation}
+    \caption{Forward and Backward Pass for Value and Derivative Calculation. }
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \begin{tikzpicture}[>=Stealth, node distance=0.65cm, auto, scale=0.9, transform shape]
+    \begin{tikzpicture}[>=Stealth, node distance=0.5cm, auto, scale=0.9, transform shape]
         % Define styles for nodes
         \tikzset{
-            op/.style={rectangle, draw=black, fill=blue!20, thick, minimum size=5mm},
-            var/.style={circle, draw=black, fill=yellow!30, thick, minimum size=5mm},
+            op/.style={rectangle, draw=black, fill=blue!20, thick, minimum size=8mm, rounded corners},
+            var/.style={circle, draw=black, fill=yellow!30, thick, minimum size=8mm},
             arrow/.style={->, thick}
         }
-        
-        % Nodes
+
+        % Nodes for forward pass
+        \node[var] (x0) {$x$};
+        \node[var] (y) [below=of x0] {$y$};
+        \node[op, right=of x0] (w0x0) {$\text{Matmul}\left(\bm{W}^{(0)} ( \cdot)\right)$};
+        \node[var, right=of w0x0] (x1) {$x_1$};
+        \node[op, right=of x1] (tanh1) {$\tanh(\cdot)$};
+        \node[var, right=of tanh1] (x2) {$x_2$};
+        \node[op, right=of x2] (w1x2) {$\text{Matmul}\left(\bm{W}^{(1)} ( \cdot)\right)$};
+        \node[var, below=of w1x2] (x3) {$x_3$};
+        \node[op, left=of x3] (sub) {$-$};
+        \node[var, below=of sub] (x4) {$x_4$};
+        \node[op, left=of x4] (square) {$(\cdot)^2$};
+        \node[var, left=of square] (L) {$\mathcal{L}$};
+
+        % Edges for forward pass
+        \draw[arrow] (x0) -- (w0x0);
+        \draw[arrow] (w0x0) -- (x1);
+        \draw[arrow] (x1) -- (tanh1);
+        \draw[arrow] (tanh1) -- (x2);
+        \draw[arrow] (x2) -- (w1x2);
+        \draw[arrow] (w1x2) -- (x3);
+        \draw[arrow] (x3) -- (sub);
+        \draw[arrow] (sub) -- (x4);
+        \draw[arrow] (x4) -- (square);
+        \draw[arrow] (square) -- (L);
+        \draw[arrow] (y) -- (sub);
+
+        % % Backward pass (derivatives)
+        % \node[var, below=3.0cm of w1x2, ] (d4) {$d_4$};
+        % \node[op, left=of d4] (subd3) {$-$};
+        % \node[var, left=of subd3] (d3) {$d_3$};
+        % \node[op, left=of d3] (tanhd2) {$1-\tanh^2$};
+        % \node[var, left=of tanhd2] (d2) {$d_2$};
+        % \node[op, left=of d2] (w0td1) {$W^{(0)\top}$};
+        % \node[var, left=of w0td1] (d1) {$d_1$};
+        % \node[op, left=of d1] (loss) {Loss};
+
+        % % Edges for backward pass
+        % \draw[arrow] (d4) -- (subd3);
+        % \draw[arrow] (subd3) -- (d3);
+        % \draw[arrow] (d3) -- (tanhd2);
+        % \draw[arrow] (tanhd2) -- (d2);
+        % \draw[arrow] (d2) -- (w0td1);
+        % \draw[arrow] (w0td1) -- (d1);
+        % \draw[arrow] (d1) -- (loss);
+    \end{tikzpicture}
+    \caption{Computational Graph for the example neural network.}
+\end{figure}
+
+For an example $x = 1$, $W^{(0)} = 2$, $W^{(1)} = 1.2$, $y = 2$, the calculations would look like the following:
+\begin{figure}[h!]
+    \centering
+    \begin{tabularx}{\linewidth}{p{0.4\linewidth} p{0.6\linewidth}}
+        \toprule
+        \textbf{Value}                                                & \textbf{Derivative}                                                   \\
+        \midrule
+        $x_0 = x \Rightarrow 1$                                       & $d_0 = \bm{1}$                                                        \\
+        $x_1 = W^{(0)} x_0 \Rightarrow 1 \times 2 = 2$                & $d_1 = W^{(0)\top} d_0 \Rightarrow 2 \times d_0 = 2$                  \\
+        $x_2 = \tanh(x_1) \Rightarrow \tanh(2) \approx 0.964$         & $d_2 = (1 - \tanh^2(2)) d_1 \Rightarrow 0.14 \times d_1 \approx 0.14$ \\
+        $x_3 = W^{(1)} x_2 \Rightarrow 1.2 \times 0.964 \approx 1.15$ & $d_3 = W^{(1)\top} d_2 \Rightarrow 1.2 \times 0.14 \approx 0.169$     \\
+        $x_4 = y - x_3 \Rightarrow 2 - 1.15 = 0.85$                   & $d_4 = -d_3 \Rightarrow -0.169$                                       \\
+        $x_5 = (x_4)^2 \Rightarrow (0.85)^2 = 0.722$                  & $d_5 = 2(x_4) d_4 \Rightarrow 2(0.85) \times (-0.169) \approx -0.283$ \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Forward and Backward Pass for Value and Derivative Calculation with extensions.}
+\end{figure}
+
+
+To clarify, \( \bm{x}_0 \) is the input, \( \bm{x}_1 \) is the result of the first matrix multiplication, \( \bm{x}_2 \) is after applying the activation function, \( \bm{x}_3 \) is the second matrix multiplication, \( \bm{x}_4 \) represents the absolute error with respect to the label, and \( \bm{x}_5 \) is the squared error. We computed \( d_5 = \frac{d \mathcal{L}}{d \bm{x}} = -0.283 \), but this does not provide \( \frac{d \mathcal{L}}{d \bm{W}^{(1)}} \). To compute this, another forward differentiation would be needed, which is beyond this example.
+
+
+\subsection{Complexity of Forward Mode Differentiation}
+
+Let the forward pass complexity be $T$, the number of operations required to compute the function. The computational complexity of finding the Jacobian with forward mode automatic differentiation is $O(2nT)$. This is identical to the complexity of finite-difference approximation, but a much less approximation error since approximations are not compounded.
+
+\subsection{Reverse-Mode Automatic Differentiation}
+
+The idea of reverse mode is to begin with an output and propagate backwards, rather than beginning with an input and propagating forwards. This is particularly useful when the number of inputs is much larger than the number of outputs, as is the case with neural networks. \bigskip
+
+In forward-mode automatic differentiation (AD), we track both the nominal values and the tangents (directional derivatives). We could do this by using the associativity of matrix products that give us our Jacobian matrix, as in Equation \ref{eq:forward-mode-jacobian}. \bigskip
+
+Reverse-mode AD, however, focuses on computing adjoints, which can be defined as:
+\[
+    \bar{x} = \frac{\partial z}{\partial x}
+\]
+
+\defb{`Adjoint' in Automatic Differentiation (AD)}{
+    `Adjoint' comes from linear algebra, and in the context of automatic differentiation (AD), particuarly reverse-mode AD, it refers to the propagation of derivatives. \bigskip
+
+    The adjoint of a variable $x$ is the derivative of the target function (often the loss function in ML) with respect to $x$. It is framed towards the reverse accumulation of derivatives in a system.
+
+
+    \[
+        \bar{x} = \frac{\partial z}{\partial x}
+    \]
+}
+
+This adjoint must have the correct shape to be multiplied by the Jacobian. To illustrate, consider the output of a model, \( \bm{y} - f(\bm{x}) \), and compute the derivative in reverse order with respect to the output:
+
+
+
+\begin{align*}
+    \bm{Jx} = \bar{\bm{y}} \bm{J} & = (\bar{\bm{y}} \bm{J}^{(L)}) \bm{J}^{(L-1)} \dots \bm{J}^{(1)}           \\
+                                  & = (\bar{\bm{y}}^{(L)} \bm{J}^{(L-1)}) \bm{J}^{(L-2)} \dots \bm{J}^{(1)}   \\
+                                  & = (\bar{\bm{y}}^{(L-1)} \bm{J}^{(L-2)}) \bm{J}^{(L-3)} \dots \bm{J}^{(1)} \\
+                                  & \dots                                                                     \\
+                                  & = \bar{\bm{y}}^{(2)} \bm{J}^{(1)}
+\end{align*}
+
+\marginnote[-80pt]{
+
+    \sns{Side Note on AutoDiff}{
+
+        We are trying to compute $\alpha \nabla_{\theta} \mathcal{L}(\theta^{(t)})$ in
+        \[
+            \theta^{(t+1)} = \theta^{(t)} - \alpha \nabla_{\theta} \mathcal{L}(\theta^{(t)})
+        \]
+        \(\bm{J} := \nabla_{\theta} \mathcal{L}(\theta) \in \mathbb{R}^{m \times n}\),\\
+        \(\theta^{(t)} \in \mathbb{R}^{n \times 1}\),\\
+        \(\mathcal{L}(\theta) : \mathbb{R}^n \rightarrow \mathbb{R}^m\),\\
+        \(\alpha > 0\),\\
+
+
+    }
+
+    In contrast to Forward Mode:
+
+    \begin{align*}
+        \bm{J} \bm{x} & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(1)} \bm{x}                      \\
+                      & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(2)} (\bm{J}^{(1)} \bm{x}^{(1)}) \\
+                      & = \bm{J}^{(L)} \bm{J}^{(L-1)} \dots \bm{J}^{(3)} (\bm{J}^{(2)} \bm{x}^{(2)}) \\
+                      & \dots                                                                        \\
+        \bm{J} \bm{x} & = \bm{J}^{(L)} \bm{x}^{(L-1)}
+    \end{align*}
+
+}
+
+
+
+In reverse mode, we compute the necessary Jacobians in reverse order, meaning we need intermediate results from the forward pass. For a fully connected neural network with \( L \) layers, the forward pass is given by:
+
+\begin{align*}
+    \bm{z}^{(1)}   & = \bm{x}                                                        \\
+    \bm{z}^{(i+1)} & = \sigma\left( \bm{W}^{(i)} \bm{z}^{(i)} + \bm{b}^{(i)} \right)
+\end{align*}
+
+Now, let us consider the weights and biases to be joined into parameters denoted \( \theta^{(i)} = \{ \bm{W}^{(i)}, \bm{b}^{(i)} \} \). We aim to compute the gradient of our function starting from the last layer using the chain rule:
+
+\begin{align*}
+    \frac{\partial \mathcal{L}}{\partial \theta^{(L-1)}} & = \frac{\partial \mathcal{L}}{\partial \bm{z}^{(L)}} \textcolor{blue}{\frac{\partial \bm{z}^{(L)}}{\partial \theta^{(L-1)}}}                                                                                                                                                                                                                \\
+    \frac{\partial \mathcal{L}}{\partial \theta^{(L-2)}} & = \frac{\partial \mathcal{L}}{\partial \bm{z}^{(L)}} \textcolor{orange}{\frac{\partial \bm{z}^{(L)}}{\partial \bm{z}^{(L-1)}}} \textcolor{blue}{\frac{\partial \bm{z}^{(L-1)}}{\partial \theta^{(L-2)}}}                                                                                                                                    \\
+    \frac{\partial \mathcal{L}}{\partial \theta^{(L-3)}} & = \frac{\partial \mathcal{L}}{\partial \bm{z}^{(L)}} \textcolor{orange}{\frac{\partial \bm{z}^{(L)}}{\partial \bm{z}^{(L-1)}} \frac{\partial \bm{z}^{(L-1)}}{\partial \bm{z}^{(L-2)}} } \textcolor{blue}{\frac{\partial \bm{z}^{(1)}}{\partial \theta^{(L-3)}}}                                                                             \\
+    \frac{\partial \mathcal{L}}{\partial \theta^{(i)}}   & = \frac{\partial \mathcal{L}}{\partial \bm{z}^{(L)}} \textcolor{orange}{\frac{\partial \bm{z}^{(L)}}{\partial \bm{z}^{(L-1)}} \frac{\partial \bm{z}^{(L-1)}}{\partial \bm{z}^{(L-2)}} } \dots \textcolor{orange}{\frac{\partial \bm{z}^{(2)}}{\partial \bm{z}^{(1)}}} \textcolor{blue}{\frac{\partial \bm{z}^{(1)}}{\partial \theta^{(i)}}}
+\end{align*}
+
+We can observe that by chain rule, we can compute the partial derivative of the parameters in layer $i$ by computing the \textcolor{orange}{partial derivative of the layer w.r.t its input}, and then multiply it with the \textcolor{blue}{partial derivative of the layer output w.r.t its parameters}. Using this recursive application of the chain rule, we propagate the error back through the layers, computing the gradient of the loss \( \mathcal{L} \) with respect to each parameter \( \theta^{(i)} \).
+
+\newpage
+\subsection{General Adjoint/Reverse Mode Algorithm}
+
+We now describe the general reverse-mode automatic differentiation algorithm. Let \( x_1, x_2, \dots, x_D \) be the input variables, and \( x_{d+1}, \dots, x_{D-1} \) be the intermediate variables, with \( x_D \) as the output variable. The flow of the computational graph is given by: \marginnote{
+    We are trying to avoid graph theory notation as much as possible in the notes.
+}
+
+\begin{equation}
+    x_i = g_i(x_{\text{Pa}(x_i)})
+    \quad \forall i \in [d+1, D]
+\end{equation}
+
+Here, \( g_i \) is the elementary operation associated with the node in the graph, and \( \text{Pa}(x_i) \) is the function that returns the set of parent (incoming) nodes to variable \( x_i \).
+
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[>=Stealth, node distance=0.5cm, auto, scale=0.9, transform shape]
+        % Define styles for nodes
+        \tikzset{
+            op/.style={rectangle, draw=black, fill=blue!20, thick, minimum size=13mm, rounded corners},
+            var/.style={circle, draw=black, fill=yellow!30, thick, minimum size=13mm},
+            arrow/.style={->, thick}
+        }
+
+        % Input Nodes
+        \node[var] (x1) {$x_1$};
+        \node[var, below= of x1] (x2) {$x_2$};
+        \node[draw=none, below= of x2] (xdots) {$\vdots$};
+        \node[var, below= of xdots] (xd) {$x_d$};
+
+        % Operations
+        \node[op, right=of x1] (gd1) {$g_{d+1}$};
+        \node[op, right=of x2] (gd2) {$g_{d+2}$};
+        \node[draw=none, below=of gd2] (xdots) {$\vdots$};
+
+
+        % Intermediate Nodes
+        \node[var, right=of gd1] (xd1) {$x_{d+1}$};
+        \node[var, right=of gd2] (xd2) {$x_{d+2}$};
+        \node[draw=none, below=of xd2] (xdots) {$\vdots$};
+
+        % Operations
+        \node[op, right=2cm of xd1] (gd3) {$g_{D}$};
+        \node[draw=none, right=of xd1, yshift=0.1cm] (gdots) {$\cdots$};
+
+        % Last Nodes
+        \node[var, right=of gd3] (xD) {$x_{D}$};
+
+
+        % Intermediate and output nodes
+        % Output node
+        % \node[var, right=of g4] (output) {$f$};
+
+        \draw[arrow] (x1) -- (gd1.west);
+        \draw[arrow] (x2) -- (gd2.west);
+        \draw[arrow] (xd) -- (gd1.west);
+
+        \draw[arrow] (xd) -- (gd2.west);
+
+        \draw[arrow] (gd1) -- (xd1.west);
+        \draw[arrow] (gd2) -- (xd2.west);
+
+        \draw[arrow] (xd1) -- (gd3.west);
+        \draw[arrow] (xd2) -- (gd3.west);
+
+        \draw[arrow] (xd) to[bend right] (gd3.south);
+        \draw[arrow] (gd3) -- (xD.west);
+
+
+
+
+
+
+    \end{tikzpicture}
+    \caption{Computational Graph notation}
+\end{figure}
+
+
+The chain rule can then be applied to compute the derivative:
+
+\begin{equation}
+    \frac{\partial f}{\partial x_i} = \sum_{x_j : i \in \text{Pa}(x_j)} \frac{\partial x_j}{\partial x_i} \frac{\partial f}{\partial x_j} = \sum_{x_j : i \in \text{Pa}(x_j)} \frac{\partial g_j}{\partial x_i} \frac{\partial f}{\partial x_j} \label{eq:reverse-mode-chain-rule}
+\end{equation}
+
+
+
+\ex{Example of finding the computational graph}{
+Consider the function:
+
+\[
+    f(x) = \sqrt{x^2 + \exp(x^2)} + \cos\left( x^2 + \exp(x^2) \right)
+\]
+
+We break this equation down into its elementary operations: { square root, exponential, power, cosine, addition }:
+
+\begin{align*}
+    x_1 & = x^2 \quad        & \frac{\partial x_1}{\partial x}   & = 2x                                   \\
+    x_2 & = \exp(x_1) \quad  & \frac{\partial x_2}{\partial x_1} & = \exp(x_1)                            \\
+    x_3 & = x_1 + x_2 \quad  & \frac{\partial x_3}{\partial x_1} & =\frac{\partial x_3}{\partial x_2} = 1 \\
+    x_4 & = \sqrt{x_3} \quad & \frac{\partial x_4}{\partial x_3} & = \frac{1}{2\sqrt{x_3}}                \\
+    x_5 & = \cos(x_3) \quad  & \frac{\partial x_5}{\partial x_3} & = -\sin(x_3)                           \\
+    x_6 & = x_4 + x_5 \quad  & \frac{\partial x_6}{\partial x_4} & =\frac{\partial x_6}{\partial x_5} = 1
+\end{align*}
+
+Here, \( x_6 \) represents the complete function \( f(z) \). Before performing the backward pass, it is useful to write out the derivative of each function at each step.
+
+\begin{center}
+    \begin{tikzpicture}[>=Stealth, node distance=0.5cm, auto, scale=0.85, transform shape]
+        % Define styles for nodes
+        \tikzset{
+            op/.style={rectangle, draw=black, fill=blue!20, thick, minimum size=8mm, rounded corners},
+            var/.style={circle, draw=black, fill=yellow!30, thick, minimum size=8mm},
+            arrow/.style={->, thick}
+        }
+
+        % Nodes for the graph
         \node[var] (x) {$x$};
         \node[op, right=of x] (square) {$(\cdot)^2$};
         \node[var, right=of square] (a) {$a$};
-        \node[op, right=of a] (exp) {exp$(\cdot)$};
+        \node[op, above right=of a] (exp) {exp$(\cdot)$};
         \node[var, right=of exp] (b) {$b$};
-        
-        \node[op, below right=of b] (add1) {$+$};
-        \node[var, right=of add1] (c) {$c$};
-        
+        \node[op, below right=of b] (plus1) {$+$};
+        \node[var, right=of plus1] (c) {$c$};
         \node[op, above right=of c] (sqrt) {$\sqrt{\cdot}$};
         \node[var, right=of sqrt] (d) {$d$};
-        
         \node[op, below right=of c] (cos) {cos$(\cdot)$};
         \node[var, right=of cos] (e) {$e$};
-        
-        \node[op, right=of d] (add2) {$+$};
-        \node[var, right=of add2] (f) {$f$};
-        
-        % Edges
+        \node[op, below right=of d] (plus2) {$+$};
+        \node[var, right=of plus2] (f) {$f$};
+
+        % Edges for the graph
         \draw[arrow] (x) -- (square);
         \draw[arrow] (square) -- (a);
-        \draw[arrow] (a) -- (exp);
-        \draw[arrow] (exp) -- (b);
-        
-        \draw[arrow] (b) -- (add1);
-        \draw[arrow] (add1) -- (c);
-        \draw[arrow] (c) -- (sqrt);
+        \draw[arrow] (a) to[bend left] (exp.west);
+        \draw[arrow] (exp.east) -- (b);
+        \draw[arrow] (b) to[bend left] (plus1.north);
+        \draw[arrow] (a) -- (plus1);
+        \draw[arrow] (plus1) -- (c);
+        \draw[arrow] (c) to[bend left] (sqrt.west);
         \draw[arrow] (sqrt) -- (d);
-        \draw[arrow] (d) -- (add2);
-        \draw[arrow] (c) -- (cos);
+        \draw[arrow] (d) to[bend left] (plus2.north);
+        \draw[arrow] (c) to[bend right] (cos.west);
         \draw[arrow] (cos) -- (e);
-        \draw[arrow] (e) to[out=20,in=-20] (add2);
-        
-        \draw[arrow] (add2) -- (f);
+        \draw[arrow] (e) to[bend right] (plus2.south);
+        \draw[arrow] (plus2) -- (f);
+
+
     \end{tikzpicture}
-    \caption{A Computational Graph}
-    \label{fig:comp_graph}
-\end{figure}
+\end{center}
+
+Now that we have defined the derivatives, we can construct a computational graph by working backwards from the output. The chain rule is applied step by step:
+
+\begin{align*}
+    \frac{\partial x_6}{\partial x_3} & = \frac{\partial x_6}{\partial x_4} \frac{\partial x_4}{\partial x_3} + \frac{\partial x_6}{\partial x_5} \frac{\partial x_5}{\partial x_3} \\
+    \frac{\partial x_6}{\partial x_2} & = \frac{\partial x_6}{\partial x_3} \frac{\partial x_3}{\partial x_2}                                                                       \\
+    \frac{\partial x_6}{\partial x_1} & = \frac{\partial x_6}{\partial x_2} \frac{\partial x_2}{\partial x_1} + \frac{\partial x_6}{\partial x_3} \frac{\partial x_3}{\partial x_1} \\
+    \frac{\partial x_6}{\partial x}   & = \frac{\partial x_6}{\partial x_1} \frac{\partial x_1}{\partial x}
+\end{align*}
+
+While working backwards, ensure all parent nodes are accounted for (summed) to avoid incorrect partial derivatives. Though we only derive the recipe for the derivative and not the actual values, understanding the process outlined in Equations \ref{eq:forward-mode-jacobian} is important.
+
+
+
+}
+
+\subsection{Complexity of Reverse Mode Differentiation}
+\begin{itemize}
+    \item The function must be evaluated once(forward pass) to get the output, in order to compute all the intermediate values. This has complexity $T$.
+    \item The function must be evaluated (with complexity $T$) for each of the $m$ outputs.
+    \item We get $O(mT + T)$. In many cases, $m$ is much smaller than the number of inputs, so reverse mode (with complexity $O(mT+T)$) is more efficient than forward mode (with complexity $O(2nT)$).
+\end{itemize}

@@ -441,11 +441,16 @@
 % set chapter counter to 0
 \setcounter{chapter}{-1}
 
+% Captions for Algos
+\captionsetup[algorithm]{justification=raggedright, singlelinecheck=false, labelfont=bf,font=normalsize}
+
+
 \input{0_prelims}
 \input{1_intro}
 \input{2_linear}
 \input{3_glm_gd}
 \input{4_dl_autodiff}
+\input{5_convex_converge_opt}
 
 \chapter{Reference Boxes}
 \label{ch:tufte-design}

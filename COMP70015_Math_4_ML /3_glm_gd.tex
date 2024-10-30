@@ -61,7 +61,7 @@ Example: I want to predict the number of times a ship will get damaged in a part
         c & 1960-64 & 1975-79 & 552   & 1  \\
         \bottomrule
     \end{tabular*}
-    \caption{Example table with booktabs, using full width of the page.}
+    \caption{Types of damages and the number of times they occurred in a particular period.}
     \label{tab:example_table}
 \end{table}
 
@@ -273,7 +273,7 @@ Some factors that affect the convergence of gradient descent are:
 
 \newpage
 \subsection{Complexity of OLS Closed-Form Solution}
-It is awkward to compare Ordinary Least Squares (OLS) to Gradient Descent (GD) in Generalised Linear Models (GLM), as we cannot directly use the OLS in GLMs. \footnote{OLS assumes the errors in the model are normally distributed and have constant variance (called homoscedasticity), a common regression assumption. But Generalised Linear Models don't have this condition, and errors can be distributed via the Poisson, binomial, or exponential families. GLMs use Maximum Likelihood Estimation the OLS. MLEs will be explained in later chapters. } \bigskip
+It is awkward to compare Ordinary Least Squares (OLS) to Gradient Descent (GD) in Generalised Linear Models (GLM), as we cannot directly use the OLS in GLMs. \footnote{OLS assumes the errors in the model are normally distributed and have constant variance (called homoscedasticity), a common regression assumption. But Generalised Linear Models don't have this condition, and errors can be distributed via the Poisson, binomial, or exponential families. GLMs use Maximum Likelihood Estimation (MLE) instead of the OLS, which will be explained in later chapters. } \bigskip
 
 We can, however, consider the complexity of Ordinary Least Squares (OLS) with Gradient Descent (GD) for Generalised Linear Models (GLMs). \bigskip
 

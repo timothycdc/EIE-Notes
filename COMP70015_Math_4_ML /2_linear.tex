@@ -269,11 +269,12 @@ We calculate \( \nabla_\theta L = 0 \), using vector calculus identities:
 With these rules, we have:
 
 \begin{align}
-    \mathcal{L}(\bm{y}, \hat{\bm{y}}) & = \frac{1}{k} \sum_i \left( y_i - \hat{y}_i \right)^2                                                                                          \\
-                                      & = \frac{1}{k} \left( (\bm{X}\theta - \bm{y})^\top (\bm{X}\theta - \bm{y}) \right)                                                              \\
-                                      & = \frac{1}{k} \left( \theta^\top \bm{X}^\top \bm{X} \theta - 2 (\bm{y}^\top \bm{X} \theta) + \bm{y}^\top \bm{y} \right)                        \\
-                                      & = \frac{1}{k} \left( \theta^\top \left[ \bm{X}^\top \bm{X} \right] \theta - 2 ([\bm{X}^\top \bm{y}]^ \top \theta) + \bm{y}^\top \bm{y} \right) \\
-    \nabla_\theta \mathcal{L}         & = \frac{2}{k} \left( \bm{X}^\top \bm{X} \theta - \bm{X}^\top \bm{y} \right)
+    \mathcal{L}(\bm{y}, \hat{\bm{y}}) & = \frac{1}{k} \sum_i \left( \bm{y}_i - \hat{y}_i \right)^2                                                                               \\
+                                      & = \frac{1}{k} \sum_i \left( \bm{y}_i - \bm{X}_{i,j}\theta_j \right)^2                                                                    \\
+                                      & = \frac{1}{k} \left( (\bm{X}\theta - \bm{y})^\top (\bm{X}\theta - \bm{y}) \right)                                                        \\
+                                      & = \frac{1}{k} \left( \theta^\top \bm{X}^\top \bm{X} \theta - 2 (\bm{y}^\top \bm{X} \theta) + \bm{y}^\top \bm{y} \right)                  \\
+                                      & = \frac{1}{k} \left( \theta^\top \left[ \bm{X}^\top \bm{X} \right] \theta - 2 ([\bm{y}^\top \bm{X}] \theta) + \bm{y}^\top \bm{y} \right) \\
+    \nabla_\theta \mathcal{L}         & = \frac{2}{k} \left( \bm{X}^\top \bm{X} \theta - \bm{y}^\top \bm{X} \right)
 \end{align}
 
 Setting this equal to zero and solving:
@@ -287,10 +288,17 @@ Setting this equal to zero and solving:
 This is the \textbf{ordinary least squares estimate}.
 
 
+\defb{General Steps for Checking Vector Calculus}{
+    Three general step to check vector calculus identities:
+    \begin{enumerate}
+        \item Break down the expression into index notation (Einstein summation notation).
+        \item Differentiate using standard calculus
+        \item Reassemble from index notation
+    \end{enumerate}
+}
 
 
-
-\defb{Proving \ensuremath{\nabla_\theta\mb{c}^\top\theta = \mb{c}}}{
+\defb{Proving \ensuremath{\nabla_\theta\mb{c}^\top\theta = \mb{c}^\top}}{
     Consider the expression \( \mathbf{c}^\top \theta \), which in Einstein summation notation expands as:
     \[
         \mathbf{c}^\top \theta = \sum_j c_j \theta_j
@@ -302,11 +310,13 @@ This is the \textbf{ordinary least squares estimate}.
     \]
     This shows that the gradient of \( \mathbf{c}^\top \theta \) with respect to \( \theta \) is:
     \[
-        \nabla_\theta \mathbf{c}^\top \theta = \mathbf{c}
+        \nabla_\theta \mathbf{c}^\top \theta = \mathbf{c}^\top
     \]
 }
 
-\defb{Proving \ensuremath{\nabla_\theta(\theta^\top\mathbf{A}\theta) = \mathbf{A}\theta + \mathbf{A}^\top\theta)}}
+
+
+\defb{Proving \ensuremath{\nabla_\theta(\theta^\top\mathbf{A}\theta) = \theta^\top(\mathbf{A} + \mathbf{A}^\top)}}
 {
     Now consider the quadratic form \( \theta^\top \mathbf{A} \theta \). Expanding it in Einstein notation:
     \[
@@ -314,21 +324,50 @@ This is the \textbf{ordinary least squares estimate}.
     \]
 
     Taking the derivative with respect to \( \theta_k \) (this allows us to see what happens when not considering the dummy variable \( k \)):
-    \[
-        \frac{\partial \theta^\top \mathbf{A} \theta}{\partial \theta_k} = \sum_i \theta_i \mathbf{A}_{i,k} + \sum_j \mathbf{A}_{k,j} \theta_j
-    \]
-    This results in:
-    \[
-        \nabla_\theta (\theta^\top \mathbf{A} \theta) = \mathbf{A} \theta + \mathbf{A}^\top \theta
-    \]
+    \begin{align*}
+        \frac{\partial \theta^\top \mathbf{A} \theta}{\partial \theta_k} & = \sum_i \theta_i \mathbf{A}_{i,k} + \sum_j \mathbf{A}_{k,j} \theta_j \\
+                                                                         & = (\mb{A} \theta )_k + (\mb{A}^\top \theta)_k
+    \end{align*}
+
+
     Thus, the gradient of \( \theta^\top \mathbf{A} \theta \) is:
     \[
-        \nabla_\theta (\theta^\top \mathbf{A} \theta) = \mathbf{A} \theta + \mathbf{A}^\top \theta
+        \nabla_\theta (\theta^\top \mathbf{A} \theta) = \theta^\top (\mathbf{A} + \mathbf{A}^\top)
     \]
 
 }
+\sn{The Derivative of Vectors are Row Vectors}{
+    Some engineering and physics students may find this jarring, but the conventions of the notes will consider the derivative of vector-valued functions to always be row vectors.
+
+    \[
+        \nabla_\theta \mathbf{c}^\top \theta = \mathbf{c}^\top
+    \]
+    The reason why we use row vectors in the convention is because operations such as the chain rule and matrix-vector multiplications maintain a clean form. \bigskip
+
+    Consider $\bm{y} = \bm{A}\bm{x}$, where $\bm{A}$ is a matrix and $\bm{x}$ is a vector. Let $x = f(\bm{y})$ where $f(\bm{y})$ is a scalar-valued function of $y$. \bigskip
+
+    If we want to compute $\frac{\partial z}{\partial \bm{x}}$:
+
+    \subsubsection{Column Vector Convention}
+    Since the gradient $\nabla_{\bm{x}}z$ is a column vector, when applying the chain rule, we have to transpose the gradient to maintain compatibility with the matrix-vector multiplication:
+    \begin{align*}
+        \frac{\partial z}{\partial \bm{y}}      & = \nabla_{\bm{y}}z \quad \text{this is a column vector}                                                                   \\
+        \frac{\partial \bm{y}}{\partial \bm{x}} & = \bm{A} \quad \text{this is a matrix}                                                                                    \\
+        \frac{\partial z}{\partial \bm{x}}      & = \frac{\partial z}{\partial \bm{y}} \cdot \frac{\partial \bm{y}}{\partial \bm{x}} = (\nabla_{\bm{y}}z)^\top \cdot \bm{A}
+    \end{align*}
+
+    \subsubsection{Row Vector Convention}
+    Here, there's no need to transpose the result. The row vector $\nabla_{\bm{y}}z$ directly multiplies the matrix $\bm{A}$:
+    \begin{align*}
+        \frac{\partial z}{\partial \bm{y}}      & = \nabla_{\bm{y}}z \quad \text{this is a row vector}                                                                \\
+        \frac{\partial \bm{y}}{\partial \bm{x}} & = \bm{A} \quad \text{this is a matrix}                                                                              \\
+        \frac{\partial z}{\partial \bm{x}}      & = \frac{\partial z}{\partial \bm{y}} \cdot \frac{\partial \bm{y}}{\partial \bm{x}} =  \nabla_{\bm{y}}z \cdot \bm{A}
+    \end{align*}
 
 
+}
+
+\newpage
 \section{Basis Expansion}
 We recap on the linear model, which is described as a linear transformation:
 \defb{Linear Transformation}{
@@ -376,36 +415,36 @@ Polynomial basis expansion is used to model non-linear functions. The key idea o
 
     We choose the basis:
 
-    \begin{equation}
+    \[
         \phi(x) = \begin{bmatrix} 1 \\ x \\ x^2 \end{bmatrix} \quad \phi(x) : \R^1 \rightarrow \R^3
-    \end{equation}
+    \]
 
     and weights:
 
-    \begin{equation}
+    \[
         \theta \in \mathbb{R}^3
-    \end{equation}
+    \]
 
     We finally have the fully expanded function (we use the dot product instead of transposing, for clarity of notation):
 
-    \begin{equation}
+    \[
         \hat{y} = \begin{bmatrix} 1 \\ x \\ x^2 \end{bmatrix} \cdot \begin{bmatrix} \theta_0 \\ \theta_1 \\ \theta_2 \end{bmatrix} = \theta_0 + \theta_1 x + \theta_2 x^2
-    \end{equation}
+    \]
 
     This example model is a quadratic polynomial.}
 
 \ex{Another Example Polynomial Basis Expansion}{
-Again, given our model is $\hat{y} = \phi(\mb{x})^\top \theta$ where $y \in \R $ and $\mb{x} \in \R^2$. We can use the basis
+    Again, given our model is $\hat{y} = \phi(\mb{x})^\top \theta$ where $y \in \R $ and $\mb{x} \in \R^2$. We can use the basis
 
-\begin{equation}
-    \phi(\mb{x}) \Rightarrow \phi\left(\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}\right) = \begin{bmatrix} 1 \\ x_1 \\ x_2 \\ x_1x_2 \\ x_1^2 \\ x_2^2 \end{bmatrix} \quad \phi(x) : \mbb{R}^2 \rightarrow \mbb{R}^6
-\end{equation}
+    \[
+        \phi(\mb{x}) \Rightarrow \phi\left(\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}\right) = \begin{bmatrix} 1 \\ x_1 \\ x_2 \\ x_1x_2 \\ x_1^2 \\ x_2^2 \end{bmatrix} \quad \phi(x) : \mbb{R}^2 \rightarrow \mbb{R}^6
+    \]
 
-and with a new set of corresponding weights, we have:
+    and with a new set of corresponding weights, we have:
 
-\begin{equation}
-    \hat{y} = \begin{bmatrix} 1 \\ x_1 \\ x_2 \\ x_1x_2 \\ x_1^2 \\ x_2^2 \end{bmatrix} \cdot  \begin{bmatrix} \theta_0 \\ \theta_1 \\ \theta_2 \\ \theta_3 \\ \theta_4 \\ \theta_5 \end{bmatrix} = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \theta_3 x_1x_2 + \theta_4 x_1^2 + \theta_5 x_2^2 \quad \theta \in \mathbb{R}^6
-\end{equation}
+    \[
+        \hat{y} = \begin{bmatrix} 1 \\ x_1 \\ x_2 \\ x_1x_2 \\ x_1^2 \\ x_2^2 \end{bmatrix} \cdot  \begin{bmatrix} \theta_0 \\ \theta_1 \\ \theta_2 \\ \theta_3 \\ \theta_4 \\ \theta_5 \end{bmatrix} = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \theta_3 x_1x_2 + \theta_4 x_1^2 + \theta_5 x_2^2 \quad \theta \in \mathbb{R}^6
+    \]
 }
 
 
@@ -415,9 +454,9 @@ The polynomial basis expansion is just a single flavour of basis expansion. Anot
 
 It takes in a fixed parameter $\gamma > 0$, defined as
 
-\begin{equation}
+\begin{equation*}
     \kappa(x, x') = \exp(-\gamma ||x - x'||^2)
-\end{equation}
+\end{equation*}
 
 where $||x - x'||^2$ is the squared Euclidean distance (or more appropriately, the $L_2$ Norm) between $x$ and $x'$. In practice, one picks fixed centres $x$ and the basis expansion computes the expanded feature set w.r.t the distance to these centres.\sidenote[][-130pt]{There is more nuance to this: you may have noticed that kernel functions take in two points, unlike the polynomial basis expansion $\phi$ taking in a single point. This is because for each of the $n$ points, we compute pairwise similarities with a point's other points, and then construct a feature vector for each point, where each point $x$ is transformed into a $n$-dimensional feature vector where each dimension represents the similarity between $x$ and one of the $n$ points.  \bigskip
 
