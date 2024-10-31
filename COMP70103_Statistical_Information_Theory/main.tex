@@ -447,82 +447,122 @@
 \chapter{Reference}
 \label{ch:tufte-design}
 
-\thm{Theorem Name}{This is the statement of the theorem.}
+\thm{Theorem Name}{
+    This is the statement of the theorem. \\
+    \texttt{\textbackslash thm\{Theorem Name\}\{This is the statement of the theorem.\}}
+}
 
-\cor{Corollary Name}{This is the statement of the corollary.}
+\cor{Corollary Name}{
+    This is the statement of the corollary. \\
+    \texttt{\textbackslash cor\{Corollary Name\}\{This is the statement of the corollary.\}}
+}
 
-\lem{Lemma Name}{This is the statement of the lemma.}
+\lem{Lemma Name}{
+    This is the statement of the lemma. \\
+    \texttt{\textbackslash lem\{Lemma Name\}\{This is the statement of the lemma.\}}
+}
 
-\clm{Claim Name}{This is the statement of the claim.}
+\clm{Claim Name}{
+    This is the statement of the claim. \\
+    \texttt{\textbackslash clm\{Claim Name\}\{This is the statement of the claim.\}}
+}
 
-\ex{Example Name}{This is the explanation of the example.}
+\ex{Example Name}{
+    This is the explanation of the example. \\
+    \texttt{\textbackslash ex\{Example Name\}\{This is the explanation of the example.\}}
+}
 
-\marginnote{\sns{Side Note Box}{This is a smaller side note.}}
-\sn{Side Note Box}{This is a side note.}
+\marginnote{\sns{Side Note Box}{
+    This is a smaller side note. \\
+    \texttt{\textbackslash sns\{Side Note Box\}\{This is a smaller side note.\}}
+}}
 
-\marginnote{\hls{This is a block of highlighted text that's smaller.}}
-\hl{This is a block of highlighted text}
+\sn{Side Note Box}{
+    This is a side note. \\
+    \texttt{\textbackslash sn\{Side Note Box\}\{This is a side note.\}}
+}
+
+\marginnote{\hls{This is a block of highlighted text that's smaller. \\
+    \texttt{\textbackslash hls\{This is a block of highlighted text that's smaller.\}}
+}}
+
+\hl{This is a block of highlighted text \\
+    \texttt{\textbackslash hl\{This is a block of highlighted text\}}
+}
 
 \marginnote{
-  \defsb{Small Def Title}{Example Text}
-}
-
-\defb{Definition Title}{
-  This is an example definition.
-}
-
-\marginnote{
-  \extrasb{Small Title}{Example Text}
-}
-
-
-\extrab{Extra Title}{
-  This is an example box with extra information.
-}
-
-\marginnote{
-  \egsb{Small Title}{
-    Example Text
-    \tcblower
-    Answer
-  } }
-
-
-
-\egb{Example Title}{
-  This is an example question.
-  \tcblower
-  Answer here
-}
-
-
-\marginnote{
-  \examsb{1c}{2018}{
-    This is an example exam question, smaller.
+  \defsb{Small Def Title}{Example Text \\
+  \texttt{\textbackslash defsb\{Small Def Title\}\{Example Text\}}
   }
 }
 
-
-\examb{1c}{2018}{
-  This is an example exam question.
+\defb{Definition Title}{
+  This is an example definition. \\
+  \texttt{\textbackslash defb\{Definition Title\}\{This is an example definition.\}}
 }
 
+\marginnote{
+  \extrasb{Small Title}{Example Text \\
+  \texttt{\textbackslash extrasb\{Small Title\}\{Example Text\}}
+  }
+}
+
+\extrab{Extra Title}{
+  This is an example box with extra information. \\
+  \texttt{\textbackslash extrab\{Extra Title\}\{This is an example box with extra information.\}}
+}
+
+\newpage
+\marginnote{
+  \egsb{Small Title}{
+    Example Text \\
+    \texttt{\textbackslash egsb\{Small Title\}\{Example Text\}} \\
+    \tcblower
+    Answer \\
+    \texttt{\textbackslash tcblower Answer}
+  } 
+}
+
+\egb{Example Title}{
+  This is an example question. \\
+  \texttt{\textbackslash egb\{Example Title\}\{This is an example question.\}} \\
+  \tcblower
+  Answer here \\
+  \texttt{\textbackslash tcblower Answer here}
+}
+
+\marginnote{
+  \examsb{1c}{2018}{
+    This is an example exam question, smaller. \\
+    \texttt{\textbackslash examsb\{1c\}\{2018\}\{This is an example exam question, smaller.\}}
+  }
+}
+
+\examb{1c}{2018}{
+  This is an example exam question. \\
+  \texttt{\textbackslash examb\{1c\}\{2018\}\{This is an example exam question.\}}
+}
 
 \marginnote{\refsb{Reference Title}{
-    This is an example reference to source material.
-  }}
+    This is an example reference to source material. \\
+    \texttt{\textbackslash refsb\{Reference Title\}\{This is an example reference to source material.\}}
+  }
+}
 
 \refb{Reference Title}{
-  This is an example reference to source material.
+  This is an example reference to source material. \\
+  \texttt{\textbackslash refb\{Reference Title\}\{This is an example reference to source material.\}}
 }
 
 \marginnote{\intuitsb{Intuition Title}{
-    This is an example of an intuitive explanation, smaller
+    This is an example of an intuitive explanation, smaller. \\
+    \texttt{\textbackslash intuitsb\{Intuition Title\}\{This is an example of an intuitive explanation, smaller.\}}
   }
 }
 
 \intuitb{Intuition Title}{
-  This is an example of an intuitive explanation.
+  This is an example of an intuitive explanation. \\
+  \texttt{\textbackslash intuitb\{Intuition Title\}\{This is an example of an intuitive explanation.\}}
 }
 
 
@@ -1428,6 +1468,7 @@ classes rely upon.  Packages marked with an asterisk are optional.
     \item titletoc
   \end{itemize}
 \end{multicols}
+
 
 
 
