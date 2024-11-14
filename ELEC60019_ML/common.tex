@@ -16,24 +16,24 @@
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning}
 
 \tikzset{
-    neuron/.style={circle, draw, minimum size=1cm},
-    input neuron/.style={neuron, fill=gray!20},
-    output neuron/.style={neuron, fill=gray!60},
-    activation function/.style={
-        rectangle,
-        draw,
-        minimum size=1cm,
-        fill=gray!30,
-        path picture={
-            % Draw the step function inside the activation function node
-            \draw[thick] 
-            ($(path picture bounding box.south)+(-0.3cm,0.2cm)$) -- 
-            ($(path picture bounding box.south)+(0cm,0.2cm)$) -- 
-            ($(path picture bounding box.south)+(0cm,0.7cm)$) -- 
-            ($(path picture bounding box.south)+(0.3cm,0.7cm)$);
-        }
-    },
-    arrow label/.style={midway, above}
+	neuron/.style={circle, draw, minimum size=1cm},
+	input neuron/.style={neuron, fill=gray!20},
+	output neuron/.style={neuron, fill=gray!60},
+	activation function/.style={
+			rectangle,
+			draw,
+			minimum size=1cm,
+			fill=gray!30,
+			path picture={
+					% Draw the step function inside the activation function node
+					\draw[thick]
+					($(path picture bounding box.south)+(-0.3cm,0.2cm)$) --
+					($(path picture bounding box.south)+(0cm,0.2cm)$) --
+					($(path picture bounding box.south)+(0cm,0.7cm)$) --
+					($(path picture bounding box.south)+(0.3cm,0.7cm)$);
+				}
+		},
+	arrow label/.style={midway, above}
 }
 
 
@@ -107,19 +107,19 @@
 % \begin{commentbox}
 %   ... the question ...
 % \end{commentbox}
- 
+
 \newtcolorbox[auto counter,number within=section]{commentbox}[2][]{%
-    colback=orange!5!white,
-    colframe=orange!95!black, % Darker orange frame
-    coltitle=white, % White title text
-    arc=0mm,
-    sharp corners=all,
-    fonttitle=\bfseries,
-    title=#2 \hfill
+	colback=orange!5!white,
+	colframe=orange!95!black, % Darker orange frame
+	coltitle=white, % White title text
+	arc=0mm,
+	sharp corners=all,
+	fonttitle=\bfseries,
+	title=#2 \hfill
 }
 
 
- 
+
 
 % For positives/pros 
 % \begin{prosbox}

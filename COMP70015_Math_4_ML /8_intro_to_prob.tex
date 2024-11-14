@@ -1,0 +1,227 @@
+\chapter{Introduction to Probability}
+
+In previous lectures, we approached
+
+\extrab{Signma Algebra and Borel Measures}{
+    \begin{itemize}
+        \item The definition of Sigma Algebra
+        \item Borel Measurability
+        \item Proof requiring you think about what is measurable and what isn't
+    \end{itemize}
+}
+
+The ideas of CDFs, PMFs, PDFs, and their corresponding probability tools will only be examined.
+
+
+\subsection{Notation Preliminaries}
+
+% First Table
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Notation}        & \textbf{Description}                               \\
+        \midrule
+        $\bm{x} \sim p(\bm{x})$  & \textbf{x} distributed according to the pdf $p(x)$ \\
+        $x \sim p(\bm{x})$       & $x$ sampled from the r.v. \textbf{x}               \\
+        $\mathbb{E}[\bm{x}]$     & The expectation of the random variable \textbf{x}  \\
+        $\mathbb{E}_{\bm{x}}[x]$ & The expectation of the random variable \textbf{x}  \\
+        \bottomrule
+    \end{tabular}
+    \caption{Notation for distributions and expectations}
+\end{table}
+
+% Second Table
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Not random} & \textbf{Random}                             \\
+        \midrule
+        $x, \bm{x}$         & $\mathbf{X}, \mathbf{X} | x, \mathbf{X}, X$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Notation distinguishing between deterministic and random variables. The $X$ is the only random variable that is not bolded– the exception is so it's more easily handwritten during an exam!}
+\end{table}
+
+
+\section{Sample and Event Space}
+\defb{Sample Space}{
+
+    The sample space is the collection of all possible outcomes. For example, a coin flip has the sample space $\{H, T\}$, where $H$ is heads and $T$ is tails. A dice roll has the sample space $\{1, 2, 3, 4, 5, 6\}$. \bigskip
+
+    The sample space of two consecutive coin flips is $\{HH, HT, TH, TT\}$.
+}
+
+\defb{Event Space}{
+    This is the power set of the sample space and comprises every outcome of an experiment we can measure. The sample space of two consecutive coin flips has the event space:
+    \begin{align*}
+        \{\emptyset, \{HH\}, \{HT\}, \{TH\}, \{TT\}, \{HH, HT\}, \{HH, TH\}, \\
+        \{HH, TT\}, \{HT, TH\}, \{HT, TT\}, \{TH, TT\}, \{HH, HT, TH\},      \\
+        \{HH, HT, TT\}, \{HH, TH, TT\}, \{HT, TH, TT\}, \{HH, HT, TH, TT\}\}
+    \end{align*}
+
+
+}
+
+
+\subsection{Probability of Events}
+
+Given our event space, we want to build our idea of probabilitiy. There are a few distinct ways to go reason about probabilities:
+
+
+\begin{enumerate}
+    \item Long-run relative frequency of events (Frequentist)
+    \item Express our beliefs about the relative likelihood of events (Bayesian)
+\end{enumerate}
+
+\section{Sigma Algebra}
+
+There are two rules of a sigma algebra:
+\begin{enumerate}
+    \item Closed under complements
+    \item Closed under countable unions
+\end{enumerate}
+
+
+\textbf{Examples of Discrete Sigma Algebras:}
+
+\begin{align*}
+    A & = \{\emptyset, \sigma\}         \\
+    A & = \{\emptyset, E, E^c, \sigma\}
+\end{align*}
+
+
+\textbf{Examples of Continuous Sigma Algebras:}
+
+\begin{align*}
+    \sigma & = \mathbb{R}                                                                                                        \\
+    \tau   & = \{ (a,b) \mid \forall a < b \in \mathbb{R} \}                                                                     \\
+    A      & = B(\tau) \quad \text{B is the operation that returns the smallest sigma algebra on } \tau \text{ or the Borel set}
+\end{align*}
+
+
+\section{Measure Theory}
+\marginnote[7pt]{\intuitsb{The Rules}{We can generate probability distributions that work for our models so long as they satisfy these three rules of a probability measure.}}
+\defb{Definition 8.2.1: \ensuremath{\sigma}-Algebra}{
+    A $\sigma$-algebra $\mathcal{A}$ on a non-empty set $\Omega$ is a collection $\mathcal{A} \subseteq \mathcal{P}(\Omega)$, the power set of $\Omega$, which is closed under complements and countable unions. Formally:
+
+    1. \textbf{Closed under complements}: If $B \in \mathcal{A}$, then $B^c \in \mathcal{A}$.
+
+    2. \textbf{Closed under countable unions}: If $B_1, B_2, \dots \in \mathcal{A}$, then $\bigcup_{i=1}^\infty B_i \in \mathcal{A}$.
+}
+
+
+
+\defb{Definition 8.2.2: Probability Measure}{
+Some abuse of notation here!
+\begin{align*}
+    \Omega               & = \{ i \}_{i=1}^n     \\
+    \mathcal{A}          & = \mathcal{P}(\Omega) \\
+    P(A \in \mathcal{A}) & = \frac{|A|}{n}
+\end{align*}
+
+
+A probability measure $P$ on a measurable space $(\Omega, \mathcal{A})$ is a function $P : \mathcal{A} \rightarrow [0, 1]$ that satisfies:
+
+1. $P(\emptyset) = 0$ and $P(\Omega) = 1$.
+
+2. \textbf{Non-negativity}: For all $B \in \mathcal{A}$, $P(B) \geq 0$.
+
+3. \textbf{Countable additivity}: For any pairwise disjoint collection $\{ B_i \}_{i=1}^{\infty} \subseteq \mathcal{A}$, we have
+\[
+    P\left( \bigcup_{i=1}^\infty B_i \right) = \sum_{i=1}^\infty P(B_i).
+\]
+}
+
+\defb{Definition 8.2.3: Cumulative Distribution Function}{
+    A cumulative distribution function $F : \mathbb{R} \rightarrow [0, 1]$ for a probability measure satisfies:
+
+    1. \textbf{Monotonicity}: If $x \leq y$, then $F(x) \leq F(y)$.
+
+    2. \textbf{Right-continuity}: $\lim_{x \to y^+} F(x) = F(y)$.
+
+    3. $\lim_{x \to -\infty} F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$.
+
+    If the CDF is differentiable, it has an associated probability density function (PDF), $f(x) = \frac{dF(x)}{dx}$, which represents probabilities over small intervals.
+}
+
+\intuitb{Rules for the CDF}{
+    If we have a CDF that satisfies the above rules, we can then write its derivative, $p(x)$, as the probability density function (PDF). \bigskip
+
+    Using this we can define the measure corresponding to the CDF.
+
+    \[
+        P((a,b]) = \int_a^b p(x) \, dx
+    \]
+}
+
+
+\section{Joint Probability Distributions}
+
+We might have probability distributions over two variables:
+\marginnote{
+    This generalises to many variables:
+    \begin{align*}
+        p(x_1, x_2, \dots, x_n) =\ P(\bm{x}_1 = x_1, \bm{x}_2 = x_2, \dots, \bm{x}_n = x_n)
+    \end{align*}
+}
+
+\[
+    P(\bm{x}, \bm{y}) = P(\bm{x} =x,  \bm{y}=y)
+\]
+
+We can view this as a surface over the two variables, where the height of the surface is the probability of that point.
+
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{c cccc}
+        \toprule
+            & \multicolumn{4}{c}{$X$}                            \\
+        \cmidrule(l){2-5}
+        $Y$ & 0                       & 1      & 2      & 3      \\
+        \midrule
+        0   & 0.15                    & 0.1    & 0.0875 & 0.0375 \\
+        1   & 0.1                     & 0.175  & 0.1125 & 0      \\
+        2   & 0.0875                  & 0.1125 & 0      & 0      \\
+        3   & 0.0375                  & 0      & 0      & 0      \\
+        \bottomrule
+    \end{tabular}
+    \caption{Joint probability distribution of $X$ and $Y$}
+\end{table}
+
+
+We can consider the probability of one variable given the other is equal to some known value:
+
+\[
+    p(\bm{x}| y) = P(\bm{x} = x | \bm{y} = y) = \frac{P(\bm{x} = x, \bm{y} = y)}{P(\bm{y} = y)}
+\]
+
+
+Given a joint distribution \( P(\mathbf{x}, y) \), we may be interested in the marginal distributions \( P(\mathbf{x}) \) or \( P(y) \). For instance, after assessing the likelihood of the friend's claim, we may want to examine \( P(\mathbf{x} = x) \), representing the distribution of signal bars in our area. Marginalization allows us to isolate \( P(\mathbf{x}) \) from \( P(\mathbf{x}, y) \) by summing over values of other variables. For continuous cases, this becomes:
+\[
+P(\mathbf{x} = x) = \int_{\Omega_y} P(\mathbf{x} = x, y = y) \, dy
+\]
+
+
+
+
+% \begin{table}[h!]
+%     \centering
+%     \begin{tabular}{c cccc c}
+%         \toprule
+%         & \multicolumn{4}{c}{$X$} & \multirow{2}{*}{$p_Y(y)$} \\
+%         \cmidrule(lr){2-5}
+%         $Y$ & 0 & 1 & 2 & 3 & \\
+%         \midrule
+%         0 & 0.15 & 0.1 & 0.0875 & 0.0375 & 0.375 \\
+%         1 & 0.1 & 0.175 & 0.1125 & 0 & 0.3875 \\
+%         2 & 0.0875 & 0.1125 & 0 & 0 & 0.2 \\
+%         3 & 0.0375 & 0 & 0 & 0 & 0.0375 \\
+%         \midrule
+%         $p_X(x)$ & 0.375 & 0.3875 & 0.2 & 0.0375 & 1 \\
+%         \bottomrule
+%     \end{tabular}
+%     \caption{Joint probability distribution of $X$ and $Y$ with marginal probabilities}
+% \end{table}

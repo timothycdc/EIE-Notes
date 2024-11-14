@@ -10,12 +10,25 @@
 \usepackage[most,many,breakable]{tcolorbox}
 \usepackage{xcolor}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.17}
-\usepgfplotslibrary{colormaps}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{intersections}
+\usepackage{pgfplotstable}
+\usepgfplotslibrary{colormaps, fillbetween}
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric} 
+\usetikzlibrary{arrows,fit}
+\usepackage{pgf-pie}
+
+
+
 \usepackage{tikz-cd}
 \usepackage{cancel}
+\usepackage{array}
+\usepackage{multirow}     % For multi-row cells in tables
+\usepackage{graphicx}     % For rotating text
+\usepackage{rotating}     % For advanced rotating capabilities
+
 
 % Redefine \subsubsection with bold and larger text
 \renewcommand{\subsubsection}[1]{%
@@ -49,35 +62,35 @@
 % Theorem styles with selective font changes
 \tcbuselibrary{theorems,skins,hooks}
 \newtcbtheorem[number within=section]{Theorem}{Theorem}
-{enhanced, breakable, colback=mytheorembg, frame hidden, boxrule=0sp,
+{enhanced, breakable=false, colback=mytheorembg, frame hidden, boxrule=0sp,
   borderline west={2pt}{0pt}{mytheoremfr}, sharp corners, detach title,
   before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
   coltitle=mytheoremfr, fonttitle=\bfseries\sffamily, description font=\mdseries,
   separator sign none, segmentation style={solid, mytheoremfr}}{th}
 
 \newtcbtheorem[number within=section]{corollary}{Corollary}
-{enhanced, breakable, colback=myp!10, frame hidden, boxrule=0sp,
+{enhanced, breakable=false, colback=myp!10, frame hidden, boxrule=0sp,
   borderline west={2pt}{0pt}{myp!85!black}, sharp corners, detach title,
   before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
   coltitle=myp!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries,
   separator sign none, segmentation style={solid, myp!85!black}}{th}
 
 \newtcbtheorem[number within=section]{lemma}{Lemma}
-{enhanced, breakable, colback=myg!10, frame hidden, boxrule=0sp,
+{enhanced, breakable=false, colback=myg!10, frame hidden, boxrule=0sp,
   borderline west={2pt}{0pt}{myg}, sharp corners, detach title,
   before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
   coltitle=myg!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries,
   separator sign none, segmentation style={solid, myg!85!black}}{th}
 
 \newtcbtheorem[number within=section]{claim}{Claim}
-{enhanced, breakable, colback=myg!10, frame hidden, boxrule=0sp,
+{enhanced, breakable=false, colback=myg!10, frame hidden, boxrule=0sp,
   borderline west={2pt}{0pt}{myg}, sharp corners, detach title,
   before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
   coltitle=myg!85!black, fonttitle=\bfseries\sffamily, description font=\mdseries,
   separator sign none, segmentation style={solid, myg!85!black}}{th}
 
 \newtcbtheorem[number within=section]{Example}{Example}
-{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti,
+{colback=myexamplebg, breakable=false, colframe=myexamplefr, coltitle=myexampleti,
   boxrule=1pt, sharp corners, detach title,
   before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
   fonttitle=\bfseries\sffamily, description font=\mdseries,
@@ -87,7 +100,7 @@
 }{ex}
 
 \newtcbtheorem[number within=section]{sidenotebox}{Note}
-{colback=myexamplebg, breakable, colframe=myexamplefr, coltitle=myexampleti,
+{colback=myexamplebg, breakable=false, colframe=myexamplefr, coltitle=myexampleti,
   boxrule=1pt, sharp corners, detach title,
   before upper={\renewcommand{\familydefault}{\sfdefault}\selectfont\tcbtitle\par\smallskip},
   fonttitle=\bfseries\sffamily, description font=\mdseries,
