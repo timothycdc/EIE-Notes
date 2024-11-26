@@ -1,0 +1,298 @@
+
+\chapter{Concentration Inequalities \& Generalisation Bounds}
+
+\section{Generalisation as a Concept}
+
+In the previous lecture, we analysed the process of learning. This lecture focuses on evaluating the result of that process. Specifically, after training a model, how do we determine if it is \textit{good}? What does "good" mean? We will examine the concept of \textit{trial deployment} to measure the relative risk of classifiers and decide which one to use in practice. This discussion ties into the idea of generalisation. We will explore \textit{concentration of measure} to theoretically validate trial deployment, particularly from a statistical perspective.
+
+\section{Test Sets}
+
+To compare two models, a practical approach is to subject them to a trial deployment and measure performance. We use a \textit{risk function} $R: \mathbb{R}^{m \times m} \to \mathbb{R}$, which takes as input the desired and predicted outputs, and returns a score where larger values indicate worse errors. For $k$ predictions, the risk of a model $f^\theta$ can be estimated as:
+
+\[
+    \hat{R}_k(f^\theta) := \frac{1}{k} \sum_{i=1}^k R(f^\theta(\boldsymbol{x}^{(i)}), \boldsymbol{y}).
+\]
+
+Given another model $g^\omega$, if $\hat{R}_k(f^\theta) < \hat{R}_k(g^\omega)$, we should prefer $f$ over $g$. In practice, instead of actual deployment, we hold out a set of $k$ input-output pairs from training. These points are not used during training (e.g., gradient descent). This \textit{holdout set} forms the basis of our evaluation.
+
+\hl{How large should $k$ be to conclusively determine whether $f$ is better than $g$? To answer, we need \textit{concentration inequalities}.}
+
+\section{Concentration and the Weak Law of Large Numbers}
+
+The length of a trial impacts its outcome. To formalise this, we adopt a probabilistic view of the dataset, treating each test sample as a random variable. For a given model $f^\theta$, let $r = R(f^\theta(x), y)$ be the risk for a sample $(x, y)$. The randomness arises from the sample distribution. Ideally, we want our estimated risk $\hat{r}_k$ to converge to the true risk $\mathbb{E}[\mathbf{r}]$, computed as:
+
+\[
+    \mathbb{E}[\mathbf{r}] = \sum_r r P(\mathbf{r} = r).
+\]
+
+However, we lack access to all possible risk values and their probabilities. Instead, we desire convergence of our empirical estimate $\hat{r}_k$ to the true risk.
+
+\subsection{Convergence for a Sequence of Random Variables}
+
+\defb{Convergence in Probability}{
+A sequence of random variables $\{\hat{r}_k\}_{k=1}^\infty$ converges \textbf{in probability} to a limit $T$ if, for every $\epsilon > 0$:
+\[
+    \lim_{k \to \infty} P(|\hat{r}_k - T| > \epsilon) = 0.
+\]
+}
+
+This definition implies that the probability of $\hat{r}_k$ deviating from $T$ by more than $\epsilon$ approaches zero as $k \to \infty$. In our context, we aim for $\mathbb{E}[\mathbf{r}] \approx \hat{r}_k$, i.e., the sample mean should converge to the true mean.
+
+\marginnote{
+
+\defsb{Markov's Inequality}{
+To prove Markov's Inequality, consider a non-negative random variable $\mathbf{r}$ and a threshold $a > 0$. By the definition of expectation:
+
+\[
+\mathbb{E}[\mathbf{r}] = \int_0^\infty r f(r) \, dr,
+\]
+
+where $f(r)$ is the probability density function of $\mathbf{r}$. Split this integral as:
+
+\[
+\mathbb{E}[\mathbf{r}] = \int_0^a r f(r) \, dr + \int_a^\infty r f(r) \, dr.
+\]
+
+For the second term, observe that $r \geq a$ when $r > a$, so:
+
+\begin{align*}
+    \int_a^\infty r f(r) \, dr &\geq a \int_a^\infty f(r) \, dr \\
+    &= a P(\mathbf{r} > a)
+\end{align*}
+
+Thus, 
+
+\[
+\mathbb{E}[\mathbf{r}] \geq a P(\mathbf{r} > a),
+\]
+
+which is Markov's Inequality.}
+
+\defsb{Chebyshev's Inequality}{
+To prove Chebyshev's Inequality, start with the definition of variance for a random variable $\mathbf{r}$ with mean $\mu = \mathbb{E}[\mathbf{r}]$:
+
+\[
+\sigma^2 = \mathbb{E}[(\mathbf{r} - \mu)^2].
+\]
+
+For any $\epsilon > 0$, let $A = \{ |\mathbf{r} - \mu| \geq \epsilon \}$. By the definition of probability and expectation:
+
+\[
+\sigma^2 = \mathbb{E}[(\mathbf{r} - \mu)^2] \geq \int_A (\mathbf{r} - \mu)^2 f(r) \, dr,
+\]
+
+since $(\mathbf{r} - \mu)^2 \geq \epsilon^2$ when $|\mathbf{r} - \mu| \geq \epsilon$. Therefore:
+
+\[
+\sigma^2 \geq \epsilon^2 \int_A f(r) \, dr = \epsilon^2 P(|\mathbf{r} - \mu| \geq \epsilon).
+\]
+
+Rearranging gives:
+
+\[
+P(|\mathbf{r} - \mu| \geq \epsilon) \leq \frac{\sigma^2}{\epsilon^2}.
+\]
+}
+
+
+}
+\subsection{Concentration Inequalities}
+
+Recalling the expectation of a discrete random variable $\mathbf{r}$:
+
+\[
+    \mathbb{E}[\mathbf{r}] = \sum_r r P(\mathbf{r} = r),
+\]
+
+we derive the following useful inequality:
+
+\[
+    \mathbb{E}[\mathbf{r}] \geq a P(\mathbf{r} > a).
+\]
+
+This is \textbf{Markov's Inequality}, relating expectation to the probability of exceeding a threshold. By considering the random variable $(\mathbf{r} - \mu)^2$, where $\mu = \mathbb{E}[\mathbf{r}]$, and setting $a = \epsilon^2$, we obtain:
+
+\[
+    P(|\mathbf{r} - \mu| \geq \epsilon) \leq \frac{\sigma^2}{\epsilon^2},
+\]
+
+known as \textbf{Chebyshev's Inequality}. This states that for a small variance, the probability of significant deviation from the mean is small.
+
+\subsection{Weak Law of Large Numbers}
+
+The \textit{Weak Law of Large Numbers (WLLN)} ensures that as $N \to \infty$, the empirical risk $\hat{r}_N$ converges to the true risk $\mu$. For $\hat{r}_N = \frac{1}{N} \sum_{i=1}^N \mathbf{r}_i$, where $\mathbf{r}_i$ are i.i.d. samples:
+
+\[
+    \mathbb{E}[\hat{r}_N] = \mu, \quad \mathbb{V}[\hat{r}_N] = \frac{\sigma^2}{N}.
+\]
+
+Using Chebyshev’s inequality, we bound the probability:
+
+\[
+    P(|\hat{r}_N - \mu| \geq \epsilon) \leq \frac{\sigma^2}{N \epsilon^2}.
+\]
+
+
+\defsb{Weak Law of Large Numbers (WLLN)}{
+To sketch the proof of the Weak Law of Large Numbers, consider the empirical mean:
+
+\[
+\hat{r}_N = \frac{1}{N} \sum_{i=1}^N \mathbf{r}_i,
+\]
+
+where $\mathbf{r}_i$ are i.i.d. random variables with mean $\mu$ and variance $\sigma^2$. The expectation and variance of $\hat{r}_N$ are:
+
+\[
+\mathbb{E}[\hat{r}_N] = \mu, \quad \mathbb{V}[\hat{r}_N] = \frac{\sigma^2}{N}.
+\]
+
+Using Chebyshev's inequality, we bound the probability of deviation from the mean:
+
+\[
+P(|\hat{r}_N - \mu| \geq \epsilon) \leq \frac{\mathbb{V}[\hat{r}_N]}{\epsilon^2} = \frac{\sigma^2}{N \epsilon^2}.
+\]
+
+As $N \to \infty$, the right-hand side converges to $0$, implying:
+
+\[
+P(|\hat{r}_N - \mu| \geq \epsilon) \to 0.
+\]
+
+This shows that $\hat{r}_N$ converges in probability to $\mu$, which is the statement of the Weak Law of Large Numbers.}
+
+\subsection{Hoeffding's Inequality}
+
+\thm{Hoeffding's Inequality}{
+    For independent random variables $X_1, X_2, \ldots, X_n$ satisfying $a_i \leq X_i \leq b_i$ almost surely, let $\bar{X}_n = \frac{1}{n} \sum_{i=1}^n X_i$. Then, for any $\epsilon > 0$:
+    \[
+        P\left(\left| \bar{X}_n - \mathbb{E}[\bar{X}_n] \right| \geq \epsilon\right) \leq 2 \exp\left(-\frac{2n \epsilon^2}{\sum_{i=1}^n (b_i - a_i)^2}\right).
+    \]
+}
+
+When $a_i = 0$ and $b_i = 1$, this simplifies to:
+
+\[
+    P\left(\left| \bar{X}_n - \mathbb{E}[X] \right| \geq \epsilon\right) \leq 2 \exp(-2n \epsilon^2).
+\]
+
+A proof of Hoeffding’s inequality typically requires proof of Chernoff’s bound which is a related and useful concentration inequality that requires moment generating functions which is beyond the scope of this class.
+
+\section{Universal Function Approximation}
+
+To generalise well, models should align with the data-generating process. Polynomial basis functions, such as $\phi(x) = [x, 1]^T$ for affine models or $\phi'(x) = [x^2, x, 1]^T$ for quadratic models, can approximate functions of arbitrary degree. However, blindly increasing model complexity risks overfitting.
+
+\defb{Weierstrass Theorem}{
+    For any continuous function $f$ on $[a, b]$ and any $\epsilon > 0$, there exists a polynomial $P(x)$ such that:
+    \[
+        \|f - P\|_\infty = \sup_{x \in [a, b]} |f(x) - P(x)| < \epsilon.
+    \]
+}
+
+This shows that polynomials can uniformly approximate continuous functions. Similarly, neural networks exhibit universal approximation properties:
+
+\thm{Universal Approximation (Cybenko, 1989)}{
+    Let $\sigma(x)$ be a sigmoidal activation function. For any continuous $f$ on a compact subset of $\mathbb{R}^n$ and $\epsilon > 0$, there exist weights $w_i$, biases $b_i$, and $N$ such that:
+    \[
+        F(x) = \sum_{i=1}^N w_i \sigma(w_i^T x + b_i),
+    \]
+    satisfies $|F(x) - f(x)| < \epsilon$.
+}
+
+
+\subsection{No-Free Lunch Theorems}
+
+\begin{itemize}
+    \item Universal function approximators, such as polynomial basis expansion and neural networks, can both represent a wide range of functions. However, in practice, neural networks are often favoured due to practical considerations.
+    \item Key reasons for choosing neural networks include:
+    \begin{itemize}
+        \item \textbf{Low sample complexity}: Neural networks often require fewer training examples for effective generalisation.
+        \item \textbf{Low relative computational complexity}: They are typically easier to optimise for many real-world problems.
+    \end{itemize}
+    \item The exact reasons behind these advantages remain an open area of research.
+    \item The \textbf{No-Free Lunch Theorems} formalise the idea that no single model is universally superior:
+    \begin{itemize}
+        \item Given two models that perfectly fit the training data (e.g., a polynomial model and a neural network), there is no inherent reason to prefer one over the other.
+        \item These theorems state that it is impossible to guarantee which model will perform better on unseen data.
+    \end{itemize}
+    \item A major focus in model comparison is studying \textbf{inductive biases}:
+    \begin{itemize}
+        \item Inductive biases refer to the types of functions that a model is predisposed to learn.
+        \item Understanding these biases helps in selecting models suited for specific types of data or tasks.
+    \end{itemize}
+    \item Future discussions and research often focus on comparing models trained on the same dataset to better understand their performance differences.
+\end{itemize}
+
+
+% \section{Generalisation Error Bounds}
+
+% Concentration inequalities enable bounds on generalisation error. For a hypothesis $\theta \in \Theta$:
+
+% \[
+%     \mathbb{P}\left[\sup_{\theta \in \Theta} |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon\right] \leq 2 |\Theta| \exp\left(-2n \epsilon^2\right).
+% \]
+
+% With confidence $1 - \delta$, we can bound the true risk:
+
+% \[
+%     R(\theta) \leq R_{\text{emp}}(\theta) + \sqrt{\frac{\log(|\Theta|) + \log(2 / \delta)}{2n}}.
+% \]
+
+% This result highlights the trade-off between model complexity and generalisation performance.
+
+\section{Generalisation Error Bounds}
+
+
+\begin{itemize}
+    \item Concentration inequalities allow us to derive bounds on the generalisation error for a hypothesis space $\Theta$.
+    \item We study the probability that the true risk $R(\theta)$ and empirical risk $R_{\text{emp}}(\theta)$ differ by more than $\epsilon$ for any $\theta \in \Theta$:
+    \[
+    \mathbb{P} \left[ \sup_{\theta \in \Theta} |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon \right].
+    \]
+    \item The left-hand side is converted into a union bound to manage probabilities across the hypothesis space.
+\end{itemize}
+
+\subsection{Union Bound}
+
+\begin{itemize}
+    \item For events $A_1, A_2, \dots, A_n$, the \textbf{union bound} states:
+    \[
+    \mathbb{P} \left[ \bigcup_{i=1}^n A_i \right] \leq \sum_{i=1}^n \mathbb{P}(A_i).
+    \]
+    \item Applied to the generalisation problem:
+    \[
+    \mathbb{P} \left[ \sup_{\theta \in \Theta} |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon \right] 
+    \leq \sum_{\theta \in \Theta} \mathbb{P} \left[ |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon \right].
+    \]
+\end{itemize}
+
+\subsection{Assembling the Bound}
+
+\begin{itemize}
+    \item Using Hoeffding's inequality:
+    \[
+    \mathbb{P} \left[ |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon \right] \leq 2 \exp(-2n\epsilon^2).
+    \]
+    \item Substituting into the union bound:
+    \[
+    \mathbb{P} \left[ \sup_{\theta \in \Theta} |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon \right] \leq |\Theta| \cdot 2 \exp(-2n\epsilon^2).
+    \]
+    \item Denoting $\delta = \mathbb{P} \left[ \sup_{\theta \in \Theta} |R(\theta) - R_{\text{emp}}(\theta)| > \epsilon \right]$ and solving for $\epsilon$, we obtain:
+    \[
+    |R(\theta) - R_{\text{emp}}(\theta)| \leq \sqrt{\frac{\log(|\Theta|) + \log(2/\delta)}{2n}}.
+    \]
+\end{itemize}
+
+\subsection{Final Generalisation Bound}
+
+\begin{itemize}
+    \item The generalisation error is bounded as:
+    \[
+    R(\theta) \leq R_{\text{emp}}(\theta) + \sqrt{\frac{\log(|\Theta|) + \log(2/\delta)}{2n}}.
+    \]
+    \item This bound shows the trade-off between:
+    \begin{itemize}
+        \item \textbf{Model complexity}: Larger hypothesis spaces $|\Theta|$ increase the generalisation error.
+        \item \textbf{Dataset size}: Larger datasets $n$ decrease the generalisation error.
+    \end{itemize}
+    \item The bound highlights the need for regularisation to manage model complexity.
+\end{itemize}

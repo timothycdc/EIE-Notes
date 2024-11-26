@@ -136,8 +136,8 @@ we subtract \(\theta^{(t)}\) from both sides to get:
 Recall the gradient descent lemma– we then substitute $\mathcal{L}(\bm{w})$ with $\mathcal{L}(\theta^{(t+1)})$ and $\mathcal{L}(\bm{v})$ with $\mathcal{L}(\theta^{(t)})$:
 \[
     \mathcal{L}(\bm{w}) \leq \mathcal{L}(\bm{v}) + \nabla \mathcal{L}(\bm{v})^\top (\bm{w} - \bm{v}) + \frac{L}{2} \|\bm{w} - \bm{v}\|^2.
-    \]
-    
+\]
+
 We have:
 \[
     \mathcal{L}(\theta^{(t+1)})\leq\mathcal{L}(\theta^{(t)})+\nabla\mathcal{L}(\theta^{(t)})^\top(\theta^{(t+1)}-\theta^{(t)})+\frac L2\left\|\theta^{(t+1)}-\theta^{(t)}\right\|^2
@@ -233,7 +233,7 @@ This definition is formulated in terms of the secant of a function and essential
         % Draw the interpolated point to the x and y axes
         \draw[dashed] (alpha_theta) -- (L_alpha);  % Dashed line from alpha_theta to L_alpha
 
-\end{tikzpicture}
+    \end{tikzpicture}
 
 
 
@@ -295,7 +295,7 @@ A convex function has a unique global minimum over a convex set, provided it att
 
 \thm{Theorem 5.3.4. Global Maximum of a Convex Function}{
 Let \(\mathcal{L}(\theta) : \mathbb{R}^n \rightarrow \mathbb{R}\) be a convex function, and let \(C \subseteq \mathbb{R}^n\) be a convex set. If \(\mathcal{L}\) attains a local maximum at \(\theta^* \in C\), then \(\theta^*\) is a global maximum. Moreover, the maximum is unique if \(\mathcal{L}\) is strictly convex.
-\paragraph{Proof.} 
+\paragraph{Proof.}
 Suppose \(\mathcal{L}\) is convex, and let \(\theta^*\) be a local minimum of \(\mathcal{L}\) in \(C\). For some neighbourhood \(N \subseteq C\) around \(\theta^*\), we have \(\mathcal{L}(\theta) \geq \mathcal{L}(\theta^*)\) for all \(\theta \in N\). \bigskip
 
 Assume, for contradiction, there exists \(\hat{\theta} \in C\) such that \(\mathcal{L}(\hat{\theta}) < \mathcal{L}(\theta^*)\). Consider the line segment \(S(\alpha) = \alpha \theta^* + (1 - \alpha) \hat{\theta}\) for \(\alpha \in (0,1)\), which lies in \(C\) since \(C\) is convex. By convexity of \(\mathcal{L}\), we have:
@@ -308,7 +308,7 @@ Thus, \(\mathcal{L}(\theta^*) \leq \mathcal{L}(\theta)\) for all \(\theta \in C\
 
 To show uniqueness, assume \(\theta^*_1\) and \(\theta^*_2\) are two distinct global minima. For any \(\alpha \in (0,1)\), by strict convexity:
 \[
-    \mathcal{L}(\alpha \theta^*_1 + (1-\alpha)\theta^*_2) < \alpha \mathcal{L}(\theta^*_1) + (1-\alpha) \mathcal{L}(\theta^*_2) = \mathcal{L}(\theta^*_1) = \mathcal{L}(\theta^*_2),
+\mathcal{L}(\alpha \theta^*_1 + (1-\alpha)\theta^*_2) < \alpha \mathcal{L}(\theta^*_1) + (1-\alpha) \mathcal{L}(\theta^*_2) = \mathcal{L}(\theta^*_1) = \mathcal{L}(\theta^*_2),
 \]
 which contradicts the assumption that both \(\theta^*_1\) and \(\theta^*_2\) are global minima. Thus, the global minimum must be unique.
 \hfill \(\Box\)
@@ -316,32 +316,351 @@ which contradicts the assumption that both \(\theta^*_1\) and \(\theta^*_2\) are
 
 
 
-\section{Convergence in Machine Learning}
-For convex functions, each step of gradient descent improves the loss, and there exists a unique global minimum for convex optimisation problems. However, we have not yet determined how quickly we can reach this minimum and under what conditions. These questions relate to \textbf{convergence} and \textbf{rate of convergence}.
+% \section{Convergence in Machine Learning}
+% For convex functions, each step of gradient descent improves the loss, and there exists a unique global minimum for convex optimisation problems. However, we have not yet determined how quickly we can reach this minimum and under what conditions. These questions relate to \textbf{convergence} and \textbf{rate of convergence}.
 
-There are many formal definitions of convergence (e.g., convergence in probability or distribution). The most commonly studied by students in calculus is:
+% There are many formal definitions of convergence (e.g., convergence in probability or distribution). The most commonly studied by students in calculus is:
 
+% % \[
+% %     \lim_{n \to \infty} x_n = L \quad \text{if for any} \ \epsilon > 0, \ \exists \ K \ \text{such that} \ |x_n - L| < \epsilon \ \text{for all} \ n > K.
+% % \]
+
+
+% \defb{Convergence}{
+% A series \(x_1, x_2, \dots, x_n\) is said to converge to a limit \(T\) if for any \(\epsilon > 0\) there exists an integer \(K\) such that for all \(M > K\), \(|x_M - T| < \epsilon\).
+% }
+
+
+% In calculus, this is typically used with arithmetic or geometric series, but in machine learning, it helps us reason about convergence in algorithms such as gradient descent. Specifically, we define a sequence of parameters resulting from the gradient descent updates: \(\theta^{(1)}, \theta^{(2)}, \dots, \theta^{(K)}\). With this sequence, we ask:
+
+% \begin{itemize}
+%     \item Under what conditions does this series converge?
+%     \item What does the series converge to?
+%     \item What do we want the series to converge to?
+% \end{itemize}
+
+% In the context of machine learning, we care about whether the parameter sequence \(\theta^{(k)}\) from gradient descent converges to \(\theta^*\), the global optimum, and how fast this happens. We want the parameter to converge to:
 % \[
-%     \lim_{n \to \infty} x_n = L \quad \text{if for any} \ \epsilon > 0, \ \exists \ K \ \text{such that} \ |x_n - L| < \epsilon \ \text{for all} \ n > K.
+%     \theta^* := \arg\min_\theta \frac{1}{N} \sum_{i=1}^{N} \mathcal{L}(f^\theta(\bm{x}^{(i)}), \bm{y}^{(i)}).
 % \]
+% That is, we aim for some finite \(K\) such that \(|\theta_K - \theta^*| < \epsilon\).
 
+Here are improved notes for Section 5.4, written concisely while maintaining all the mathematical content:
+
+---
+
+\section{Convergence in Machine Learning}
+
+In machine learning, we aim to determine if gradient descent (GD) will converge to a solution and, if so, under what conditions and how quickly. Convergence is the process by which a sequence approaches a limit. Formally:
 
 \defb{Convergence}{
-A series \(x_1, x_2, \dots, x_n\) is said to converge to a limit \(T\) if for any \(\epsilon > 0\) there exists an integer \(K\) such that for all \(M > K\), \(|x_M - T| < \epsilon\).
+    A series \(x_1, x_2, \dots, x_n\) converges to a limit \(T\) if for any \(\epsilon > 0\), there exists an integer \(K\) such that \(\forall M > K\), \(|x_M - T| < \epsilon\).
+}
+
+In GD, our parameters \(\theta^{(1)}, \theta^{(2)}, \dots, \theta^{(t)}\) form a sequence. The goal is for this sequence to converge to the optimal parameter:
+
+\[
+    \theta^\star = \underset{\theta}{\operatorname*{argmin}} \frac{1}{N} \sum_{i=1}^N \mathcal{L}\big(f^\theta(\boldsymbol{x}^{(i)}, \boldsymbol{y}^{(i)})\big),
+\]
+where \(\mathcal{L}\) is the loss function, \(f^\theta\) is the model, and \(N\) is the number of data points.
+
+To assess convergence, we ask:
+
+\begin{itemize}
+    \item Under what conditions does the sequence converge?
+    \item What does it converge to?
+    \item How quickly does it converge?
+\end{itemize}
+
+\subsection{Convergence in Linear Regression}
+
+Recall the linear model with input features $\bm{x} \in \R^{D \times 1}$ and labels $\bm{y} \in \R$. Recall the model is:
+
+\[
+    f^\theta(\bm{x}, \theta) = \bm{x}^\top \theta \quad \hat{y} = f^\theta(\bm{x}, \theta).
+\]
+
+In the context of linear regression, the exact solution for the parameter vector \(\theta^\star\) is given by:
+
+\[
+    \theta^\star = (\boldsymbol{X}^\top \boldsymbol{X})^{-1} \boldsymbol{X}^\top \boldsymbol{y}.
+\]
+
+\textbf{Definition:} \(\theta^\star\) represents the optimal parameter vector that minimizes the mean squared error (MSE) between the predicted values and the actual target values.
+
+Considering the mean squared error (MSE) loss function:
+
+\[
+    \mathcal{L}(\theta) = \frac{1}{2} \|\boldsymbol{y} - \boldsymbol{X} \theta\|_2^2,
+\]
+
+the gradient descent (GD) update rule is expressed as:
+
+\[
+    \theta^{(t+1)} = \theta^{(t)} - \alpha \nabla_{\theta^{(t)}} \mathcal{L}(\theta),
+\]
+
+where the gradient of the loss function with respect to \(\theta\) is:
+
+\[
+    \nabla_{\theta^{(t)}} \mathcal{L}(\theta) = \boldsymbol{X}^\top (\boldsymbol{X} \theta^{(t)} - \boldsymbol{y}).
+\]
+
+Substituting this gradient into the GD update rule, we obtain:
+
+\[
+    \theta^{(t+1)} = \theta^{(t)} - \alpha \boldsymbol{X}^\top (\boldsymbol{X} \theta^{(t)} - \boldsymbol{y}).
+\]
+
+Simplifying the above equation, we get:
+
+\[
+    \theta^{(t+1)} = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}) \theta^{(t)} + \alpha \boldsymbol{X}^\top \boldsymbol{y}.
+\]
+
+Thus, we derive the recurrence relation for the gradient descent update rule in linear regression:
+
+\[
+    \theta^{(t+1)} = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}) \theta^{(t)} + \alpha \boldsymbol{X}^\top \boldsymbol{y}.
+\]
+
+\subsubsection{Recurrence Relation and Convergence Analysis}
+
+To analyse the convergence of the gradient descent algorithm, we will develop the recurrence relation step by step.
+
+
+
+
+Applying the GD update rule:
+\sidenote{Note: The notes for Lecture 5 derive this rather differently.}
+
+\begin{align*}
+    \theta^{(1)} & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}) \theta^{(0)} + \alpha \boldsymbol{X}^\top \boldsymbol{y}                                                                                                                                                                                                               \\
+    \theta^{(2)} & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}) \theta^{(1)} + \alpha \boldsymbol{X}^\top \boldsymbol{y}                                                                                                                                                                                                               \\
+                 & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^2 \theta^{(0)} + (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})\alpha \boldsymbol{X}^\top \boldsymbol{y}                 +
+    \alpha \boldsymbol{X}^\top \boldsymbol{y}                                                                                                                                                                                                                                                                                                        \\
+    \theta^{(3)} & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}) \theta^{(2)} + \alpha \boldsymbol{X}^\top \boldsymbol{y},                                                                                                                                                                                                              \\
+                 & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^3 \theta^{(0)} + (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^2 \alpha \boldsymbol{X}^\top \boldsymbol{y} + (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})\alpha \boldsymbol{X}^\top \boldsymbol{y} + \alpha \boldsymbol{X}^\top \boldsymbol{y}.
+    \\
+\end{align*}
+
+Observing the pattern from the first three iterations, we can generalise the parameter vector at the \(t^{\text{th}}\) iteration as:
+
+\[
+    \theta^{(t)} = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)} + \sum_{k=0}^{t-1} (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^k \alpha \boldsymbol{X}^\top \boldsymbol{y}.
+\]
+
+This pattern resembles a geometric sequence where each term involves increasing powers of \((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})\). To generalise the pattern, we define the matrix \(\mathbf{A}\) as:
+
+\[
+    \mathbf{A} = \alpha \boldsymbol{X}^\top \boldsymbol{X}.
+\]
+
+Using this definition, the recurrence relation can be expressed as:
+
+\begin{align*}
+    \theta^{(t)} & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)}  + \left( \sum_{k=0}^{t-1} (\boldsymbol{I} -  \alpha \boldsymbol{X}^\top \boldsymbol{X})^k\right) \alpha \boldsymbol{X} ^\top \boldsymbol{y} \\
+                 & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)}  + \left( \sum_{k=0}^{t-1} (\boldsymbol{I} -  \mathbf{A})^k \right)  \alpha \boldsymbol{X} ^\top \boldsymbol{y}
+\end{align*}
+
+
+
+This summation represents a geometric series. The closed-form solution for the sum of a geometric series involving matrices is given by:
+
+\[
+    \sum_{k=0}^{t-1} (\bm{I} - \bm{A})^k = (\bm{I} - (\bm{I} - \bm{A})^t)\bm{A}^{-1}.
+\]
+
+% The closed-form solution for the sum of a geometric series involving matrices is given by:
+
+% \[
+%     \sum_{k=0}^{t-1} \mathbf{A}^k = (\mathbf{I} - \mathbf{A}^t) (\mathbf{I} - \mathbf{A})^{-1},
+% \]
+
+\marginnote[-300pt]{
+    \thm{Geometric Series for Matrices}{
+        The summation formula for a geometric series of matrices is given by:
+        \[
+            \sum_{k=0}^{t-1} (\bm{I} - \bm{A})^k = (\bm{I} - (\bm{I} - \bm{A})^t)\bm{A}^{-1}.
+        \]
+
+        \paragraph{Proof.} Let
+        \[
+            \bm{S}_t = \sum_{k=0}^{t-1} (\bm{I} - \bm{A})^k.
+        \]
+
+        To simplify the sum, multiply \(\bm{S}_t\) by \((\bm{I} - \bm{A})\):
+        \begin{align*}
+            (\bm{I} - \bm{A})\bm{S}_t & = \sum_{k=0}^{t-1} (\bm{I} - \bm{A})^{k+1} \\
+                                      & = \sum_{k=1}^{t} (\bm{I} - \bm{A})^k
+        \end{align*}
+
+        Notice that this sum can be rewritten as:
+        \[
+            (\bm{I} - \bm{A})\bm{S}_t = \bm{S}_t - \bm{I} + (\bm{I} - \bm{A})^t.
+        \]
+
+        Rearranging terms, we get:
+        \[
+            \bm{S}_t - (\bm{I} - \bm{A})\bm{S}_t = \bm{I} - (\bm{I} - \bm{A})^t.
+        \]
+
+        Factoring out \(\bm{S}_t\) on the left-hand side:
+        \[
+            (\bm{I} - (\bm{I} - \bm{A}))\bm{S}_t = \bm{I} - (\bm{I} - \bm{A})^t.
+        \]
+
+        Simplify \(\bm{I} - (\bm{I} - \bm{A}) = \bm{A}\):
+        \[
+            \bm{A} \bm{S}_t = \bm{I} - (\bm{I} - \bm{A})^t.
+        \]
+
+        Finally, solve for \(\bm{S}_t\) by multiplying both sides by \(\bm{A}^{-1}\):
+        \[
+            \bm{S}_t = (\bm{I} - (\bm{I} - \bm{A})^t)\bm{A}^{-1}.
+        \]
+
+        This completes the proof.
+    }
+
 }
 
 
-In calculus, this is typically used with arithmetic or geometric series, but in machine learning, it helps us reason about convergence in algorithms such as gradient descent. Specifically, we define a sequence of parameters resulting from the gradient descent updates: \(\theta^{(1)}, \theta^{(2)}, \dots, \theta^{(K)}\). With this sequence, we ask:
+provided that \(\mathbf{A}\) is invertible, so $\mb{A}^{-1} = \frac{1}{\alpha} (\bm{X}^\top\bm{X})^{-1}$. Substituting this into the expression for \(\theta^{(t)}\), we obtain:
 
+\begin{align*}
+    \theta^{(t)} & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)}  + \left( \sum_{k=0}^{t-1} (\boldsymbol{I} -  \mathbf{A})^k \right)  \alpha \boldsymbol{X} ^\top \boldsymbol{y}                                                              \\
+                 & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)}  + (\mathbf{I}- (\mathbf{I} - \mathbf{A})^t) \mathbf{A}^{-1} \alpha \boldsymbol{X} ^\top \boldsymbol{y}                                                                      \\
+                 & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)}  + (\mathbf{I}- (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t) \left(\frac{1}{\alpha} \bm{X}^\top \bm{X}\right)^{-1} \alpha \boldsymbol{X} ^\top \boldsymbol{y} \\
+                 & = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t \theta^{(0)}  + (\mathbf{I}- (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t) \theta^\star                                                                                     \\
+\end{align*}
+
+
+Rearranging the above equation, we have:
+
+\[
+    \theta^{(t)} = (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t (\theta^{(0)} - \theta^\star) + \theta^\star.
+\]
+
+This equation explicitly shows the dependence of \(\theta^{(t)}\) on the optimal parameter vector \(\theta^\star\) and the matrix \((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t\).
+
+\subsection{Conditions for Convergence}
+
+For the gradient descent algorithm to converge to the optimal parameter vector \(\theta^\star\), the term \((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t (\theta^{(0)} - \theta^\star)\) must approach the zero vector as \(t \to \infty\). This occurs if and only if the eigenvalues of \( \mb{A}=\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}\) have magnitudes less than one.
+
+\subsubsection{Eigenvalue Analysis:}
+
+Let \(\lambda_i\) be the eigenvalues of \(\boldsymbol{X}^\top \boldsymbol{X}\). Then, the eigenvalues of \(\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}\) are:
+
+\[
+    \mu_i = 1 - \alpha \lambda_i.
+\]
+
+\subsubsection{Convergence Criteria:}
+
+For \(\mathbf{A}^t\) to approach the zero matrix as \(t \to \infty\), all eigenvalues \(\mu_i\) must satisfy:
+
+\[
+    |\mu_i| = |1 - \alpha \lambda_i| < 1 \quad \forall \, i.
+\]
+
+Solving the inequality:
+
+\[
+    -1 < 1 - \alpha \lambda_i < 1.
+\]
+
+This leads to:
+
+\[
+    0 < \alpha \lambda_i < 2 \quad \forall \, i.
+\]
+
+\[
+    0 < \alpha < \frac{2}{\lambda_i} \quad \forall \, i.
+\]
+
+\subsubsection{Deriving the Learning Rate Condition:}
+
+To satisfy the above condition for all eigenvalues simultaneously, the learning rate \(\alpha\) must satisfy:
+
+\[
+    \alpha < \frac{2}{\lambda_{\max}(\boldsymbol{X}^\top \boldsymbol{X})},
+\]
+
+where \(\lambda_{\max}(\boldsymbol{X}^\top \boldsymbol{X})\) is the largest eigenvalue of \(\boldsymbol{X}^\top \boldsymbol{X}\).
+
+\subsubsection{Implications:}
+
+Setting the learning rate \(\alpha\) according to the above condition ensures that all eigenvalues of \(\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}\) lie within the interval \((-1, 1)\). This guarantees that:
+
+\[
+    \lim_{t \to \infty} (\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t (\theta^{(0)} - \theta^\star) = \mathbf{0},
+\]
+
+thereby ensuring that:
+
+\[
+    \lim_{t \to \infty} \theta^{(t)} = \theta^\star.
+\]
+
+\subsubsection{Summary of Convergence:}
+
+To ensure convergence of the gradient descent algorithm in linear regression, the learning rate \(\alpha\) must be chosen such that:
+
+\[
+    \alpha < \frac{2}{\lambda_{\max}(\boldsymbol{X}^\top \boldsymbol{X})}.
+\]
+
+This condition guarantees that the parameter vector \(\theta^{(t)}\) converges to the optimal solution \(\theta^\star\) as the number of iterations \(t\) approaches infinity. We will discuss why in the next part.
+
+\subsubsection{Distance to Optimal Parameter Vector}
+
+The distance from \(\theta^{(t)}\) to \(\theta^\star\) in the \(\ell_2\)-norm is given by:
+\[\begin{aligned}
+    ||\theta^{(t)}-\theta^{*}||_{2}^{2} & =||(\mathbf{I}-\alpha\mathbf{X}^{\top}\mathbf{X})^{t}(\theta^{(0)}-\theta^{*})||_{2}^{2}                                \\
+                        & =|(\theta^{(0)}-\theta^{*})^{\top}(\mathbf{I}-\alpha\boldsymbol{X}^{\top}\boldsymbol{X})^{2t}(\theta^{(0)}-\theta^{*})|
+    \end{aligned}\]
+
+
+Using the eigenvalue decomposition of \(\boldsymbol{X}^\top \boldsymbol{X}\), we can bound this distance as follows: recall from our review of linear algebra that we can use eigen decomposition to bound the quadratic form involving a symmetric matrix. The relevant fact is:
+\[
+    \lambda_{\min}(\boldsymbol{A})\|\boldsymbol{x}\|_2^2 \leq \boldsymbol{x}^\top\boldsymbol{A}\boldsymbol{x} \leq \lambda_{\max}(\boldsymbol{A})\|\boldsymbol{x}\|_2^2.
+\]
+
+When substituting for the relevant terms, we obtain:
+\[
+    \|\theta^{(t)} - \theta^{*}\|_{2}^{2} \geq \lambda_{\min}((\mathbf{I} - \alpha \mathbf{X}^{\top} \mathbf{X})^{2t}) \|\theta^{(0)} - \theta^{*}\|_{2}^{2},
+\]
+\[
+    \|\theta^{(t)} - \theta^{*}\|_{2}^{2} \leq \lambda_{\max}((\mathbf{I} - \alpha \mathbf{X}^{\top} \mathbf{X})^{2t}) \|\theta^{(0)} - \theta^{*}\|_{2}^{2}.
+\]
+
+\[
+    \lambda_{\min}((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^{2t}) \|\theta^{(0)} - \theta^\star\|_2^2 \quad \leq \|\theta^{(t)} - \theta^\star\|_2^2  \leq \quad \lambda_{\max}((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^{2t}) \|\theta^{(0)} - \theta^\star\|_2^2.
+\]
+
+\textbf{Convergence Properties in Different Cases:}
+\begin{enumerate}
+    \item If \(\lambda_{\max} < 1\): The system always converges.
+    \item If \(\lambda_{\min} \geq 1\): The system always diverges.
+    \item If \(\lambda_{\min} < 1\) but \(\lambda_{\max} \geq 1\): Convergence depends on the initial condition \(\boldsymbol{\theta}^{(1)}\).
+\end{enumerate}
+
+
+
+Here, \(\lambda_{\min}\) and \(\lambda_{\max}\) denote the minimum and maximum eigenvalues of the matrix \((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^{2t}\), respectively. As \(t\) increases, provided that \(|1 - \alpha \lambda_i| < 1\) for all eigenvalues \(\lambda_i\), both bounds approach zero, indicating that \(\theta^{(t)}\) converges to \(\theta^\star\).
+
+
+To ensure convergence of our algorithm, we must control the maximum eigenvalue of the matrix. Using eigenvalue properties, let \(\lambda\) be an eigenvalue of \(\mathbf{X}^\top \mathbf{X}\). Recall the following:
 \begin{itemize}
-    \item Under what conditions does this series converge?
-    \item What does the series converge to?
-    \item What do we want the series to converge to?
+    \item If \(\lambda\) is an eigenvalue of \(\mathbf{A}\), then \(c\lambda\) is an eigenvalue of \(c\mathbf{A}\).
+    \item If \(\lambda\) is an eigenvalue of \(\mathbf{A}\), then \(1 - \lambda\) is an eigenvalue of \(\mathbf{I} - \mathbf{A}\).
+    \item If \(\lambda\) is an eigenvalue of \(\mathbf{A}\), then \(\lambda^2\) is an eigenvalue of \(\mathbf{A}^2\).
 \end{itemize}
 
-In the context of machine learning, we care about whether the parameter sequence \(\theta^{(k)}\) from gradient descent converges to \(\theta^*\), the global optimum, and how fast this happens. We want the parameter to converge to:
-\[
-    \theta^* := \arg\min_\theta \frac{1}{N} \sum_{i=1}^{N} \mathcal{L}(f^\theta(\bm{x}^{(i)}), \bm{y}^{(i)}).
-\]
-That is, we aim for some finite \(K\) such that \(|\theta_K - \theta^*| < \epsilon\).
+Combining these facts, if \(\lambda\) is an eigenvalue of \(\mathbf{X}^\top \mathbf{X}\), then \((1 - \alpha \lambda)^2\) is an eigenvalue of \((\mathbf{I} - \alpha \mathbf{X}^\top \mathbf{X})^2\). To guarantee convergence, we require \((1 - \alpha \lambda_{\max})^2 < 1\), which simplifies to:
 
+\[
+\alpha < \frac{2}{\lambda_{\max}(\mathbf{X}^\top \mathbf{X})}.
+\]
