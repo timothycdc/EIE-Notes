@@ -974,9 +974,14 @@ Here, \( g_i \) is the elementary operation associated with the node in the grap
 
 The chain rule can then be applied to compute the derivative:
 
-\begin{equation}
-    \frac{\partial f}{\partial x_i} = \sum_{x_j : i \in \text{Pa}(x_j)} \frac{\partial x_j}{\partial x_i} \frac{\partial f}{\partial x_j} = \sum_{x_j : i \in \text{Pa}(x_j)} \frac{\partial g_j}{\partial x_i} \frac{\partial f}{\partial x_j} \label{eq:reverse-mode-chain-rule}
-\end{equation}
+\defb{
+    Reverse Mode
+}
+{
+    \begin{equation}
+        \frac{\partial f}{\partial x_i} = \sum_{x_j : i \in \text{Pa}(x_j)} \frac{\partial x_j}{\partial x_i} \frac{\partial f}{\partial x_j} = \sum_{x_j : i \in \text{Pa}(x_j)} \frac{\partial g_j}{\partial x_i} \frac{\partial f}{\partial x_j} \label{eq:reverse-mode-chain-rule}
+    \end{equation}
+}
 
 
 

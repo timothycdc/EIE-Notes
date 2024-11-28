@@ -188,8 +188,7 @@ where $r_i$ is the $i$th sample of the random variable $r$. This estimator estim
 
 \begin{itemize}
     \item In Chapter 6, the estimator was for the risk of our model at deployment time.
-    \item Bias-variance decomposition allows us to reason about the bias-variance trade-off of a ML model.
-    \item Are its errors more due to the bias term or variance term?
+    \item Bias-variance decomposition allows us to reason about the bias-variance trade-off of a ML model– are its errors more due to the bias term or variance term?
     \item Total prediction error decomposes as:
           \[
               \mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - y)^2] = \underbrace{\mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - \bar{f}(x))^2]}_{\text{Variance}} + \underbrace{(\bar{f}(x) - \mu_y)^2}_{\text{Bias}^2} + \underbrace{\mathbb{E}[(\mu_y - y)^2]}_{\text{Label Noise}}.
@@ -306,7 +305,7 @@ The bias and variance decomposition applies to specific estimators:
 \end{itemize}
 
 Under the no-modelling-error assumption (\(\mathbf{y} = \mathbf{X}\theta^*\)), we can express the OLS estimator as \footnote{All we have done is substituted in the true model for y since there is no mismatch. Proving
-    that the OLS is an unbiased estimator of $\theta^\star$ is shown by verifying:}:
+    that the OLS is an unbiased estimator of $\theta^\star$ is shown by verifying the equation below.}
 \[
     \theta^{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top (\mathbf{X}\theta^*).
 \]

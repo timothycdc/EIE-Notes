@@ -590,7 +590,7 @@ To satisfy the above condition for all eigenvalues simultaneously, the learning 
 
 where \(\lambda_{\max}(\boldsymbol{X}^\top \boldsymbol{X})\) is the largest eigenvalue of \(\boldsymbol{X}^\top \boldsymbol{X}\).
 
-\subsubsection{Implications:}
+% \subsubsection{Implications:}
 
 Setting the learning rate \(\alpha\) according to the above condition ensures that all eigenvalues of \(\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}\) lie within the interval \((-1, 1)\). This guarantees that:
 
@@ -635,7 +635,7 @@ When substituting for the relevant terms, we obtain:
 \[
     \|\theta^{(t)} - \theta^{*}\|_{2}^{2} \leq \lambda_{\max}((\mathbf{I} - \alpha \mathbf{X}^{\top} \mathbf{X})^{2t}) \|\theta^{(0)} - \theta^{*}\|_{2}^{2}.
 \]
-
+In short:
 \[
     \lambda_{\min}((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^{2t}) \|\theta^{(0)} - \theta^\star\|_2^2 \quad \leq \|\theta^{(t)} - \theta^\star\|_2^2  \leq \quad \lambda_{\max}((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^{2t}) \|\theta^{(0)} - \theta^\star\|_2^2.
 \]
