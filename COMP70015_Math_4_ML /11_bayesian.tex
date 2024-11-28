@@ -742,6 +742,37 @@ p(\bm{\theta} \mid \bm{X}, \bm{y}) = \mathcal{N}\left(\bm{\theta}; \left(\bm{X}^
     \item Notation is slightly odd: \(x^*\) is not a random variable but indicates the conditioning is with respect to \(x^*\).
     \item This integral combines the likelihood and posterior to produce predictions.
 \end{itemize}
+\hl{
+To recap:
+
+\begin{enumerate}
+    \item \textbf{Likelihood \( p(y \mid \bm{x}^*, \bm{\theta}) \):} \\
+    This is the probability of observing \( y \) given \( \bm{x}^* \) and parameters \( \bm{\theta} \). In Bayesian linear regression, this is typically modelled as:
+    \[
+    y \mid \bm{x}^*, \bm{\theta} \sim \mathcal{N}(\bm{x}^{*T}\bm{\theta}, \tau^2),
+    \]
+    where \( \bm{x}^{*T}\bm{\theta} \) is the mean (predicted value), and \( \tau^2 \) is the variance.
+
+    \item \textbf{Posterior \( p(\bm{\theta} \mid \mathcal{D}) \):} \\
+    This represents the distribution of the parameters \( \bm{\theta} \) after observing the data \( \mathcal{D} \). The posterior is also Gaussian due to the conjugacy between the normal likelihood and prior. It is written as:
+    \[
+    \bm{\theta} \mid \mathcal{D} \sim \mathcal{N}(\bm{\mu}, \bm{\Sigma}),
+    \]
+    where \( \bm{\mu} \) and \( \bm{\Sigma} \) are the posterior mean and covariance matrix, respectively.
+
+    \item \textbf{Posterior Predictive Distribution \( p(y \mid \bm{x}^*, \mathcal{D}) \):} \\
+    This is what we ultimately want to compute. It is derived by marginalising over \( \bm{\theta} \):
+    \[
+    p(y \mid \bm{x}^*, \mathcal{D}) = \int p(y \mid \bm{x}^*, \bm{\theta}) p(\bm{\theta} \mid \mathcal{D}) d\bm{\theta}.
+    \]
+    Substituting the Gaussian forms of \( p(y \mid \bm{x}^*, \bm{\theta}) \) and \( p(\bm{\theta} \mid \mathcal{D}) \), the integral simplifies (as shown in the derivation) to a Gaussian distribution:
+    \[
+    p(y \mid \bm{x}^*, \mathcal{D}) = \mathcal{N}(y \mid \bm{x}^{*T}\bm{\mu}, \bm{x}^{*T}\bm{\Sigma}\bm{x}^* + \tau^2).
+    \]
+\end{enumerate}
+
+
+}
 
 % $$\begin{aligned}p(y|x^{*},\mathcal{D})&=\int_{\theta\in\Theta}p(y|x^{*},\theta)p(\theta|\mathcal{D})d\theta\\&=\int_{\theta\in\Theta}\mathcal{N}(x^{*}\theta,\tau^{2})\mathcal{N}(\theta;\boldsymbol{\mu},\boldsymbol{\Sigma})d\theta\\&\propto\int_{\theta\in\Theta}\exp(\frac1{\tau^2}(y-w^\top x)^2)\exp(-\frac12(\theta-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\theta-\boldsymbol{\mu}))d\theta\\&=\int_{\theta\in\Theta}\exp\left(\frac1{\tau^2}(y^2-2(\theta^\top x^*)y+(\theta^\top x^*)^2)\right)\exp(-\frac12(\theta-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\theta-\boldsymbol{\mu}))d\theta\\&=\int_{\theta\in\Theta}\exp\left(\frac1{\tau^2}(y^2-2(\theta^\top x^*)y+(\theta^\top x^*)^2\right)-\frac12(\theta^\top\boldsymbol{\Sigma}\theta-2\theta^\top\boldsymbol{\Sigma}^{-1}\boldsymbol{\mu}+\boldsymbol{\mu}^\top\boldsymbol{\Sigma}^{-1}\boldsymbol{\mu})\Big)d\theta\\&\propto\int_{\theta\in\Theta}\exp\left(\frac1{\tau^2}(y^2-2(\theta^\top x^*)y+(\theta^\top x^*)^2\right)-\frac12(\theta^\top\boldsymbol{\Sigma}\theta-2\theta^\top\boldsymbol{\Sigma}^{-1}\boldsymbol{\mu})\Big)d\theta\end{aligned}$$
 
