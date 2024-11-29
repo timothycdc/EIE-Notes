@@ -88,11 +88,11 @@ Now, we have one more term to differentiate, which is the normalising constant. 
 To derive the gradient of \( \log(z(\theta)) \), we proceed as follows:
 
 \begin{align*}
-    \frac{\partial}{\partial \theta_j} \log(z(\theta)) &= \frac{1}{z(\theta)} \frac{\partial}{\partial \theta_j} z(\theta) \\
-    &= \frac{1}{z(\theta)} \int_{\mathbb{R}^d} h(x) s_j(x) e^{\theta^\top s(x)} dx \\
-    &= \int_{\mathbb{R}^d} s_j(x) \frac{h(x) e^{\theta^\top s(x)}}{z(\theta)} dx \\
-    &= \int_{\mathbb{R}^d} s_j(x) p(x; \theta) dx \\
-    &= \mathbb{E}_{x \sim p(x; \theta)} [s_j(x)]
+    \frac{\partial}{\partial \theta_j} \log(z(\theta)) & = \frac{1}{z(\theta)} \frac{\partial}{\partial \theta_j} z(\theta)            \\
+                                                       & = \frac{1}{z(\theta)} \int_{\mathbb{R}^d} h(x) s_j(x) e^{\theta^\top s(x)} dx \\
+                                                       & = \int_{\mathbb{R}^d} s_j(x) \frac{h(x) e^{\theta^\top s(x)}}{z(\theta)} dx   \\
+                                                       & = \int_{\mathbb{R}^d} s_j(x) p(x; \theta) dx                                  \\
+                                                       & = \mathbb{E}_{x \sim p(x; \theta)} [s_j(x)]
 \end{align*}
 
 Thus, we have:
@@ -104,13 +104,13 @@ Thus, we have:
 Combining the differentiated terms, the gradient equation becomes:
 
 \begin{align*}
-    0 &= -n \mathbb{E}[s_j(x)] + \sum_{i=1}^N s_j(\boldsymbol{x}_i) \\
-    \mathbb{E}[s_j(x)] &= \frac{1}{n} \sum_{i=1}^N s_j(\boldsymbol{x}_i)
+    0                  & = -n \mathbb{E}[s_j(x)] + \sum_{i=1}^N s_j(\boldsymbol{x}_i) \\
+    \mathbb{E}[s_j(x)] & = \frac{1}{n} \sum_{i=1}^N s_j(\boldsymbol{x}_i)
 \end{align*}
 
 \hl{This implies that at the critical points of exponential distributions, the expected value of the sufficient statistics under the model equals the empirical average of the sufficient statistics from the data.This is true for any critical point of the distribution and will come in handy for the method of moments.  \bigskip
 
-In other words, the sample mean of the sufficient statistics should equal the true mean of the sufficient statistics.}\marginnote[-30pt]{This relationship is fundamental in deriving the maximum likelihood estimates for parameters in exponential family distributions.}
+    In other words, the sample mean of the sufficient statistics should equal the true mean of the sufficient statistics.}\marginnote[-30pt]{This relationship is fundamental in deriving the maximum likelihood estimates for parameters in exponential family distributions.}
 
 
 % \hl{This means that at critical points of exponential distributions the sample mean of the sufficient statistics should equal the true mean of the sufficient statistics. This is true for any critical point of the distribution and will come in handy for the method of moments.}
@@ -192,7 +192,7 @@ Which immediately gives us our estimator for $\lambda$ which students can verify
 
 \section{Dimensionality Reduction}
 
-Visualising high-dimensional data ($d > 3$) is challenging but crucial for understanding machine learning problems. 
+Visualising high-dimensional data ($d > 3$) is challenging but crucial for understanding machine learning problems.
 \begin{marginfigure}
     \centering
     \includegraphics[width=1\linewidth]{img/2_mnist.png}
@@ -212,32 +212,56 @@ Visualising high-dimensional data ($d > 3$) is challenging but crucial for under
 \end{itemize}
 
 \subsection{Minimising Reconstruction Error}
-
-To visualise data in lower dimensions, we use transformation matrices. Let $W \in \mathbb{R}^{2 \times d}$ be a matrix that projects data from $d$ to 2 dimensions. The quality of this projection is measured by the reconstruction error:
+To visualise data in lower dimensions, we use transformation matrices. Let $\bm{W} \in \mathbb{R}^{2 \times d}$ be a matrix that projects data from $d$ to 2 dimensions. The quality of this projection is measured by the reconstruction error:
 \[
-    \mathcal{L}(\boldsymbol{W}) = \|\boldsymbol{x} - \boldsymbol{W}^\top(\boldsymbol{W}\boldsymbol{x})\|_2^2
+    \mathcal{L}(\bm{W}) = \|\bm{x} - \bm{W}^\top(\bm{W}\bm{x})\|_2^2
 \]
-Here, $W^\top$ projects back from 2 to $d$ dimensions. For the entire dataset, the loss is:
+Here, $\bm{W}^\top$ projects back from 2 to $d$ dimensions. For the entire dataset, the loss is:
 \[
-    \mathcal{L}(\boldsymbol{W}) = \frac{1}{n} \sum_{i=1}^n \|\boldsymbol{x}^{(i)} - \boldsymbol{W}(\boldsymbol{W}^\top \boldsymbol{x}^{(i)})\|_2^2
+    \mathcal{L}(\bm{W}) = \frac{1}{n} \sum_{i=1}^n \|\bm{x}^{(i)} - \bm{W}(\bm{W}^\top \bm{x}^{(i)})\|_2^2
 \]
-Using the design matrix $X$ (with rows as transposed inputs), this can be rewritten as:
+Using the design matrix $\bm{X}$ (with rows as transposed inputs), this can be rewritten as:
 \[
-    \mathcal{L}(\boldsymbol{W}) = \|X - X\boldsymbol{W}\boldsymbol{W}^\top\|_{\mathrm{F}}^2
+    \mathcal{L}(\bm{W}) = \|\bm{X} - \bm{X}\bm{W}\bm{W}^\top\|_{\mathrm{F}}^2
 \]
 where $\|\cdot\|_{\mathrm{F}}^2$ denotes the squared Frobenius norm. \bigskip
 
+\defb{Frobenius Norm}{
+\raggedright
+The Frobenius norm of a matrix \(\bm{A} \in \mathbb{R}^{m \times n}\) is a measure of its magnitude, defined as the square root of the sum of the squares of all its entries. Mathematically, it is given by:
+\[
+    \|\bm{A}\|_F = \sqrt{\sum_{i=1}^m \sum_{j=1}^n |a_{ij}|^2},
+\]
+where \(a_{ij}\) denotes the \((i,j)\)-th entry of the matrix \(\bm{A}\).
+
+Alternatively, the Frobenius norm can be expressed using the trace operator or the matrix's singular values:
+\[
+    \|\bm{A}\|_F = \sqrt{\mathrm{trace}(\bm{A}^\top \bm{A})} = \sqrt{\sum_{i=1}^{\min(m, n)} \sigma_i^2},
+\]
+where \(\sigma_i\) are the singular values of \(\bm{A}\).
+
+The Frobenius norm is analogous to the Euclidean norm for vectors and satisfies the following properties:
+\begin{itemize}
+    \item \textbf{Non-negativity:} \(\|\bm{A}\|_F \geq 0\), and \(\|\bm{A}\|_F = 0\) if and only if \(\bm{A} = \bm{0}\).
+    \item \textbf{Homogeneity:} \(\|\alpha \bm{A}\|_F = |\alpha| \|\bm{A}\|_F\) for any scalar \(\alpha\).
+    \item \textbf{Triangle Inequality:} \(\|\bm{A} + \bm{B}\|_F \leq \|\bm{A}\|_F + \|\bm{B}\|_F\) for any matrices \(\bm{A}\) and \(\bm{B}\) of the same size.
+\end{itemize}
+
+The Frobenius norm is widely used in numerical linear algebra and machine learning to quantify the size of a matrix or as a regularisation term in optimisation problems.
+}
+
+
 To solve the optimisation problem:
 \[
-    \boldsymbol{W}^{\star} = \underset{W}{\operatorname{argmin}} \| \boldsymbol{X} - \boldsymbol{X}\boldsymbol{W}\boldsymbol{W}^\top \|_{\mathrm{F}}^{2}
+    \bm{W}^{\star} = \underset{\bm{W}}{\operatorname{argmin}} \| \bm{X} - \bm{X}\bm{W}\bm{W}^\top \|_{\mathrm{F}}^{2}
 \]
 we decompose the Frobenius norm:
 \[
-    \|X\|_{\mathrm{F}}^{2} = \underbrace{\|X\boldsymbol{W}\boldsymbol{W}^\top\|_{\mathrm{F}}^{2}}_{\text{Aspects captured by the subspace}} + \underbrace{\|X - X\boldsymbol{W}\boldsymbol{W}^\top\|_{\mathrm{F}}^{2}}_{\text{Aspects not captured by subspace}}
+    \|\bm{X}\|_{\mathrm{F}}^{2} = \underbrace{\|\bm{X}\bm{W}\bm{W}^\top\|_{\mathrm{F}}^{2}}_{\text{Aspects captured by the subspace}} + \underbrace{\|\bm{X} - \bm{X}\bm{W}\bm{W}^\top\|_{\mathrm{F}}^{2}}_{\text{Aspects not captured by subspace}}
 \]
-This implies that minimising the reconstruction error is equivalent to maximising $\|X\boldsymbol{W}\boldsymbol{W}^\top\|_{\mathrm{F}}^{2}$. However, the solution to this is not uniqe because we could arbitrarily scale $\bm{W}$ and get the same result. To ensure a unique solution, we impose that the columns of $W$ are orthonormal:
+This implies that minimising the reconstruction error is equivalent to maximising $\|\bm{X}\bm{W}\bm{W}^\top\|_{\mathrm{F}}^{2}$. However, the solution to this is not unique because we could arbitrarily scale $\bm{W}$ and get the same result. To ensure a unique solution, we impose that the columns of $\bm{W}$ are orthonormal:
 \[
-    \boldsymbol{W}^\top \boldsymbol{W} = \mathbf{I}
+    \bm{W}^\top \bm{W} = \mathbf{I}
 \]
 
 \subsection{Principal Component Analysis}
@@ -326,10 +350,10 @@ Another approach to dimensionality reduction involves using non-linear models in
     \item \textbf{Autoencoders and VAEs}: These are popular models based on deep neural networks that learn efficient data representations.
     \item \textbf{Training Method}: Instead of computing principal components, these models use gradient descent to optimise their parameters.
     \item \textbf{Network Architecture}: The key idea is to introduce a bottleneck in the network with a lower dimensionality $d$:
-    \begin{itemize}
-        \item \textbf{Encoder}: Maps input data to a latent representation, $E(x) = z$.
-        \item \textbf{Decoder}: Reconstructs the input data from the latent representation, $D(\boldsymbol{z}) = \hat{x}$.
-    \end{itemize}
+          \begin{itemize}
+              \item \textbf{Encoder}: Maps input data to a latent representation, $E(x) = z$.
+              \item \textbf{Decoder}: Reconstructs the input data from the latent representation, $D(\boldsymbol{z}) = \hat{x}$.
+          \end{itemize}
     \item \textbf{Objective}: By minimising the reconstruction loss, the autoencoder learns a compact representation of the data that can be used for visualization and, in some cases, to generate new data samples from the same distribution.
 \end{itemize}
 
@@ -339,6 +363,6 @@ Variational Autoencoders (VAEs) address the challenge of generating new samples 
 \begin{itemize}
     \item \textbf{Sampling Issue}: Sampling randomly from the latent representation $Z$ can be problematic if the distribution of $E(\boldsymbol{x})$ does not follow a known distribution.
     \item \textbf{Known Distribution Constraint}: To ensure meaningful generation of new samples, VAEs incorporate a loss term that penalises the difference between the output distribution of $E(\boldsymbol{x})$ and a predefined reference distribution (e.g., a normal distribution).
-    \item \textbf{Regularisation}: This approach is similar to regularisation techniques previously discussed in the course, linking the penalty term to probabilistic notions.
+    \item \textbf{Regularisation}: This approach is similar to regularisation techniques previously discussed in the course, by adding a penalty term.
     \item \textbf{Future Exploration}: The mathematical details of how this loss term is formulated and optimised will be covered in the next lecture.
 \end{itemize}

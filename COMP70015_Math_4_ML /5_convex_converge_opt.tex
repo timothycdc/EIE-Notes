@@ -544,6 +544,41 @@ Rearranging the above equation, we have:
 
 This equation explicitly shows the dependence of \(\theta^{(t)}\) on the optimal parameter vector \(\theta^\star\) and the matrix \((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t\).
 
+\subsubsection{Alternative Method: Arithmo-Geometric Series}
+\defb{Deriving the Arithmetico-Geometric Sequence}{
+To analyse the gradient descent update rule, we derived a recurrence relation for the parameter vector \(\theta\) in the form:
+\[
+\theta^{(t+1)} = \bm{B}\theta^{(t)} + \bm{c}, \quad t \geq 0,
+\]
+where \(\bm{B} = (\bm{I} - \alpha \bm{X}^\top \bm{X})\) and \(\bm{c} = \alpha \bm{X}^\top \bm{y}\). This recurrence describes a sequence that combines repeated matrix multiplications with a vector addition.
+
+Expanding this recurrence iteratively, we obtain:
+\[
+\theta^{(t+1)} = \bm{B}(\bm{B}\theta^{(t-1)} + \bm{c}) + \bm{c} = \bm{B}^2\theta^{(t-1)} + \bm{B}\bm{c} + \bm{c}.
+\]
+Repeating this expansion for \(t\) iterations, the sequence can be written as:
+\[
+\theta^{(t)} = \bm{B}^t\theta^{(0)} + \sum_{k=0}^{t-1} \bm{B}^k \bm{c}.
+\]
+The first term, \(\bm{B}^t\theta^{(0)}\), represents the effect of repeated matrix multiplications on the initial condition. The summation term represents the accumulated effect of the vector \(\bm{c}\) as it propagates through successive transformations by \(\bm{B}\).
+
+To simplify the analysis, we observe that the recurrence is an affine relation due to the additive term \(\bm{c}\), which makes it difficult to directly apply standard methods for linear recurrences. Instead, we reformulate the sequence in a new form:
+\[
+\theta^{(t)} = \bm{A}^t(\theta^{(0)} + \bm{\beta}) - \bm{\beta},
+\]
+for some matrix \(\bm{A}\) and vector \(\bm{\beta}\). Substituting and solving for \(\bm{A}\) and \(\bm{\beta}\), we find:
+\[
+\bm{A} = \bm{B}, \quad \bm{\beta} = (\bm{B} - \bm{I})^{-1}\bm{c}.
+\]
+
+This reformulation is advantageous because it eliminates the additive structure, reducing the problem to repeated matrix multiplications and a single addition and subtraction. The final expression for \(\theta^{(t)}\) highlights the relationship between the parameters and the least squares solution:
+\[
+\theta^{(t)} = (\bm{I} - \alpha \bm{X}^\top \bm{X})^t (\theta^{(0)} - \theta^*) + \theta^*,
+\]
+where \(\theta^* = (\bm{X}^\top \bm{X})^{-1} \bm{X}^\top \bm{y}\) is the least squares estimate. This result demonstrates how gradient descent converges geometrically to the optimal solution \(\theta^*\) as \(t \to \infty\), provided that the step size \(\alpha\) is appropriately chosen.
+}
+
+
 \subsection{Conditions for Convergence}
 
 For the gradient descent algorithm to converge to the optimal parameter vector \(\theta^\star\), the term \((\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X})^t (\theta^{(0)} - \theta^\star)\) must approach the zero vector as \(t \to \infty\). This occurs if and only if the eigenvalues of \( \mb{A}=\mathbf{I} - \alpha \boldsymbol{X}^\top \boldsymbol{X}\) have magnitudes less than one.
