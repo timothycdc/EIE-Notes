@@ -425,7 +425,7 @@ Thus, we derive the recurrence relation for the gradient descent update rule in 
 \]
 
 \subsubsection{Recurrence Relation and Convergence Analysis}
-
+\raggedright
 To analyse the convergence of the gradient descent algorithm, we will develop the recurrence relation step by step.
 
 
@@ -571,10 +571,11 @@ for some matrix \(\bm{A}\) and vector \(\bm{\beta}\). Substituting and solving f
 \bm{A} = \bm{B}, \quad \bm{\beta} = (\bm{B} - \bm{I})^{-1}\bm{c}.
 \]
 
-This reformulation is advantageous because it eliminates the additive structure, reducing the problem to repeated matrix multiplications and a single addition and subtraction. The final expression for \(\theta^{(t)}\) highlights the relationship between the parameters and the least squares solution:
+This reformulation is advantageous because the subtraction of $\bm{\beta}$ eliminates the additive structure, reducing the problem to repeated matrix multiplications and a single addition and subtraction. The final expression for \(\theta^{(t)}\) shows the relationship between the parameters and the least squares solution:
 \[
 \theta^{(t)} = (\bm{I} - \alpha \bm{X}^\top \bm{X})^t (\theta^{(0)} - \theta^*) + \theta^*,
 \]
+\raggedright
 where \(\theta^* = (\bm{X}^\top \bm{X})^{-1} \bm{X}^\top \bm{y}\) is the least squares estimate. This result demonstrates how gradient descent converges geometrically to the optimal solution \(\theta^*\) as \(t \to \infty\), provided that the step size \(\alpha\) is appropriately chosen.
 }
 
