@@ -1,0 +1,321 @@
+\chapter{Approximate Bayesian Inference for ML}
+\section{Bayesian Inference in Non-Linear Models}
+
+In the previous chapter, we observed that the mean of the posterior in linear regression is equivalent to the ridge regression estimate with regularisation. Specifically, we computed:
+
+\[
+    \begin{aligned}
+        \boldsymbol{\mu}    & = \left(\boldsymbol{X}^{\top}\boldsymbol{X} + \frac{\sigma^{2}}{\tau^{2}}\mathbf{I}\right)^{-1}\boldsymbol{X}^{\top}\boldsymbol{y}, \\
+        \boldsymbol{\Sigma} & = \left(\frac{1}{\sigma^{2}}\boldsymbol{X}^{\top}\boldsymbol{X} + \sigma^{2}\mathbf{I}\right)^{-1}.
+    \end{aligned}
+\]
+
+\begin{itemize}
+    \item In the case of the normal distribution:
+          \begin{itemize}
+              \item The mean of the posterior corresponds to the parameter with the maximum posterior probability (MAP estimate).
+              \item We have identified four estimators in this course: Ordinary Least Squares (OLS), Maximum Likelihood Estimation (MLE), Ridge Regression, and Maximum Posterior Probability (MAP).
+          \end{itemize}
+    \item Relationships between estimators:
+          \begin{itemize}
+              \item OLS = MLE
+              \item Ridge = MAP
+          \end{itemize}
+    \item Importance:
+          \begin{itemize}
+              \item Viewing machine learning problems from different mathematical perspectives motivates sophisticated model choices.
+          \end{itemize}
+\end{itemize}
+
+We can generalise our findings to compute the MAP estimate in logistic regression:
+\begin{itemize}
+    \item Recall the MAP estimate in linear regression derived from density matching:
+          \[
+              \log(p(\theta|\mathcal{D})) \propto \log(p(\mathcal{D}|\theta)) + \log(p(\theta)).
+          \]
+    \item \textbf{Choosing the Prior in Logistic Regression:}
+          \begin{itemize}
+              \item Parameters are not directly those of the Bernoulli distribution; they parameterise a linear transformation.
+              \item No conjugacy exists in this model.
+              \item A Gaussian prior acts as a regulariser by keeping parameter magnitudes small.
+          \end{itemize}
+    \item \textbf{Log Posterior Expression:}
+          \[
+              \log p(\theta|\mathcal{D}) \propto \sum_{i=1}^N \left( y^{(i)} \log \sigma(\mathbf{x}^{(i)\top}\theta) + (1 - y^{(i)}) \log \left(1 - \sigma(\mathbf{x}^{(i)\top}\theta)\right) \right) + \frac{1}{2\tau^2} \theta^\top \theta.
+          \]
+\end{itemize}
+
+\textbf{Conclusion:}
+\begin{itemize}
+    \item There is no closed-form expression for the MAP estimate in logistic regression.
+    \item We know this because there is no closed form MLE (close form of MAP when $\tau$ = 0)
+    \item Instead, we must rely on using approximate Bayesian inference methods.
+\end{itemize}
+
+
+\section{Approximate Bayesian Inference}
+
+Approximate Bayesian inference addresses the intractability of computing the posterior distribution by approximating it. There are two main categories:
+
+\begin{itemize}
+    \item \textbf{Sample-based Approximations}
+    \item \textbf{Variational Approximations}
+\end{itemize}
+
+We will explore both categories, starting with approaches that provide insightful perspectives on Bayesian inference.
+
+\subsection{Laplace Approximation}
+
+The Laplace approximation approximates the posterior distribution with a Gaussian centred at the Maximum A Posteriori (MAP) estimate.
+
+\begin{itemize}
+    \item \textbf{Negative Log Posterior (Energy):}
+          \[
+              E(\theta) = -\log p(\theta, \mathcal{D}) = -\log p(\mathcal{D} \mid \theta) - \log p(\theta)
+          \]
+    \item \textbf{Properties:}
+          \begin{itemize}
+              \item Negative Log Posterior $E(\theta)$ is convex since both the negative log-likelihood and negative log-prior are convex. The sum of two convec functions is convex.
+              \item Thus, gradient descent converges to the global minimum with many interations, which is the MAP estimate $\theta^{*}$.
+          \end{itemize}
+    \item \textbf{Second-Order Taylor Expansion around $\theta^{*}$:}
+          \begin{itemize}
+              \item To approximate the posterior, we first perform a second-order Taylor expansion of the energy $E(\theta)$ around its mode $\theta^{*}$, which is the MAP estimate:
+                    \[
+                        \theta^* = \arg\min_{\theta} E(\theta).
+                    \]
+                    We expand and have:
+          \end{itemize}
+          \begin{align*}
+              E(\theta) & \approx E(\theta^*) + (\theta - \theta^*)^\top \nabla E(\theta^*) + \frac{1}{2} (\theta - \theta^*)^\top \mathbf{H} (\theta - \theta^*) \\
+                        & \approx E(\theta^*) + \frac{1}{2} (\theta - \theta^*)^\top \mathbf{H} (\theta - \theta^*)
+          \end{align*}
+          Then, we approximate the posterior distribution as:
+          $$p(\theta\mid\mathcal{D})\propto\exp(-E(\theta))\approx\exp\biggl(-E(\theta^{*})-\frac{1}{2}(\theta-\theta^{*})^{\top}\mathbf{H}(\theta-\theta^{*})\biggr).$$
+          This expression resembles a multivariate Gaussian distribution, and thus we can write:
+    \item \textbf{Gaussian Approximation of the Posterior:}
+          \[
+              \hat{p}(\theta \mid \mathcal{D}) \approx \mathcal{N}(\theta \mid \theta^*, \mathbf{H}^{-1})
+          \]
+          \begin{itemize}
+              \item $\theta^{*}$: Mean (MAP estimate)
+              \item $\mathbf{H}^{-1}$: Covariance matrix (inverse Hessian)
+          \end{itemize}
+    \item \textbf{Summary:}
+          \begin{itemize}
+              \item The Laplace approximation provides a Gaussian approximation centred at the MAP estimate.
+              \item Efficient for models where the posterior is approximately Gaussian, such as Generalised Linear Models (GLMs).
+          \end{itemize}
+\end{itemize}
+
+\subsection{Variational Inference}
+
+Variational Inference (VI) approximates complex posterior distributions with simpler, tractable ones by solving an optimisation problem.
+
+\begin{itemize}
+    \item \textbf{Objective:}
+          \begin{itemize}
+              \item Select a variational family $q(\theta)$ that is easy to work with (e.g., Gaussian).
+              \item Optimise the parameters of $q(\theta)$ to minimise the divergence from the true posterior $p(\theta \mid \mathcal{D})$.
+          \end{itemize}
+    \item \textbf{Advantages:}
+          \begin{itemize}
+              \item \textbf{Computational Efficiency:} Transforms Bayesian inference into an optimisation problem.
+              \item \textbf{Scalability:} Suitable for large datasets and high-dimensional models.
+          \end{itemize}
+    \item \textbf{Common Variational Families:}
+          \begin{itemize}
+              \item \textbf{Mean-Field Approximation:}
+                    \[
+                        q(\theta) = \prod_i q(\theta_i)
+                    \]
+              \item Assumes independence between parameters, simplifying optimisation.
+          \end{itemize}
+    \item \textbf{Trade-offs:}
+          \begin{itemize}
+              \item \textbf{Speed vs. Accuracy:} Faster than exact methods like MCMC but may be less accurate.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Markov Chain Monte Carlo Algorithms}
+
+Markov Chain Monte Carlo (MCMC) algorithms generate samples from the true posterior distribution, enabling us to accurately estimate posterior properties. Unlike variational inference, which approximates the posterior directly with a simpler distribution, MCMC methods aim to generate samples from the true posterior distribution itself.
+
+\begin{itemize}
+    \item \textbf{Core Idea:}
+          \begin{itemize}
+              \item Construct a Markov chain with the desired posterior as its equilibrium distribution.
+              \item Run the chain for sufficient steps to obtain representative samples.
+          \end{itemize}
+    \item \textbf{Common Algorithms:}
+          \begin{itemize}
+              \item \textbf{Metropolis-Hastings:}
+                    \begin{itemize}
+                        \item Iteratively proposes new samples.
+                        \item Accepts or rejects proposals based on posterior probabilities.
+                        \item Most widely used
+                    \end{itemize}
+              \item \textbf{Gibbs Sampling:}
+                    \begin{itemize}
+                        \item Simplifies sampling by breaking down the process into conditional distributions for each parameter.
+                    \end{itemize}
+          \end{itemize}
+    \item \textbf{Advantages:}
+          \begin{itemize}
+              \item Highly accurate as they do not require simplifying assumptions about the posterior's shape.
+              \item Applicable to multimodal or skewed posteriors.
+          \end{itemize}
+    \item \textbf{Drawbacks:}
+          \begin{itemize}
+              \item \textbf{Computational Expense:} Especially for high-dimensional models or complex dependencies.
+          \end{itemize}
+\end{itemize}
+
+\section{Kinds of Predictive Uncertainty}
+
+In Bayesian modelling, uncertainty is quantified to represent our beliefs about predictions. There are two primary types of predictive uncertainty:
+
+\defb{Aleatoric Uncertainty}{
+    Aleatoric uncertainty, also known as irreducible uncertainty, arises from the inherent noise in the observations. It cannot be reduced by gathering more data.
+}
+
+\defb{Epistemic Uncertainty}{
+    Epistemic uncertainty, or reducible uncertainty, stems from our lack of knowledge about the underlying model parameters. It can be decreased by obtaining more data.
+}
+
+\subsection{Aleatoric Uncertainty}
+
+Aleatoric uncertainty is present in supervised learning scenarios and can be categorised as:
+
+\begin{itemize}
+    \item \textbf{Homoscedastic Noise:}
+          \begin{itemize}
+              \item The observational noise is constant and does not vary with the input $\mathbf{x}$.
+              \item Likelihood model:
+                    \[
+                        p(\mathcal{D} \mid \theta) = \prod_{i=1}^k \frac{1}{(2\pi\sigma^2)^{1/2}} \exp\left(-\frac{1}{2\sigma^2} (\mathbf{y}^{(i)} - \mathbf{x}^{(i)\top}\theta)^2 \right)
+                    \]
+          \end{itemize}
+    \item \textbf{Heteroscedastic Noise:}
+          \begin{itemize}
+              \item The observational noise varies with the input $\mathbf{x}$.
+              \item Likelihood model:
+                    \[
+                        p(\mathcal{D} \mid \theta) = \prod_{i=1}^k \frac{1}{(2\pi\sigma(\mathbf{x})^2)^{1/2}} \exp\left(-\frac{1}{2\sigma(\mathbf{x})^2} (\mathbf{y}^{(i)} - \mathbf{x}^{(i)\top}\theta)^2 \right)
+                    \]
+          \end{itemize}
+    \item \textbf{Implications:}
+          \begin{itemize}
+              \item Aleatoric uncertainty is irreducible; adding more data to our training does not decrease this uncertainty.
+              \item In neural networks, the variance can be treated as an additional output dimension to model heteroscedastic noise.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Epistemic Uncertainty}
+
+Epistemic uncertainty arises from uncertainty in the model parameters and can be reduced with more data.
+
+\begin{itemize}
+    \item \textbf{Example:}
+          \begin{itemize}
+              \item Consider choosing an online seller:
+                    \begin{itemize}
+                        \item \textbf{Seller A:} 10 positive and 0 negative reviews.
+                              \[
+                                  \text{Posterior Beta: } \text{Beta}(11, 1) \quad \text{Mean} = \frac{11}{12} \approx 0.9167, \quad \text{Variance} = 0.0059
+                              \]
+                        \item \textbf{Seller B:} 100 positive and 100 negative reviews.
+                              \[
+                                  \text{Posterior Beta: } \text{Beta}(101, 101) \quad \text{Mean} = 0.5, \quad \text{Variance} = 0.0012
+                              \]
+                    \end{itemize}
+          \end{itemize}
+    \item \textbf{Characteristics:}
+          \begin{itemize}
+              \item Represents uncertainty about the correct model parameters.
+              \item Can be reduced by acquiring more training data.
+          \end{itemize}
+    \item \textbf{Decomposition:}
+          \begin{itemize}
+              \item \textbf{Epistemic Uncertainty:} Uncertainty about model parameters.
+              \item \textbf{Aleatoric Uncertainty:} Uncertainty from the data generation process.
+          \end{itemize}
+    \item \textbf{Application in Bayesian Active Learning:}
+          \begin{itemize}
+              \item Focuses on acquiring new training data that minimises epistemic uncertainty.
+              \item Selects data points that provide the most information given current beliefs.
+          \end{itemize}
+\end{itemize}
+
+\section{Bayesian Model Selection}
+
+Bayesian model selection involves choosing the model that best explains the observed data by evaluating the model evidence or marginal likelihood.
+
+\subsection{Model Evidence}
+
+The model evidence, also known as the marginal likelihood, is defined for a model $m$ as:
+
+\[
+    p(\mathcal{D} \mid m) = \int p(\mathcal{D} \mid \theta, m) \, p(\theta \mid m) \, d\theta
+\]
+
+\begin{itemize}
+    \item Represents the probability of observing the data $\mathcal{D}$ under model $m$, integrating over all possible parameter values $\theta$.
+    \item Balances:
+          \begin{itemize}
+              \item \textbf{Model Fit:} How well the model explains the data (likelihood).
+              \item \textbf{Model Complexity:} The complexity of the model (prior).
+          \end{itemize}
+\end{itemize}
+
+\subsection{Bayesian Model Selection Process}
+
+\begin{itemize}
+    \item Given a set of candidate models $\{m_1, m_2, \ldots, m_k\}$, compute the posterior probability for each model:
+          \[
+              p(m \mid \mathcal{D}) \propto p(\mathcal{D} \mid m) \, p(m)
+          \]
+          \begin{itemize}
+              \item $p(m)$: Prior probability of model $m$.
+              \item The model with the highest posterior probability is selected.
+          \end{itemize}
+    \item \textbf{Bayesian Occam's Razor:}
+          \begin{itemize}
+              \item Prefers simpler models unless the data strongly supports more complex ones.
+              \item Complex models spread their probability mass over many possible datasets, leading to lower evidence for any specific dataset.
+              \item Simpler models allocate more probability mass to the observed data, resulting in higher evidence.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Example: Logistic Regression Model Evidence}
+
+Using the Laplace approximation, the model evidence for logistic regression can be approximated as:
+
+\begin{itemize}
+    \item \textbf{Laplace Approximation:}
+          \[
+              p(\theta \mid \mathcal{D}) \approx \mathcal{N}(\theta \mid \theta^*, \mathbf{H}^{-1})
+          \]
+    \item \textbf{Normalisation Constant (Marginal Likelihood):}
+          \begin{align*}
+              Z & = p(\mathcal{D}) \approx e^{-E(\theta^*)} (2\pi)^{\frac{D}{2}} |\mathbf{H}|^{-\frac{1}{2}} \\
+                & = e^{-E(\theta^*)} (2\pi)^{\frac{D}{2}} \left|\mathbf{H}\right|^{-\frac{1}{2}}
+          \end{align*}
+          \begin{itemize}
+              \item $D$: Dimensionality of $\theta$.
+              \item $E(\theta^*)$: Negative log-posterior at the MAP estimate.
+          \end{itemize}
+
+          \begin{itemize}
+              \item $e^{-E(\theta^*)}$ reflects the model fit to the data.
+              \item $|\mathbf{H}|^{-\frac{1}{2}}$ penalises model complexity by accounting for the parameter space volume.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Summary}
+
+\begin{itemize}
+    \item Bayesian model selection utilises the model evidence to evaluate and compare different models.
+    \item The approach inherently balances model fit and complexity, favouring simpler models unless justified by the data.
+    \item Approximations like the Laplace method enable efficient computation of the model evidence, facilitating model comparison even in complex scenarios such as logistic regression.
+\end{itemize}

@@ -1,0 +1,374 @@
+\chapter{Cross-Validation and Bias-Variance Trade-Off}
+
+\section{Model Selection}
+
+\begin{itemize}
+    \item Model selection aims to find the best combination of hyper-parameters (e.g., learning rate, number of layers, regularisation strength, etc.) to minimise risk.
+    \item Regularisation strength $\lambda$ is key to controlling model complexity:
+          \begin{itemize}
+              \item Higher $\lambda$: Reduces flexibility, preventing overfitting.
+              \item Lower $\lambda$: Allows for a more complex model, increasing the risk of overfitting.
+          \end{itemize}
+    \item Optimisation problem for hyper-parameters $\lambda^\star$ and $t^\star$:
+          \[
+              \lambda^{\star}, t^{\star} = \underset{\lambda, t}{\text{argmin}} \, \mathbb{E} \Big[R\Big(f^{M(\theta', \lambda, t)}(\mathbf{x}), \mathbf{y}\Big)\Big]
+          \]
+          Where $M$ is a function $M : \R^{n+2} \rightarrow \R$ that given an initial parameter, a regularisation parameter, and amount of time, returns a trained parameter $M(\theta', \lambda, t)=\theta^{(t)}$.
+    \item Using the training set for hyper-parameter selection may lead to models that minimise training loss perfectly, making comparisons difficult.
+    \item Using the test set for hyper-parameter selection is flawed, as it leads to overfitting to the test data, making it an unreliable measure of generalisation.
+\end{itemize}
+
+\intuitb{Hyper-parameter Selection on the Test Set}{
+    The other perspective is to use the test set. Unfortunately, this is a seriously flawed approach, as it leads to overfitting by effectively "training" on the test set. A simple way to see that this is flawed is to imagine “selecting”the value of $\theta_1.$ Thus, the optimisation becomes:
+
+    $$\lambda^\star,t^\star,\theta_1^\star=\underset{\lambda,t,\theta_1}{\text{argmin}}\min_{\theta/\theta_1}\mathbb{E}\Big[R\Big(f^{M(\theta',\lambda,t)}(\mathbf{x}),\mathbf{y}\Big)\Big]$$
+
+    Taking this reasoning to the extreme, we could “select" a value for every parameter and perform comparisons. While this is not a realistic approach to learning, it highlights the issues with using the test set to both select a model and measure performance. Once a model is selected on the basis of specific samples, those samples can no longer serve as an objective measure of model performance.
+}
+
+\section{Regularisation}
+
+\marginnote{\defsb{Regularisation}{
+        Regularisation introduces a parameter (e.g., weight decay) to limit model complexity and reduce overfitting.}}
+
+\begin{itemize}
+    \item Ridge regression (or $\ell_2$ regularisation) modifies the loss function to add the L2 norm of the parameters to be minimised, with $\lambda$ as the regularisation strength:
+          \[
+              \mathcal{L}_{\text{ridge}}(\theta) = \mathcal{L}(\theta) + \lambda \|\theta\|_2^2.
+          \]
+    \item The ridge regression loss with $\lambda$ penalises large parameter magnitudes, enforcing simpler models:
+          \begin{align*}
+              \mathcal{L}_{\text{ridge}}(\theta) & = \frac{1}{k} \|\mathbf{y} - \mathbf{X}\theta\|^2 + \lambda \|\theta\|_2^2.                                                                              \\
+                                                 & =\frac{1}{k}(\mathbf{y}^\top\mathbf{y}-2\mathbf{y}^\top\boldsymbol{X}\theta+\theta^\top\boldsymbol{X}^\top\boldsymbol{X}\theta)+\lambda\theta^\top\theta
+          \end{align*}
+          % \item Solving for $\theta$:
+          % \[
+          % \theta = (\mathbf{X}^\top \mathbf{X} + k\lambda \mathbf{I})^{-1} \mathbf{X}^\top \mathbf{y}.
+          % \]
+          Taking the derivative with respect to $\theta$,we have:
+          $$\nabla_\theta\mathcal{L}_{\mathrm{ridge}}=\frac{2}{k}\bigg(\boldsymbol{X}^\top\boldsymbol{X}\theta-\boldsymbol{X}^\top\mathbf{y}\bigg)+2\lambda\theta $$
+
+
+          Setting $\nabla_\theta\mathcal{L}_\mathrm{ridge}=0$ and solving for $\theta:$
+
+          $$\begin{aligned}0&=\frac{2}{k}\bigg(\boldsymbol{X}^{\top}\boldsymbol{X}\theta-\boldsymbol{X}^{\top}\mathbf{y}\bigg)+2\lambda\theta\\&=\boldsymbol{X}^{\top}\boldsymbol{X}\theta-\boldsymbol{X}^{\top}\mathbf{y}+k\lambda\theta\\(\boldsymbol{X}^{\top}\boldsymbol{X}+k\lambda\mathbf{I})\theta&=\boldsymbol{X}^{\top}\mathbf{y}\\\theta&=(\boldsymbol{X}^{\top}\boldsymbol{X}+k\lambda\mathbf{I})^{-1}\boldsymbol{X}^{\top}\mathbf{y}\end{aligned}$$
+\end{itemize}
+
+\section{Cross-Validation}
+
+\begin{itemize}
+    \item We have shown in the previous section why we cannot use the same test-set to measure generalisation and make our hyper-parameter choices.
+    \item A secret ``third option" for selecting hyper-parameters is splitting the training set further into a validation set, keeping the test set purely for evaluation.
+    \item $k$-fold cross-validation:
+          \begin{itemize}
+              \item Divide data into $k$ folds.
+              \item Train $k$ times, using $k-1$ folds for training and 1 fold for validation.
+              \item Average the performance across $k$ iterations:
+                    \[
+                        \mathrm{CV}(\mathcal{D}, f) = \frac{1}{k} \sum_{j=1}^k \frac{1}{|\mathcal{D}_j|} \sum_{i=1}^{|\mathcal{D}_j|} R\Big(f^{M(\theta', \mathcal{D}_{k \neq j})}(\mathbf{x}^{(i)}), \mathbf{y}^{(i)}\Big).
+                    \]
+              \item  Where $\mathcal{D}_{k\neq j}$ denotes the set of all folds not equal to the $j$th fold.
+          \end{itemize}
+    \item Leave-One-Out Cross-Validation (LOOCV) is a special case where $k$ equals the total number of samples.
+          \begin{itemize}
+              \item In each iteration, a single data point is used for validation, and the model is trained on the remaining $n-1$ points.
+              \item This process is repeated $n$ times, with the final performance averaged across all iterations.
+          \end{itemize}
+\end{itemize}
+
+\section{Bias and Variance of Estimators}
+
+\defb{Statistic}{A statistic $S$ is a random variable that is a function of data $\mathcal{D}$: $S = g(\mathcal{D})$. S is a random variable not because $g$ is random, but because the inputs to $g$ are random.}
+
+\defb{Estimator}{An estimator $\hat{S}_n$ is a statistic intended to estimate a parameter of the data distribution, where $\mathcal{D}$ is the data distribution with $|\mathcal{D}| = n$ datapoints.  \bigskip
+
+An example of an estimator is
+
+\[\hat{r}_{k}=\frac{1}{n}\sum_{i=1}^{k}r_{i}\]
+
+where $r_i$ is the $i$th sample of the random variable $r$. This estimator estimates the mean of the random variable $r$.
+
+}
+
+\subsection{Linearity of Expectation}
+
+\begin{itemize}
+    \item For any random variables $\bm{x}_1, \bm{x}_2, \dots, \bm{x}_k$:
+
+    \item The expected value of their sum is the sum of the expectations. \footnote{This property holds regardless of whether the random variables are independent, making it
+              widely useful for analysing expectations in various scenarios.}:
+          \[
+              \mathbb{E} \left[\sum_{i=1}^k \mathbf{x}_i \right] = \sum_{i=1}^k \mathbb{E}[\mathbf{x}_i].
+          \]
+    \item Constants can be factored out:
+          \[
+              \mathbb{E}[a \cdot \mathbf{x}] = a \cdot \mathbb{E}[\mathbf{x}].
+          \]
+    \item Sums of random variables and composed can be decomposed:
+          \[
+              \mathbb{E}[a \cdot \mathbf{x} + b \cdot \mathbf{y}] = a \cdot \mathbb{E}[\mathbf{x}] + b \cdot \mathbb{E}[\mathbf{y}]
+          \]
+\end{itemize}
+
+\ex{Using Linearity of Expectation}{
+    As an example, if we need the expectation of
+    \[
+        \frac{1}{k} \sum_{i=1}^k (r_i - \mu_r)^2,
+    \]
+    we can use the linearity of expectation to distribute the expectation across the sum:
+    \[
+        \mathbb{E} \left[ \frac{1}{k} \sum_{i=1}^k (r_i - \mu_r)^2 \right]
+        = \frac{1}{k} \sum_{i=1}^k \mathbb{E} \left[ (r_i - \mu_r)^2 \right].
+    \]
+
+    This simplification is crucial when calculating expectations of quantities involving multiple terms, as it allows us to analyse each component individually. These properties will be applied in subsequent steps to study the bias of our variance estimate.
+}
+
+
+\defb{Bias of an Estimator}{
+    The bias of an estimator quantifies the systematic deviation of the estimator's expected value from the true parameter it estimates. Let \(\hat{S}\) be an estimator for a parameter \(S\), and let \(\mathbb{E}[\hat{S}]\) denote the expected value of the estimator. The bias is defined as:
+    \[
+        \mathrm{Bias}(\hat{S}) = \mathbb{E}[\hat{S}] - S.
+    \]
+
+    An estimator is \textbf{unbiased} if \(\mathrm{Bias}(\hat{S}) = 0\), meaning its expected value equals the true parameter \(S\). Otherwise, a non-zero bias implies the estimator systematically overestimates or underestimates \(S\).
+}
+
+\defb{Variance of an Estimator}{
+    The variance of an estimator measures the average squared deviation of the estimator from its expected value, quantifying its variability. For an estimator \(\hat{S}\), the variance is given by:
+    \[
+        \mathrm{Var}(\hat{S}) = \mathbb{E}[(\hat{S} - \mathbb{E}[\hat{S}])^2].
+    \]
+
+    Smaller variance indicates more consistent estimates across samples, while larger variance suggests higher dispersion around the expected value.
+}
+
+
+\section{Bias-Variance Decomposition}
+
+\marginnote{
+    A statistic $S$ is just some function of our data $S = g(\mathcal{D})$. If we let it replace $\hat{S}$, then we have:
+
+    \[
+        Err(\hat{S}) = \mathbb{E}[(g(\mathcal{D}) - S)^2]
+    \]
+
+    Which is just the MSE. So what is left to do is prove the first equation in Equation \ref{eq:bias_variance_decomposition_problem}.
+}
+\begin{itemize}
+    \item The bias-variance decomposition simply states that error of an estimate can be totally accounted for with these two quantities.
+    \item Total error of an estimator decomposes into bias and variance:
+          \[
+              \mathrm{Err}(\hat{S}) = \mathbb{E}[(\hat{S} - S)^2] = \mathrm{Bias}^2 + \mathrm{Var}.
+          \]
+    \item We expand:
+          \[
+              \mathbb{E}[(\hat{S} - S)^2] = \mathbb{E}[(\hat{S} - \mu)^2] + (\mu - S)^2.
+          \]
+    \item We have:
+          \begin{align}
+              \mathbb{E}[(\hat{S}-S)^{2}] & =\mathbb{E}\left[\left(\hat{S}-\mu+\mu-S\right)^{2}\right]                  \label{eq:bias_variance_decomposition_problem} \\
+                                          & =\mathbb{E}\left[\left((\hat{S}-\mu)+(\mu-S)\right)^{2}\right]                                                             \\
+                                          & =\mathbb{E}\left[(\hat{S}-\mu)^{2}+2(\hat{S}-\mu)(\mu-S)+(\mu-S)^{2}\right]                                                \\
+                                          & =\mathbb{E}[(\hat{S}-\mu)^{2}]+\mathbb{E}\Big[2(\hat{S}-\mu)(\mu-S)\Big]+\mathbb{E}[(\mu-S)^{2}]
+          \end{align}
+    \item Next, observe that the middle term
+          \[
+              \mathbb{E}\Big[2(\hat{S}-\mu)(\mu-S)\Big]
+          \]
+          drops out. This is because \(\mu = \mathbb{E}(\hat{S})\), so \(\mathbb{E}[\hat{S}-\mu] = 0\), making the product \((\hat{S}-\mu)(\mu-S)\) have an expectation of zero:
+          \begin{align*}
+              \mathbb{E}[(\hat{S} - S)^2] & = \mathbb{E}[(\hat{S} - \mu)^2] + (\mu - S)^2   \\
+                                          & =\mathrm{Var}(\hat{S})+\mathrm{Bias}(\hat{S})^2
+          \end{align*}
+
+\end{itemize}
+
+\section{Bias-Variance Trade-Off in ML Models}
+
+\begin{itemize}
+    \item In Chapter 6, the estimator was for the risk of our model at deployment time.
+    \item Bias-variance decomposition allows us to reason about the bias-variance trade-off of a ML model– are its errors more due to the bias term or variance term?
+    \item Total prediction error decomposes as:
+          \[
+              \mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - y)^2] = \underbrace{\mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - \bar{f}(x))^2]}_{\text{Variance}} + \underbrace{(\bar{f}(x) - \mu_y)^2}_{\text{Bias}^2} + \underbrace{\mathbb{E}[(\mu_y - y)^2]}_{\text{Label Noise}}.
+          \]
+\end{itemize}
+
+
+
+
+
+\subsection{General Prediction}
+The \textbf{bias-variance trade-off} arises because simple models tend to have high bias but low variance, while complex models exhibit low bias but high variance.
+
+To analyse the sources of error in a machine learning model, we decompose the model's prediction error into three components: variance, squared bias, and label noise. For a given input \( x \) and target \( y \), the prediction error of a model \( f_{\mathcal{D}}^\theta(x) \), trained on dataset \( \mathcal{D} \), is expressed as:
+\[
+    \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - y)^2 \big],
+\]
+where the expectation is over all possible datasets \( \mathcal{D} \). Our goal is to break down this expression to quantify the distinct sources of error. To better understand this, we define the \textit{mean model prediction}:
+\[
+    \bar{f}(x) := \mathbb{E}_{\mathcal{D}}[f_{\mathcal{D}}^\theta(x)],
+\]
+which represents the average output of the model across all datasets.
+
+By adding and subtracting \( \bar{f}(x) \), we can rewrite the error as:
+\[
+    \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - y)^2 \big] = \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - \bar{f}(x) + \bar{f}(x) - y)^2 \big].
+\]
+Expanding the square, we obtain:
+\[
+    \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - y)^2 \big] = \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - \bar{f}(x))^2 \big] + 2 \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - \bar{f}(x)) (\bar{f}(x) - y) \big] + (\bar{f}(x) - y)^2.
+\]
+
+Since \( \mathbb{E}_{\mathcal{D}}[f_{\mathcal{D}}^\theta(x) - \bar{f}(x)] = 0 \), the cross (middle) term vanishes:
+\[
+    \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - y)^2 \big] = \mathbb{E}_{\mathcal{D}} \big[ (f_{\mathcal{D}}^\theta(x) - \bar{f}(x))^2 \big] + (\bar{f}(x) - y)^2.
+\]
+
+Next, we decompose \( (\bar{f}(x) - y)^2 \) into its components. Let \( \mu_y := \mathbb{E}[y] \) represent the true mean of the target \( y \). Adding and subtracting \( \mu_y \), we get:
+\[
+    (\bar{f}(x) - y)^2 = (\bar{f}(x) - \mu_y + \mu_y - y)^2.
+\]
+Expanding this, we have:
+\[
+    (\bar{f}(x) - y)^2 = (\bar{f}(x) - \mu_y)^2 + 2 (\bar{f}(x) - \mu_y)(\mu_y - y) + (\mu_y - y)^2.
+\]
+Taking the expectation over \( y \), the cross term \( 2 \mathbb{E}[(\bar{f}(x) - \mu_y)(\mu_y - y)] \) vanishes because \( \mathbb{E}[\mu_y - y] = 0 \). Thus:
+\[
+    \mathbb{E}[(\bar{f}(x) - y)^2] = (\bar{f}(x) - \mu_y)^2 + \mathbb{E}[(\mu_y - y)^2].
+\]
+
+Finally, substituting this result back, we obtain the full decomposition of the prediction error:
+\[
+    \mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - y)^2] = \underbrace{\mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - \bar{f}(x))^2]}_{\text{Variance}} + \underbrace{(\bar{f}(x) - \mu_y)^2}_{\text{Squared Bias}} + \underbrace{\mathbb{E}[(\mu_y - y)^2]}_{\text{Label Noise}}.
+\]
+
+\defb{Prediction Error Decomposition}{
+For a model $f_{\mathcal{D}}^\theta(x)$ trained on dataset $\mathcal{D}$, the prediction error can be expressed as:
+\[
+    \mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - y)^2] = \underbrace{\mathbb{E}_{\mathcal{D}}[(f_{\mathcal{D}}^\theta(x) - \bar{f}(x))^2]}_{\text{Variance}} + \underbrace{(\bar{f}(x) - \mu_y)^2}_{\text{Squared Bias}} + \underbrace{\mathbb{E}[(\mu_y - y)^2]}_{\text{Label Noise}}.
+\]
+Here:
+\begin{itemize}
+    \item \textbf{Variance:} Variability of predictions due to training data.
+    \item \textbf{Squared Bias:} Systematic error between the mean prediction $\bar{f}(x)$ and the true mean $\mu_y$.
+    \item \textbf{Label Noise:} Irreducible error in the target $y$.
+\end{itemize}
+}
+
+
+\subsection{Bias-Variance in Linear Regression}
+For a linear regression model, assuming there is no mdelling error:
+\[
+    \mathrm{P.Err}(\theta) = \mathbb{E}[||\mathbf{y} - \mathbf{X}\theta||_2^2],
+\]
+assuming $\mathbf{y} = \mathbf{X}\theta^*$. Using ridge regression:
+\[
+    \theta^{\text{Ridge}} = (\lambda \mathbf{I} + \mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y},
+\]
+the bias depends on $\lambda$, where increasing $\lambda$ induces bias but reduces variance. For OLS:
+\[
+    \theta^{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y},
+\]
+we observe zero bias but potentially high variance in ill-conditioned settings.
+
+\subsection{Bias-Variance in Linear Regression}
+
+To decompose the prediction error of a linear regression model, we analyse its bias and variance. Let the model be parameterised by \(\theta\) and trained on a dataset \(\mathcal{D} := (\mathbf{X}, \mathbf{y})\). Assuming no modelling error, \footnote{(i.e., there exists \(\theta^*\) such that \(\mathbf{y} = \mathbf{X}\theta^*\))} the predictive error is given by:
+\[
+    \mathrm{P.Err}(\theta) = \mathbb{E}\big[ \|\mathbf{y} - \mathbf{X}\theta\|_2^2 \big].
+\]
+Expanding \(\mathbf{y} = \mathbf{X}\theta^*\) and denoting \(\mathrm{Err}(\theta) := \theta - \theta^*\), we have:
+\[
+    \mathrm{P.Err}(\theta) = \mathbb{E}\big[(\mathbf{X}\mathrm{Err}(\theta))^\top (\mathbf{X}\mathrm{Err}(\theta))\big].
+\]
+
+To further understand this, we decompose the error of the learned parameter \(\theta\) as:
+\begin{align*}
+    \text{Err}(\theta) & = \mathbb{E}_{\mathcal{D}}\big[(\theta(\mathcal{D}) - \theta^*)^\top (\theta(\mathcal{D}) - \theta^*)\big] \\
+                       & = \mathbf{b}(\theta)^\top \mathbf{b}(\theta) + \mathbb{V}(\theta),
+\end{align*}
+where \(\mathbf{b}(\theta) = \mathbb{E}_{\mathcal{D}}[\theta(\mathcal{D})] - \theta^*\) is the \textit{bias}, and \(\mathbb{V}(\theta)\) is the \textit{variance} of \(\theta\).
+
+\subsubsection{Ridge and OLS Estimators}
+The bias and variance decomposition applies to specific estimators:
+\begin{itemize}
+    \item \textbf{Ridge Regression:}
+          \[
+              \theta^{\text{Ridge}} = (\lambda \mathbf{I} + \mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}.
+          \]
+    \item \textbf{Ordinary Least Squares (OLS):}
+          \[
+              \theta^{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}.
+          \]
+\end{itemize}
+
+Under the no-modelling-error assumption (\(\mathbf{y} = \mathbf{X}\theta^*\)), we can express the OLS estimator as \footnote{All we have done is substituted in the true model for y since there is no mismatch. Proving
+    that the OLS is an unbiased estimator of $\theta^\star$ is shown by verifying the equation below.}
+\[
+    \theta^{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top (\mathbf{X}\theta^*).
+\]
+Simplifying, we see that:
+\[
+    \mathbb{E}\big[(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top (\mathbf{X}\theta^*)\big] = \theta^*,
+\]
+which proves that OLS is an \textit{unbiased} estimator.
+
+For Ridge regression, substituting the true model similarly gives:
+\[
+    \mathbb{E}\big[(\lambda \mathbf{I} + \mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top (\mathbf{X}\theta^*)\big] = (\lambda \mathbf{I} + \mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{X} \theta^*.
+\]
+Since the matrix term does not completely cancel, Ridge regression introduces bias:
+\[
+    \mathbf{b}(\lambda) := \mathbb{E}_{\mathcal{D}}[\theta^{\text{Ridge}}] - \theta^* = -\mathbb{E}\big[(\lambda \mathbf{I} + \mathbf{X}^\top \mathbf{X})^{-1}\big]\lambda\theta^*.
+\]
+When \(\lambda = 0\), Ridge regression reduces to OLS, recovering the unbiased case.
+
+\intuitb{Conclusion of Ridge vs OLS}{
+    Ridge regression trades increased bias for reduced variance, stabilising the solution in ill-conditioned or high-dimensional settings. OLS, while unbiased, can exhibit high variance when \(\mathbf{X}^\top \mathbf{X}\) is nearly singular.
+}
+
+
+\subsection{Variance of Linear Models}
+
+The variance of an estimator quantifies how much the learned parameter \(\theta\) fluctuates around its expected value due to changes in the training dataset \(\mathcal{D}\). Formally, the variance is defined as:
+\defb{Variance}{
+\[
+    \mathbb{V}(\theta) = \mathbb{E}_{\mathcal{D}} \big[ (\theta(\mathcal{D}) - \mathbb{E}_{\mathcal{D}}[\theta(\mathcal{D})])^\top (\theta(\mathcal{D}) - \mathbb{E}_{\mathcal{D}}[\theta(\mathcal{D})]) \big].
+\]
+}
+
+\defb{Variance of OLS Estimator}{
+    \raggedright
+    For the ordinary least squares (OLS) estimator, assuming \(\mathbf{y} = \mathbf{X}\theta^*\), we have:
+    \[
+        \theta^{\text{OLS}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{X} \theta^*.
+    \]
+    Simplifying gives \(\theta^{\text{OLS}} = \theta^*\). Thus, in this idealised case, OLS is unbiased, and its variance depends entirely on the variance of the dataset \(\mathbf{X}^\top \mathbf{X}\). If this variance is high (e.g., due to ill-conditioned \(\mathbf{X}^\top \mathbf{X}\)), the estimate for \(\theta^*\) becomes unstable.
+}
+
+\defb{Variance of Ridge Estimator}{
+\raggedright
+For ridge regression, the estimator is:
+\[
+    \theta^{\text{Ridge}} = (\lambda \mathbf{I} + \mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{X} \theta^*.
+\]
+Simplifying gives:
+\[
+    \mathbb{V}(\theta^{\text{Ridge}}) = \mathbb{E}_{\mathcal{D}} \big[ (\theta^{\text{Ridge}} - \mathbb{E}_{\mathcal{D}}[\theta^{\text{Ridge}}])^\top (\theta^{\text{Ridge}} - \mathbb{E}_{\mathcal{D}}[\theta^{\text{Ridge}}]) \big].
+\]
+The variance reflects the stabilising effect of the regularisation term \(\lambda\). By adding \(\lambda \mathbf{I}\), ridge regression reduces variance, particularly when \(\mathbf{X}^\top \mathbf{X}\) is nearly singular or ill-conditioned.\bigskip
+
+\begin{itemize}
+    \item Ill-conditioned (eigenvalues that are very small or closae to zero) $\mathbf{X}^\top \mathbf{X}$ can lead to high variance in OLS, because the inverse becomes unstable.
+    \item When $\mathbf{X}$ as multicollinearity (highly correlated predictors), the eigenvalues of $\mathbf{X}^\top \mathbf{X}$ tend to be small in such cases.
+    \item Adding \(\lambda \mathbf{I}\) ensures that the eigenvalues of \(\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I}\) are shifted by at least $\lambda$, which increases the smallest eigenvalues, and improves the conditioning of the matrix.
+    \item Better conditioning reduces numerical instability, making the solution more robust.
+\end{itemize}
+}
+
+\intuitb{Summary}{
+    OLS achieves unbiased estimates but can exhibit high variance when \(\mathbf{X}^\top \mathbf{X}\) is poorly conditioned. Ridge regression trades a small bias for reduced variance, stabilising the parameter estimates by adding \(\lambda \mathbf{I}\) to \(\mathbf{X}^\top \mathbf{X}\).
+}
+
