@@ -2361,12 +2361,6 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">sample-handout.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1" intorder="1">Bringhurst2005</bcf:citekey>
-    <bcf:citekey order="2" intorder="1">Tufte2006</bcf:citekey>
-    <bcf:citekey order="3" intorder="1">Tufte2006</bcf:citekey>
-    <bcf:citekey order="3" intorder="2">Tufte1990</bcf:citekey>
-    <bcf:citekey order="4" intorder="1">Bringhurst2005</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">pkg-geometry</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
